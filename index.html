@@ -2,105 +2,141 @@
 
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Tools</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Tools</title>
 
-```
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
 <style>
-    body {
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
-        background: #f5f7fb;
-        color: #1a1a1a;
-    }
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #f4f6f9;
+    color: #1a1a1a;
+}
 
-    header {
-        background: #2f6fed;
-        color: white;
-        padding: 24px;
-        text-align: center;
-    }
+/* NAV */
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 24px;
+    background: white;
+    border-bottom: 1px solid #e5e8ef;
+}
+.nav h1 {
+    font-size: 18px;
+    margin: 0;
+}
 
-    header h1 {
-        margin: 0;
-        font-size: 28px;
-    }
+/* HERO */
+.hero {
+    text-align: center;
+    padding: 60px 20px 40px;
+}
+.hero h2 {
+    font-size: 36px;
+    margin: 0;
+}
+.hero p {
+    margin-top: 10px;
+    color: #666;
+}
 
-    header p {
-        margin: 8px 0 0;
-        opacity: 0.9;
-    }
+/* GRID */
+.container {
+    max-width: 1100px;
+    margin: 0 auto 50px;
+    padding: 0 20px;
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+}
 
-    .container {
-        max-width: 1000px;
-        margin: 40px auto;
-        padding: 0 20px;
-    }
+/* CARD */
+.card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    transition: all 0.2s ease;
+}
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+}
+.card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+.card-content {
+    padding: 20px;
+}
+.card h3 {
+    margin: 0 0 10px;
+}
+.card p {
+    margin: 0;
+    color: #555;
+}
+.tag {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 12px;
+    background: #e8f0ff;
+    color: #2f6fed;
+    padding: 6px 10px;
+    border-radius: 999px;
+}
 
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-    }
-
-    .card {
-        background: white;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-        text-decoration: none;
-        color: inherit;
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 24px rgba(0,0,0,0.12);
-    }
-
-    .card h2 {
-        margin-top: 0;
-        font-size: 20px;
-    }
-
-    .card p {
-        margin-bottom: 0;
-        color: #555;
-    }
-
-    footer {
-        text-align: center;
-        padding: 30px;
-        font-size: 14px;
-        color: #777;
-    }
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 40px;
+    font-size: 14px;
+    color: #777;
+}
 </style>
-```
 
 </head>
 
 <body>
 
-<header>
+<div class="nav">
     <h1>Teacher Tools</h1>
-    <p>Simple, free tools to make your classroom run smoother</p>
-</header>
+</div>
+
+<div class="hero">
+    <h2>Simple tools. Better classrooms.</h2>
+    <p>Free, clean, and effective tools designed for real teachers.</p>
+</div>
 
 <div class="container">
     <div class="grid">
 
 ```
-    <!-- SOUND MONITOR TOOL -->
     <a href="01-sound-monitor.html" class="card">
-        <h2>🔊 Sound Level Monitor</h2>
-        <p>Visual noise meter for classroom management. Great for keeping volume under control.</p>
+        <img src="https://images.unsplash.com/photo-1588072432836-e10032774350">
+        <div class="card-content">
+            <h3>🔊 Sound Level Monitor</h3>
+            <p>Real-time classroom noise meter with visual feedback.</p>
+            <div class="tag">Classroom Management</div>
+        </div>
     </a>
 
-    <!-- FUTURE TOOL EXAMPLE -->
-    <div class="card" style="opacity:0.5;">
-        <h2>➕ More tools coming</h2>
-        <p>Timers, randomizers, grouping tools, and more.</p>
+    <div class="card" style="opacity:.5;">
+        <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b">
+        <div class="card-content">
+            <h3>⏱ Timer</h3>
+            <p>Clean visual timers for lessons and transitions.</p>
+            <div class="tag">Coming Soon</div>
+        </div>
     </div>
 
 </div>
@@ -109,7 +145,7 @@
 </div>
 
 <footer>
-    Free tools for teachers • More coming soon
+Free tools for teachers • More added regularly
 </footer>
 
 </body>
