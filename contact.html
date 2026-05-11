@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Contact — Handy Teacher Tools</title>
+<meta name="description" content="Contact HandyTeacherTools.com — get in touch with questions, feedback, or tool suggestions."/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:ital,wght@0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+  :root { --board: #2d4a3e; --chalk: #f5f0e8; --ink: #1a2e25; --muted: #6b7f76; --border: #e0dbd2; --apple: #4caf50; --gold-lt: #ffc107; --shadow: 0 4px 20px rgba(0,0,0,0.08); --radius: 16px; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--chalk); color: var(--ink); font-family: 'Nunito', sans-serif; min-height: 100vh; }
+  nav { background: var(--board); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+  nav a { color: rgba(255,255,255,0.7); text-decoration: none; font-weight: 700; font-size: 14px; }
+  nav a:hover { color: white; }
+  nav .brand { font-weight: 900; font-size: 1.1rem; color: white; }
+
+  .page { max-width: 700px; margin: 0 auto; padding: 56px 24px 80px; }
+  h1 { font-family: 'Lora', serif; font-size: 2.2rem; font-weight: 600; color: var(--board); margin-bottom: 8px; }
+  .subtitle { font-family: 'Lora', serif; font-style: italic; font-size: 1rem; color: var(--muted); margin-bottom: 40px; line-height: 1.6; }
+
+  /* CONTACT CARDS */
+  .contact-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 48px; }
+  .contact-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
+  .contact-card .icon { font-size: 2rem; margin-bottom: 12px; }
+  .contact-card h3 { font-size: 1rem; font-weight: 800; color: var(--board); margin-bottom: 6px; }
+  .contact-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; font-weight: 600; margin-bottom: 12px; }
+  .contact-card a { color: var(--board); font-weight: 800; font-size: 0.9rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border: 2px solid var(--border); border-radius: 8px; transition: all 0.2s; }
+  .contact-card a:hover { border-color: var(--apple); color: var(--apple); }
+
+  /* FORM */
+  .form-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow); margin-bottom: 40px; }
+  .form-card h2 { font-family: 'Lora', serif; font-size: 1.4rem; font-weight: 600; color: var(--board); margin-bottom: 8px; }
+  .form-card p { font-size: 0.88rem; color: var(--muted); font-weight: 600; margin-bottom: 24px; line-height: 1.5; }
+
+  .form-group { margin-bottom: 18px; }
+  .form-group label { display: block; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); margin-bottom: 7px; }
+  .form-group input, .form-group textarea, .form-group select {
+    width: 100%;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink);
+    background: var(--chalk);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--apple); background: white; }
+  .form-group textarea { min-height: 130px; resize: vertical; }
+  .form-group select { cursor: pointer; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .btn-submit {
+    width: 100%;
+    padding: 16px;
+    background: var(--apple);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 900;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(76,175,80,0.25);
+    margin-top: 4px;
+  }
+  .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(76,175,80,0.35); }
+
+  .success-msg { display: none; text-align: center; padding: 24px; background: #e8f5e9; border: 2px solid #a5d6a7; border-radius: 12px; margin-top: 16px; }
+  .success-msg .icon { font-size: 2.5rem; margin-bottom: 8px; }
+  .success-msg p { color: #2e7d32; font-weight: 800; font-size: 1rem; }
+
+  /* TOPIC CARDS */
+  .topics { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-bottom: 40px; }
+  .topic-card { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; font-size: 0.85rem; font-weight: 700; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+
+  footer { background: var(--board); color: rgba(255,255,255,0.6); text-align: center; padding: 24px; font-size: 13px; font-weight: 600; }
+  footer a { color: rgba(255,255,255,0.8); text-decoration: none; margin: 0 8px; }
+  footer a:hover { color: var(--gold-lt); }
+
+  @media (max-width: 500px) {
+    .contact-cards { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">← Back to Tools</a>
+  <span class="brand">HandyTeacherTools.com</span>
+  <span></span>
+</nav>
+
+<div class="page">
+  <h1>Get in Touch</h1>
+  <p class="subtitle">Have a question, found a bug, or want to suggest a new tool? We'd love to hear from you.</p>
+
+  <!-- CONTACT METHODS -->
+  <div class="contact-cards">
+    <div class="contact-card">
+      <div class="icon">📧</div>
+      <h3>Email Us</h3>
+      <p>For general questions, feedback, or partnership enquiries.</p>
+      <a href="mailto:hello@handyteachertools.com">hello@handyteachertools.com</a>
+    </div>
+    <div class="contact-card">
+      <div class="icon">🐛</div>
+      <h3>Report a Bug</h3>
+      <p>Something not working right? Let us know which tool and what happened.</p>
+      <a href="mailto:bugs@handyteachertools.com">bugs@handyteachertools.com</a>
+    </div>
+  </div>
+
+  <!-- WHAT WE CAN HELP WITH -->
+  <h2 style="font-family:'Lora',serif;font-size:1.3rem;font-weight:600;color:var(--board);margin-bottom:14px">What you can contact us about</h2>
+  <div class="topics">
+    <div class="topic-card">💡 Tool suggestions</div>
+    <div class="topic-card">🐛 Bug reports</div>
+    <div class="topic-card">♿ Accessibility issues</div>
+    <div class="topic-card">📰 Press enquiries</div>
+    <div class="topic-card">🤝 Partnerships</div>
+    <div class="topic-card">📋 General feedback</div>
+  </div>
+
+  <!-- CONTACT FORM -->
+  <div class="form-card">
+    <h2>Send us a message</h2>
+    <p>Fill in the form below and we'll get back to you as soon as we can. We aim to respond within 2 business days.</p>
+
+    <div id="contactForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fname">First Name</label>
+          <input type="text" id="fname" placeholder="Alice" maxlength="50"/>
+        </div>
+        <div class="form-group">
+          <label for="lname">Last Name</label>
+          <input type="text" id="lname" placeholder="Johnson" maxlength="50"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="alice@school.edu"/>
+      </div>
+      <div class="form-group">
+        <label for="subject">Subject</label>
+        <select id="subject">
+          <option value="">Select a topic...</option>
+          <option>Tool suggestion</option>
+          <option>Bug report</option>
+          <option>Accessibility issue</option>
+          <option>General feedback</option>
+          <option>Press / partnership enquiry</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" placeholder="Tell us what's on your mind..."></textarea>
+      </div>
+      <button class="btn-submit" onclick="submitForm()">📨 Send Message</button>
+    </div>
+
+    <div class="success-msg" id="successMsg">
+      <div class="icon">✅</div>
+      <p>Message sent! We'll get back to you within 2 business days.</p>
+    </div>
+  </div>
+
+  <p style="font-size:0.85rem;color:var(--muted);font-weight:600;line-height:1.6">
+    <strong style="color:var(--board)">Note:</strong> This contact form sends your message directly to our email. We do not store your message or contact details on our servers beyond what is needed to reply to you. See our <a href="privacy.html" style="color:var(--board);font-weight:800">Privacy Policy</a> for more details.
+  </p>
+</div>
+
+<footer>
+  <a href="index.html">Home</a>
+  <a href="privacy.html">Privacy Policy</a>
+  <a href="terms.html">Terms of Use</a>
+  <a href="contact.html">Contact</a>
+  <a href="about.html">About</a>
+  <br/><br/>
+  © 2025 HandyTeacherTools.com · Free for all teachers · No data collected
+</footer>
+
+<script>
+  function submitForm() {
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
+    const subject = document.getElementById('subject').value;
+
+    if (!email || !message || !subject) {
+      alert('Please fill in your email, subject, and message before sending.');
+      return;
+    }
+
+    // Build mailto link (works without a backend — opens the user's email client)
+    const fname = document.getElementById('fname').value.trim();
+    const lname = document.getElementById('lname').value.trim();
+    const name = [fname, lname].filter(Boolean).join(' ');
+    const body = encodeURIComponent(`From: ${name} (${email})\n\nSubject: ${subject}\n\n${message}`);
+    const mailtoLink = `mailto:hello@handyteachertools.com?subject=${encodeURIComponent('[HandyTeacherTools] ' + subject)}&body=${body}`;
+
+    window.location.href = mailtoLink;
+
+    // Show success after short delay
+    setTimeout(() => {
+      document.getElementById('contactForm').style.display = 'none';
+      document.getElementById('successMsg').style.display = 'block';
+    }, 500);
+  }
+</script>
+
+</body>
+</html>

@@ -24,10 +24,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Nunito', sans-serif; background: var(--chalk); color: var(--ink); min-height: 100vh; }
 
-    .ad-banner-top { background: #e8e0d4; border-bottom: 1px solid #d4ccc0; display: flex; align-items: center; justify-content: center; padding: 8px 16px; min-height: 90px; }
-    .ad-placeholder { background: #d8d0c4; border: 2px dashed #b8b0a4; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #8a8078; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; gap: 4px; }
-    .ad-placeholder.leaderboard { width: 728px; height: 90px; max-width: 100%; }
-    .ad-placeholder.rectangle  { width: 300px; height: 250px; }
+
 
     header { background: var(--board); color: white; padding: 36px 24px 32px; text-align: center; position: relative; overflow: hidden; }
     header::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.04) 39px, rgba(255,255,255,0.04) 40px); pointer-events: none; }
@@ -66,7 +63,6 @@
     .tool-card[data-color="cyan"]   { border-top: 4px solid #00bcd4; }
 
     .sidebar { display: flex; flex-direction: column; gap: 24px; position: sticky; top: 20px; }
-    .sidebar-ad-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); text-align: center; margin-bottom: 4px; }
     .sidebar-tip { background: var(--board); color: white; border-radius: var(--radius); padding: 20px; }
     .sidebar-tip h3 { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gold-lt); margin-bottom: 10px; }
     .sidebar-tip p { font-size: 0.85rem; color: rgba(255,255,255,0.8); line-height: 1.6; font-family: 'Lora', serif; font-style: italic; }
@@ -83,14 +79,6 @@
   </style>
 </head>
 <body>
-
-  <div class="ad-banner-top">
-    <!-- REPLACE WITH GOOGLE ADSENSE LEADERBOARD 728×90 -->
-    <div class="ad-placeholder leaderboard">
-      <span>📢</span><span>Advertisement — 728×90 Leaderboard</span>
-      <span style="font-size:10px;opacity:0.7">Replace with Google AdSense code</span>
-    </div>
-  </div>
 
   <header>
     <div class="header-inner">
@@ -183,44 +171,25 @@
 
       </div>
 
-      <!-- MID-PAGE AD -->
-      <div style="display:flex;justify-content:center;margin:16px 0 8px;">
-        <!-- REPLACE WITH GOOGLE ADSENSE IN-CONTENT 728×90 -->
-        <div class="ad-placeholder leaderboard">
-          <span>📢</span><span>Advertisement — 728×90</span>
-          <span style="font-size:10px;opacity:0.7">Replace with Google AdSense code</span>
-        </div>
-      </div>
     </main>
 
     <aside class="sidebar">
-      <div>
-        <div class="sidebar-ad-label">Advertisement</div>
-        <!-- REPLACE WITH GOOGLE ADSENSE 300×250 -->
-        <div class="ad-placeholder rectangle">
-          <span>📢</span><span>300×250</span>
-          <span style="font-size:10px;opacity:0.7">AdSense code here</span>
-        </div>
-      </div>
-
       <div class="sidebar-tip">
         <h3>💡 Pro Tip</h3>
         <p>Open multiple tools in separate tabs before class — they load instantly and work without an internet connection once open.</p>
-      </div>
-
-      <div>
-        <div class="sidebar-ad-label">Advertisement</div>
-        <!-- REPLACE WITH GOOGLE ADSENSE 300×250 -->
-        <div class="ad-placeholder rectangle">
-          <span>📢</span><span>300×250</span>
-          <span style="font-size:10px;opacity:0.7">AdSense code here</span>
-        </div>
       </div>
     </aside>
   </div>
 
   <footer>
-    <p>© 2025 <a href="/">HandyTeacherTools.com</a> &nbsp;·&nbsp; Free for all teachers &nbsp;·&nbsp; No data collected &nbsp;·&nbsp; <a href="mailto:hello@handyteachertools.com">Contact</a></p>
+    <p>
+      <a href="about.html">About</a> &nbsp;·&nbsp;
+      <a href="contact.html">Contact</a> &nbsp;·&nbsp;
+      <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
+      <a href="terms.html">Terms of Use</a> &nbsp;·&nbsp;
+      <a href="cookies.html">Cookie Policy</a>
+    </p>
+    <p style="margin-top:10px">© 2025 <a href="/">HandyTeacherTools.com</a> &nbsp;·&nbsp; Free for all teachers &nbsp;·&nbsp; No data collected</p>
   </footer>
 
 </body>

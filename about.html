@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>About — Handy Teacher Tools</title>
+<meta name="description" content="About HandyTeacherTools.com — free, no-login classroom tools built for teachers by someone who cares about education."/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:ital,wght@0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+  :root { --board: #2d4a3e; --chalk: #f5f0e8; --ink: #1a2e25; --muted: #6b7f76; --border: #e0dbd2; --gold: #f9a825; --gold-lt: #ffc107; --apple: #4caf50; --radius: 16px; --shadow: 0 4px 20px rgba(0,0,0,0.08); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--chalk); color: var(--ink); font-family: 'Nunito', sans-serif; min-height: 100vh; }
+  nav { background: var(--board); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+  nav a { color: rgba(255,255,255,0.7); text-decoration: none; font-weight: 700; font-size: 14px; }
+  nav a:hover { color: white; }
+  nav .brand { font-weight: 900; font-size: 1.1rem; color: white; }
+
+  /* HERO */
+  .hero { background: var(--board); padding: 64px 24px; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.04) 39px, rgba(255,255,255,0.04) 40px); }
+  .hero-inner { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+  .hero h1 { font-family: 'Lora', serif; font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 600; color: white; margin-bottom: 16px; line-height: 1.3; }
+  .hero h1 em { color: var(--gold-lt); font-style: italic; }
+  .hero p { font-size: 1.05rem; color: rgba(255,255,255,0.75); line-height: 1.7; font-family: 'Lora', serif; font-style: italic; }
+
+  .page { max-width: 800px; margin: 0 auto; padding: 56px 24px 80px; }
+
+  /* VALUES */
+  .values { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-bottom: 56px; }
+  .value-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 20px; box-shadow: var(--shadow); }
+  .value-icon { font-size: 2rem; margin-bottom: 12px; }
+  .value-card h3 { font-size: 1rem; font-weight: 800; color: var(--board); margin-bottom: 8px; }
+  .value-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; font-weight: 600; }
+
+  h2 { font-family: 'Lora', serif; font-size: 1.6rem; font-weight: 600; color: var(--board); margin-bottom: 16px; }
+  p.body { font-size: 0.97rem; color: var(--ink); line-height: 1.85; margin-bottom: 18px; font-weight: 600; }
+  .section { margin-bottom: 48px; }
+
+  /* TOOLS LIST */
+  .tool-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 20px; }
+  .tool-pill { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); font-weight: 700; font-size: 0.88rem; transition: all 0.15s; box-shadow: var(--shadow); }
+  .tool-pill:hover { border-color: var(--apple); color: var(--board); transform: translateX(3px); }
+
+  /* PROMISE BOX */
+  .promise-box { background: var(--board); color: white; border-radius: var(--radius); padding: 32px; margin: 40px 0; }
+  .promise-box h3 { font-family: 'Lora', serif; font-size: 1.3rem; color: var(--gold-lt); margin-bottom: 16px; }
+  .promise-box ul { margin-left: 20px; display: flex; flex-direction: column; gap: 10px; }
+  .promise-box li { font-size: 0.95rem; color: rgba(255,255,255,0.85); line-height: 1.6; font-weight: 600; }
+
+  .cta { text-align: center; margin-top: 48px; }
+  .cta a { display: inline-block; padding: 16px 40px; background: var(--apple); color: white; text-decoration: none; border-radius: 14px; font-weight: 900; font-size: 1.05rem; box-shadow: 0 4px 16px rgba(76,175,80,0.3); transition: all 0.2s; }
+  .cta a:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(76,175,80,0.4); }
+
+  footer { background: var(--board); color: rgba(255,255,255,0.6); text-align: center; padding: 24px; font-size: 13px; font-weight: 600; }
+  footer a { color: rgba(255,255,255,0.8); text-decoration: none; margin: 0 8px; }
+  footer a:hover { color: var(--gold-lt); }
+
+  @media (max-width: 500px) { .values { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">← Back to Tools</a>
+  <span class="brand">HandyTeacherTools.com</span>
+  <span></span>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <h1>Built for teachers, <em>by someone who gets it.</em></h1>
+    <p>Free classroom tools that just work — no accounts, no subscriptions, no data collected. Open a tab, use the tool, close it. Done.</p>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- VALUES -->
+  <div class="values">
+    <div class="value-card">
+      <div class="value-icon">🆓</div>
+      <h3>Always Free</h3>
+      <p>Every tool, forever free. The site is funded through advertising — teachers never pay a thing.</p>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">🔒</div>
+      <h3>No Data Collected</h3>
+      <p>Student names and class data never leave your device. Nothing is stored on a server.</p>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">⚡</div>
+      <h3>Works Instantly</h3>
+      <p>No login, no install, no loading screen. Open the tool, use it, close it when you're done.</p>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">🖥️</div>
+      <h3>Projector-Ready</h3>
+      <p>Large text, high contrast, clear visuals — designed to be seen clearly from the back row.</p>
+    </div>
+  </div>
+
+  <!-- STORY -->
+  <div class="section">
+    <h2>Why we built this</h2>
+    <p class="body">Teachers already have enough on their plates. The tools they need for the classroom shouldn't require a sign-up form, a subscription fee, or a 20-minute tutorial. They should just work.</p>
+    <p class="body">We looked at the landscape of classroom tools and found something frustrating: the good ones cost money, the free ones require an account, and almost all of them store your class data on a remote server — raising questions schools understandably worry about.</p>
+    <p class="body">So we built HandyTeacherTools.com from scratch with three non-negotiable rules: everything is free, no accounts ever, and no data leaves your browser. The tools run entirely in your browser window. When you close the tab, the data disappears. It's that simple.</p>
+  </div>
+
+  <!-- PROMISE -->
+  <div class="promise-box">
+    <h3>🤝 Our Promise to Teachers</h3>
+    <ul>
+      <li>We will never charge for any tool on this site</li>
+      <li>We will never require you to create an account</li>
+      <li>We will never store student names or class data on our servers</li>
+      <li>We will never sell your data to third parties (we have none to sell)</li>
+      <li>The site will always be ad-supported, not teacher-supported</li>
+    </ul>
+  </div>
+
+  <!-- TOOLS -->
+  <div class="section">
+    <h2>All 10 free tools</h2>
+    <div class="tool-list">
+      <a href="01-random-student-picker.html" class="tool-pill">🎲 Random Student Picker</a>
+      <a href="02-classroom-timer.html"       class="tool-pill">⏱️ Classroom Timer</a>
+      <a href="03-noise-meter.html"           class="tool-pill">🔊 Noise Meter</a>
+      <a href="04-group-maker.html"           class="tool-pill">👥 Group Maker</a>
+      <a href="05-whiteboard.html"            class="tool-pill">✏️ Whiteboard</a>
+      <a href="06-quick-poll.html"            class="tool-pill">📊 Quick Poll</a>
+      <a href="07-reward-points.html"         class="tool-pill">⭐ Reward Points</a>
+      <a href="08-seating-chart.html"         class="tool-pill">🪑 Seating Chart</a>
+      <a href="09-word-cloud.html"            class="tool-pill">☁️ Word Cloud</a>
+      <a href="10-exit-ticket.html"           class="tool-pill">🎟️ Exit Ticket</a>
+    </div>
+  </div>
+
+  <!-- ADVERTISING NOTE -->
+  <div class="section">
+    <h2>How we keep the lights on</h2>
+    <p class="body">HandyTeacherTools.com is funded entirely through Google AdSense advertising. When you visit the site, you'll see a small number of ads. Clicking on those ads (when relevant to you) is the best way to support the site and keep all tools free.</p>
+    <p class="body">We deliberately limit the number of ads to keep the experience clean and distraction-free — especially important for a classroom environment. We will never use pop-up ads, auto-play video ads, or anything that would disrupt a lesson.</p>
+  </div>
+
+  <div class="cta">
+    <a href="index.html">← Browse all free tools</a>
+  </div>
+
+</div>
+
+<footer>
+  <a href="index.html">Home</a>
+  <a href="privacy.html">Privacy Policy</a>
+  <a href="terms.html">Terms of Use</a>
+  <a href="contact.html">Contact</a>
+  <a href="about.html">About</a>
+  <br/><br/>
+  © 2025 HandyTeacherTools.com · Free for all teachers · No data collected
+</footer>
+
+</body>
+</html>
