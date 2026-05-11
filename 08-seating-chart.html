@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Seating Chart — Handy Teacher Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #f0f4f8;
+    --card: #ffffff;
+    --board: #2c3e50;
+    --accent: #3498db;
+    --accent2: #2ecc71;
+    --text: #1a252f;
+    --muted: #7f8c8d;
+    --border: #d5dde5;
+    --desk: #fff8e1;
+    --desk-border: #f0c040;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; }
+
+  nav { background: var(--board); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+  nav a { color: rgba(255,255,255,0.6); text-decoration: none; font-weight: 700; font-size: 14px; }
+  nav a:hover { color: white; }
+  nav .tool-title { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: white; }
+
+  .app { display: grid; grid-template-columns: 280px 1fr; height: calc(100vh - 49px); }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: var(--card);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .sidebar-header {
+    padding: 16px 16px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--board);
+    color: white;
+  }
+  .sidebar-header h2 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; margin-bottom: 8px; }
+
+  .class-textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.82rem;
+    resize: none;
+    outline: none;
+    height: 100px;
+  }
+  .class-textarea::placeholder { color: rgba(255,255,255,0.4); }
+  .sidebar-header button {
+    margin-top: 8px;
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    border: none;
+    background: var(--accent2);
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .sidebar-header button:hover { opacity: 0.85; }
+
+  /* UNASSIGNED POOL */
+  .pool-section { flex: 1; overflow-y: auto; padding: 12px; }
+  .pool-section h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); font-weight: 800; margin-bottom: 8px; }
+  .pool {
+    min-height: 60px;
+    background: #f8fafc;
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    padding: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-content: flex-start;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .pool.drag-over { border-color: var(--accent); background: #e8f4fd; }
+
+  .student-chip {
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    cursor: grab;
+    user-select: none;
+    border: 2px solid transparent;
+    transition: all 0.15s;
+    white-space: nowrap;
+    color: white;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  }
+  .student-chip:hover { transform: scale(1.05); box-shadow: 0 3px 8px rgba(0,0,0,0.2); }
+  .student-chip.dragging { opacity: 0.4; transform: scale(0.95); }
+
+  /* TOOLS */
+  .tools-bar {
+    padding: 10px 12px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .tools-bar h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); font-weight: 800; }
+  .layout-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+  .layout-btn {
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: white;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .layout-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .action-btns { display: flex; gap: 6px; }
+  .action-btn {
+    flex: 1;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: white;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .action-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* CLASSROOM */
+  .classroom {
+    position: relative;
+    overflow: auto;
+    background:
+      radial-gradient(circle at 20px 20px, rgba(100,140,180,0.03) 1px, transparent 1px),
+      radial-gradient(circle at 60px 60px, rgba(100,140,180,0.03) 1px, transparent 1px);
+    background-size: 80px 80px;
+    background-color: #e8eef4;
+  }
+
+  .classroom-inner {
+    position: relative;
+    width: 100%;
+    min-height: 100%;
+    padding: 20px;
+  }
+
+  /* TEACHER DESK */
+  .teacher-area {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .teacher-desk {
+    display: inline-block;
+    background: var(--board);
+    color: white;
+    padding: 10px 48px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    box-shadow: 0 3px 12px rgba(44,62,80,0.3);
+  }
+  .teacher-label { font-size: 0.75rem; color: var(--muted); margin-top: 6px; }
+
+  /* DESK GRID */
+  .desk-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+  .desk-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* INDIVIDUAL DESK */
+  .desk {
+    width: 90px;
+    min-height: 80px;
+    background: var(--desk);
+    border: 2px solid var(--desk-border);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6px;
+    position: relative;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    cursor: default;
+  }
+  .desk.occupied { border-color: currentColor; }
+  .desk.drag-over { border-color: var(--accent); background: #e8f4fd; transform: scale(1.06); box-shadow: 0 4px 16px rgba(52,152,219,0.3); }
+  .desk.empty-desk {
+    border-style: dashed;
+    border-color: #c0cdd8;
+    background: rgba(255,255,255,0.5);
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+  .desk.empty-desk:hover { opacity: 1; border-color: var(--accent); }
+
+  .desk-student {
+    font-size: 0.75rem;
+    font-weight: 800;
+    line-height: 1.2;
+    word-break: break-word;
+    color: var(--text);
+  }
+  .desk-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 900;
+    color: white;
+    margin-bottom: 4px;
+  }
+  .desk-remove {
+    position: absolute;
+    top: -6px; right: -6px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: none;
+    background: #e74c3c;
+    color: white;
+    font-size: 10px;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  }
+  .desk:hover .desk-remove { display: flex; }
+  .desk-plus { font-size: 1.2rem; color: #a0b0c0; }
+
+  /* ZOOM CONTROLS */
+  .zoom-controls {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    display: flex;
+    gap: 6px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 6px;
+    box-shadow: var(--shadow);
+  }
+  .zoom-btn {
+    width: 32px; height: 32px;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: white;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+    font-weight: 800;
+  }
+  .zoom-btn:hover { background: var(--bg); }
+  .zoom-label { display: flex; align-items: center; padding: 0 6px; font-size: 0.8rem; font-weight: 800; color: var(--muted); }
+
+  /* PRINT */
+  @media print {
+    nav, .sidebar, .zoom-controls { display: none !important; }
+    .app { grid-template-columns: 1fr; height: auto; }
+    .classroom { background: white; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">← All Tools</a>
+  <span class="tool-title">🪑 Seating Chart Builder</span>
+  <span style="font-size:12px;color:rgba(255,255,255,0.4)">handyteachertools.com</span>
+</nav>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>📋 Class List</h2>
+      <textarea class="class-textarea" id="classTextarea" placeholder="One student per line:&#10;Alice Johnson&#10;Bob Smith&#10;Carlos Rivera...">Alice Johnson
+Bob Smith
+Carlos Rivera
+Diana Lee
+Ethan Brown
+Fiona Davis
+George Wilson
+Hannah Martinez
+Isaac Taylor
+Julia Anderson
+Kevin Thomas
+Laura Jackson
+Mike Chen
+Nina Patel</textarea>
+      <button onclick="loadStudents()">Load Students →</button>
+    </div>
+
+    <div class="pool-section">
+      <h3>Unassigned (<span id="poolCount">0</span>)</h3>
+      <div class="pool" id="studentPool"></div>
+    </div>
+
+    <div class="tools-bar">
+      <h3>Classroom Layout</h3>
+      <div class="layout-btns">
+        <button class="layout-btn" onclick="buildLayout('grid',4,4)">4×4 Grid</button>
+        <button class="layout-btn" onclick="buildLayout('grid',5,5)">5×5 Grid</button>
+        <button class="layout-btn" onclick="buildLayout('grid',6,4)">6×4</button>
+        <button class="layout-btn" onclick="buildLayout('u',5,3)">U-Shape</button>
+        <button class="layout-btn" onclick="buildLayout('rows',3,5)">3 Rows</button>
+      </div>
+      <div class="action-btns">
+        <button class="action-btn" onclick="randomFill()">🎲 Auto Fill</button>
+        <button class="action-btn" onclick="clearAll()">🗑️ Clear</button>
+        <button class="action-btn" onclick="window.print()">🖨️ Print</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLASSROOM -->
+  <div class="classroom" id="classroom">
+    <div class="classroom-inner" id="classroomInner">
+      <div class="teacher-area">
+        <div class="teacher-desk">TEACHER</div>
+        <div class="teacher-label">Front of classroom</div>
+      </div>
+      <div class="desk-grid" id="deskGrid"></div>
+    </div>
+    <div class="zoom-controls">
+      <button class="zoom-btn" onclick="zoom(-0.1)">−</button>
+      <span class="zoom-label" id="zoomLabel">100%</span>
+      <button class="zoom-btn" onclick="zoom(0.1)">+</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const COLORS = ['#e74c3c','#3498db','#9b59b6','#f39c12','#1abc9c','#e67e22','#2ecc71','#e91e63','#00bcd4','#ff5722','#8bc34a','#607d8b','#ff9800','#795548'];
+
+  let students = [];
+  let desks = []; // [{id, studentName|null}]
+  let scale = 1;
+  let dragSource = null; // {type: 'pool'|'desk', id?}
+  let dragName = null;
+
+  const grid = document.getElementById('deskGrid');
+  const pool = document.getElementById('studentPool');
+
+  function loadStudents() {
+    const names = document.getElementById('classTextarea').value.split('\n').map(s => s.trim()).filter(s => s);
+    students = names;
+    // Clear all desk assignments
+    desks.forEach(d => d.studentName = null);
+    renderPool();
+    renderDesks();
+  }
+
+  function getPoolStudents() {
+    const assigned = new Set(desks.filter(d => d.studentName).map(d => d.studentName));
+    return students.filter(s => !assigned.has(s));
+  }
+
+  function renderPool() {
+    const inPool = getPoolStudents();
+    document.getElementById('poolCount').textContent = inPool.length;
+    pool.innerHTML = '';
+    inPool.forEach(name => {
+      const chip = makeChip(name);
+      pool.appendChild(chip);
+    });
+  }
+
+  function makeChip(name) {
+    const i = students.indexOf(name) % COLORS.length;
+    const chip = document.createElement('div');
+    chip.className = 'student-chip';
+    chip.textContent = name.split(' ')[0];
+    chip.title = name;
+    chip.style.background = COLORS[i];
+    chip.draggable = true;
+    chip.addEventListener('dragstart', e => { dragName = name; dragSource = {type:'pool'}; chip.classList.add('dragging'); });
+    chip.addEventListener('dragend',   () => chip.classList.remove('dragging'));
+    return chip;
+  }
+
+  function buildLayout(type, cols, rows) {
+    desks = [];
+    let id = 0;
+    if (type === 'grid') {
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          desks.push({ id: id++, row: r, col: c, studentName: null });
+        }
+      }
+    } else if (type === 'u') {
+      // Front row + two side columns
+      for (let c = 0; c < cols*2; c++) desks.push({ id: id++, row: 0, col: c, studentName: null });
+      for (let r = 1; r <= rows; r++) {
+        desks.push({ id: id++, row: r, col: 0, studentName: null });
+        desks.push({ id: id++, row: r, col: cols*2-1, studentName: null });
+      }
+    } else if (type === 'rows') {
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          desks.push({ id: id++, row: r, col: c, studentName: null });
+        }
+      }
+    }
+    renderPool();
+    renderDesks();
+  }
+
+  function renderDesks() {
+    grid.innerHTML = '';
+    if (desks.length === 0) {
+      grid.innerHTML = '<p style="color:var(--muted);font-size:0.9rem;text-align:center;padding:40px">Choose a layout →</p>';
+      return;
+    }
+    const maxRow = Math.max(...desks.map(d => d.row));
+    for (let r = 0; r <= maxRow; r++) {
+      const rowDesks = desks.filter(d => d.row === r);
+      if (rowDesks.length === 0) continue;
+      const row = document.createElement('div');
+      row.className = 'desk-row';
+      rowDesks.sort((a,b) => a.col - b.col).forEach(d => {
+        row.appendChild(makeDeskEl(d));
+      });
+      grid.appendChild(row);
+    }
+  }
+
+  function makeDeskEl(d) {
+    const el = document.createElement('div');
+    el.className = 'desk';
+    el.dataset.id = d.id;
+    const si = d.studentName ? students.indexOf(d.studentName) % COLORS.length : -1;
+
+    if (d.studentName) {
+      el.classList.add('occupied');
+      el.style.borderColor = COLORS[si] + '80';
+      const initials = d.studentName.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+      el.innerHTML = `
+        <div class="desk-avatar" style="background:${COLORS[si]}">${initials}</div>
+        <div class="desk-student">${d.studentName.split(' ')[0]}</div>
+        <button class="desk-remove" onclick="removeFromDesk(${d.id})">×</button>
+      `;
+      el.draggable = true;
+      el.addEventListener('dragstart', e => { dragName = d.studentName; dragSource = {type:'desk', id:d.id}; });
+    } else {
+      el.classList.add('empty-desk');
+      el.innerHTML = `<span class="desk-plus">+</span>`;
+    }
+
+    el.addEventListener('dragover',  e => { e.preventDefault(); el.classList.add('drag-over'); });
+    el.addEventListener('dragleave', () => el.classList.remove('drag-over'));
+    el.addEventListener('drop', e => {
+      e.preventDefault();
+      el.classList.remove('drag-over');
+      if (!dragName) return;
+      // Clear old desk if from desk
+      if (dragSource?.type === 'desk') {
+        const oldDesk = desks.find(x => x.id === dragSource.id);
+        if (oldDesk) oldDesk.studentName = null;
+      }
+      // If dropping on occupied desk, swap
+      if (d.studentName && dragSource?.type === 'desk') {
+        const oldDesk = desks.find(x => x.id === dragSource.id);
+        if (oldDesk) oldDesk.studentName = d.studentName;
+      }
+      d.studentName = dragName;
+      dragName = null; dragSource = null;
+      renderPool(); renderDesks();
+    });
+
+    return el;
+  }
+
+  function removeFromDesk(id) {
+    const d = desks.find(x => x.id === id);
+    if (d) d.studentName = null;
+    renderPool(); renderDesks();
+  }
+
+  function randomFill() {
+    const unassigned = getPoolStudents();
+    const empty = desks.filter(d => !d.studentName);
+    const shuffled = [...unassigned].sort(() => Math.random() - 0.5);
+    shuffled.forEach((name, i) => { if (empty[i]) empty[i].studentName = name; });
+    renderPool(); renderDesks();
+  }
+
+  function clearAll() {
+    desks.forEach(d => d.studentName = null);
+    renderPool(); renderDesks();
+  }
+
+  function zoom(delta) {
+    scale = Math.max(0.5, Math.min(1.5, scale + delta));
+    document.getElementById('classroomInner').style.transform = `scale(${scale})`;
+    document.getElementById('classroomInner').style.transformOrigin = 'top center';
+    document.getElementById('zoomLabel').textContent = Math.round(scale * 100) + '%';
+  }
+
+  // Pool drop target
+  pool.addEventListener('dragover', e => { e.preventDefault(); pool.classList.add('drag-over'); });
+  pool.addEventListener('dragleave', () => pool.classList.remove('drag-over'));
+  pool.addEventListener('drop', e => {
+    e.preventDefault();
+    pool.classList.remove('drag-over');
+    if (dragSource?.type === 'desk') {
+      const d = desks.find(x => x.id === dragSource.id);
+      if (d) d.studentName = null;
+    }
+    dragName = null; dragSource = null;
+    renderPool(); renderDesks();
+  });
+
+  // Init
+  loadStudents();
+  buildLayout('grid', 5, 3);
+  // Auto-fill on first load
+  randomFill();
+</script>
+</body>
+</html>

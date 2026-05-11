@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Random Student Picker — Handy Teacher Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #1b2838; --card: #243447; --border: #2f4562;
+    --accent: #66c0f4; --gold: #f9a825; --green: #4caf50;
+    --text: #f0f6fc; --muted: #7a9bbf; --radius: 18px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+
+  nav { background: rgba(27,40,56,0.97); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+  nav a { color: var(--muted); text-decoration: none; font-weight: 700; font-size: 14px; }
+  nav a:hover { color: var(--text); }
+  nav .tool-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: var(--accent); }
+
+  main { flex: 1; max-width: 900px; margin: 0 auto; padding: 40px 20px 60px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 28px; }
+
+  /* SPINNER */
+  .spinner-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 580px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .spinner-label { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 16px; }
+  .spinner-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 10vw, 5.5rem);
+    letter-spacing: 3px;
+    color: var(--accent);
+    line-height: 1;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.1s;
+    text-shadow: 0 0 30px rgba(102,192,244,0.3);
+  }
+  .spinner-name.spinning { animation: flicker 0.08s infinite; }
+  @keyframes flicker { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+  .spinner-name.winner {
+    color: var(--gold);
+    text-shadow: 0 0 40px rgba(249,168,37,0.5);
+    animation: winnerPop 0.5s ease;
+  }
+  @keyframes winnerPop { 0% { transform: scale(0.8); } 60% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+  .btn-spin {
+    margin-top: 28px;
+    padding: 18px 56px;
+    background: var(--accent);
+    color: #1b2838;
+    border: none;
+    border-radius: 14px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 20px rgba(102,192,244,0.3);
+  }
+  .btn-spin:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(102,192,244,0.4); }
+  .btn-spin:disabled { opacity: 0.5; pointer-events: none; }
+  .btn-spin.stop-mode { background: var(--gold); box-shadow: 0 4px 20px rgba(249,168,37,0.3); }
+
+  .picked-count { margin-top: 16px; font-size: 0.85rem; color: var(--muted); font-weight: 700; }
+
+  /* CONTROLS */
+  .controls-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .ctrl-btn {
+    padding: 10px 20px; border-radius: 10px; border: 1px solid var(--border);
+    background: var(--card); color: var(--text); font-family: 'Nunito', sans-serif;
+    font-size: 0.88rem; font-weight: 800; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .ctrl-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* CLASS LIST + PICKED */
+  .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 760px; }
+  .list-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+  .list-card h3 { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+  .list-card h3 span { background: var(--border); border-radius: 100px; padding: 2px 10px; font-size: 0.75rem; color: var(--text); }
+
+  textarea.class-input {
+    width: 100%; height: 180px; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 10px; color: var(--text); padding: 10px 12px;
+    font-family: 'Nunito', sans-serif; font-size: 0.88rem; resize: vertical; outline: none;
+    transition: border-color 0.2s;
+  }
+  textarea.class-input:focus { border-color: var(--accent); }
+
+  .picked-list { display: flex; flex-direction: column; gap: 6px; max-height: 220px; overflow-y: auto; }
+  .picked-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 8px; font-size: 0.88rem; font-weight: 700;
+    animation: slideIn 0.25s ease;
+  }
+  @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+  .picked-num { font-size: 0.75rem; color: var(--gold); font-weight: 900; min-width: 20px; }
+
+  /* CONFETTI */
+  .conf { position: fixed; pointer-events: none; z-index: 1000; }
+  .conf-piece { position: absolute; top: -10px; width: 8px; height: 8px; border-radius: 2px; animation: fall linear forwards; }
+  @keyframes fall { to { transform: translateY(105vh) rotate(720deg); opacity: 0; } }
+
+  footer { text-align: center; padding: 20px; font-size: 12px; color: var(--muted); font-weight: 600; }
+  footer a { color: var(--muted); text-decoration: none; }
+
+  @media (max-width: 600px) { .bottom-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html">← All Tools</a>
+  <span class="tool-title">🎲 Student Picker</span>
+  <span style="font-size:12px;color:var(--muted)">handyteachertools.com</span>
+</nav>
+
+<main>
+  <div class="spinner-card">
+    <div class="spinner-label">Next up…</div>
+    <div class="spinner-name" id="spinnerName">?</div>
+    <button class="btn-spin" id="btnSpin" onclick="toggleSpin()">SPIN!</button>
+    <div class="picked-count" id="pickedCount"></div>
+  </div>
+
+  <div class="controls-row">
+    <button class="ctrl-btn" onclick="resetPicked()">🔄 Reset Picked</button>
+    <button class="ctrl-btn" onclick="removeLastPicked()">↩ Undo Last</button>
+    <button class="ctrl-btn" onclick="pickAll()">📋 Pick All (in order)</button>
+  </div>
+
+  <div class="bottom-grid">
+    <div class="list-card">
+      <h3>Class List <span id="totalCount">0</span></h3>
+      <textarea class="class-input" id="classList" placeholder="One student per line:&#10;Alice Johnson&#10;Bob Smith&#10;Carlos Rivera..." oninput="updateList()">Alice Johnson
+Bob Smith
+Carlos Rivera
+Diana Lee
+Ethan Brown
+Fiona Davis
+George Wilson
+Hannah Martinez
+Isaac Taylor
+Julia Anderson
+Kevin Thomas
+Laura Jackson</textarea>
+    </div>
+    <div class="list-card">
+      <h3>Already Picked <span id="pickedListCount">0</span></h3>
+      <div class="picked-list" id="pickedList"></div>
+    </div>
+  </div>
+</main>
+
+<div class="conf" id="confetti"></div>
+<footer><a href="index.html">← Back to all tools</a> · handyteachertools.com</footer>
+
+<script>
+  const COLORS = ['#66c0f4','#f9a825','#4caf50','#ff6b6b','#c77dff','#06d6a0','#ff9800'];
+  let students = [];
+  let picked = [];
+  let spinning = false;
+  let spinInterval = null;
+
+  function getStudents() {
+    return document.getElementById('classList').value.split('\n').map(s => s.trim()).filter(s => s);
+  }
+
+  function updateList() {
+    students = getStudents();
+    document.getElementById('totalCount').textContent = students.length;
+    updatePickedCount();
+  }
+
+  function updatePickedCount() {
+    const remaining = students.filter(s => !picked.includes(s)).length;
+    document.getElementById('pickedCount').textContent =
+      picked.length > 0 ? `${picked.length} picked · ${remaining} remaining` : `${students.length} students`;
+  }
+
+  function toggleSpin() {
+    if (spinning) stopSpin();
+    else startSpin();
+  }
+
+  function startSpin() {
+    students = getStudents();
+    const pool = students.filter(s => !picked.includes(s));
+    if (pool.length === 0) {
+      document.getElementById('spinnerName').textContent = 'ALL PICKED!';
+      return;
+    }
+    spinning = true;
+    document.getElementById('btnSpin').textContent = 'STOP!';
+    document.getElementById('btnSpin').classList.add('stop-mode');
+    document.getElementById('spinnerName').classList.add('spinning');
+    document.getElementById('spinnerName').classList.remove('winner');
+
+    spinInterval = setInterval(() => {
+      const name = pool[Math.floor(Math.random() * pool.length)];
+      document.getElementById('spinnerName').textContent = name.split(' ')[0].toUpperCase();
+    }, 80);
+  }
+
+  function stopSpin() {
+    clearInterval(spinInterval);
+    spinning = false;
+    const pool = students.filter(s => !picked.includes(s));
+    const winner = pool[Math.floor(Math.random() * pool.length)];
+    picked.push(winner);
+
+    const el = document.getElementById('spinnerName');
+    el.classList.remove('spinning');
+    el.classList.add('winner');
+    el.textContent = winner.split(' ')[0].toUpperCase();
+
+    document.getElementById('btnSpin').textContent = 'SPIN!';
+    document.getElementById('btnSpin').classList.remove('stop-mode');
+
+    renderPickedList();
+    updatePickedCount();
+    spawnConfetti();
+  }
+
+  function renderPickedList() {
+    const list = document.getElementById('pickedList');
+    list.innerHTML = '';
+    [...picked].reverse().forEach((name, i) => {
+      const item = document.createElement('div');
+      item.className = 'picked-item';
+      item.innerHTML = `<span class="picked-num">${picked.length - i}</span>${name}`;
+      list.appendChild(item);
+    });
+    document.getElementById('pickedListCount').textContent = picked.length;
+  }
+
+  function resetPicked() {
+    picked = [];
+    document.getElementById('spinnerName').textContent = '?';
+    document.getElementById('spinnerName').classList.remove('winner');
+    renderPickedList();
+    updatePickedCount();
+  }
+
+  function removeLastPicked() {
+    if (picked.length === 0) return;
+    picked.pop();
+    renderPickedList();
+    updatePickedCount();
+  }
+
+  function pickAll() {
+    students = getStudents();
+    const shuffled = [...students].sort(() => Math.random() - 0.5);
+    picked = shuffled;
+    renderPickedList();
+    updatePickedCount();
+    if (shuffled.length > 0) {
+      const el = document.getElementById('spinnerName');
+      el.textContent = shuffled[0].split(' ')[0].toUpperCase();
+      el.classList.add('winner');
+    }
+  }
+
+  function spawnConfetti() {
+    const wrap = document.getElementById('confetti');
+    wrap.innerHTML = '';
+    for (let i = 0; i < 50; i++) {
+      const p = document.createElement('div');
+      p.className = 'conf-piece';
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.background = COLORS[Math.floor(Math.random() * COLORS.length)];
+      p.style.animationDuration = (1 + Math.random() * 1.5) + 's';
+      p.style.animationDelay = (Math.random() * 0.3) + 's';
+      wrap.appendChild(p);
+    }
+    setTimeout(() => wrap.innerHTML = '', 2500);
+  }
+
+  updateList();
+</script>
+</body>
+</html>

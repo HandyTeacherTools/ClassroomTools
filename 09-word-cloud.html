@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Word Cloud — Handy Teacher Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0d0d1a;
+    --card: #13131f;
+    --border: #1e1e30;
+    --accent: #7c3aed;
+    --accent2: #06b6d4;
+    --text: #f1f5f9;
+    --muted: #64748b;
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+
+  nav { background: var(--card); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+  nav a { color: var(--muted); text-decoration: none; font-weight: 700; font-size: 14px; transition: color 0.2s; }
+  nav a:hover { color: var(--text); }
+  nav .tool-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--text); }
+
+  .app { flex: 1; display: grid; grid-template-columns: 320px 1fr; height: calc(100vh - 49px); }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: var(--card);
+    border-right: 1px solid var(--border);
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow-y: auto;
+  }
+  .sidebar h2 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--text); margin-bottom: 4px; }
+
+  label { font-size: 0.78rem; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; display: block; margin-bottom: 6px; }
+
+  .word-input-area {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .word-entry {
+    display: flex;
+    gap: 6px;
+    width: 100%;
+  }
+  input[type=text].word-field {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 10px 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input[type=text].word-field:focus { border-color: var(--accent); }
+
+  .add-btn {
+    padding: 10px 14px;
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+  }
+  .add-btn:hover { opacity: 0.85; }
+
+  textarea.bulk-input {
+    width: 100%;
+    height: 100px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 10px 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  textarea.bulk-input:focus { border-color: var(--accent); }
+  .bulk-btn {
+    width: 100%;
+    padding: 9px;
+    background: var(--border);
+    border: none;
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 6px;
+  }
+  .bulk-btn:hover { background: #252535; }
+
+  /* WORD LIST */
+  .word-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-height: 40px;
+    max-height: 150px;
+    overflow-y: auto;
+  }
+  .word-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px 5px 12px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: white;
+    cursor: default;
+    transition: all 0.15s;
+  }
+  .word-tag .del { cursor: pointer; opacity: 0.7; font-size: 0.9rem; }
+  .word-tag .del:hover { opacity: 1; }
+  .word-count-badge {
+    background: rgba(255,255,255,0.25);
+    border-radius: 100px;
+    padding: 1px 6px;
+    font-size: 0.7rem;
+  }
+
+  /* THEME */
+  .theme-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .theme-btn {
+    padding: 8px 4px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background: var(--bg);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--muted);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+  }
+  .theme-btn:hover { border-color: var(--accent); color: var(--text); }
+  .theme-btn.active { border-color: var(--accent); color: var(--text); background: rgba(124,58,237,0.1); }
+
+  /* SETTINGS */
+  .setting-row { display: flex; align-items: center; justify-content: space-between; }
+  .setting-row label { margin: 0; }
+  input[type=range].mini-range {
+    -webkit-appearance: none;
+    width: 100px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  input[type=range].mini-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px; height: 14px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+  .range-val { font-size: 0.8rem; font-weight: 800; color: var(--accent); min-width: 28px; text-align: right; }
+
+  .action-row { display: flex; gap: 8px; }
+  .action-row button {
+    flex: 1;
+    padding: 11px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: transparent;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .action-row button:hover { border-color: var(--accent); color: var(--accent); }
+  .action-row button.primary { background: var(--accent); border-color: var(--accent); }
+  .action-row button.primary:hover { opacity: 0.85; color: white; }
+
+  /* CLOUD CANVAS */
+  .cloud-area {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  canvas { display: block; }
+
+  .empty-cloud {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    gap: 12px;
+    pointer-events: none;
+  }
+  .empty-cloud .icon { font-size: 4rem; opacity: 0.3; }
+  .empty-cloud p { font-size: 1rem; font-weight: 700; opacity: 0.5; }
+
+  footer { text-align: center; padding: 12px; font-size: 12px; color: var(--muted); font-weight: 600; }
+  footer a { color: var(--muted); text-decoration: none; }
+
+  @media (max-width: 700px) {
+    .app { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+    .sidebar { max-height: 50vh; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">← All Tools</a>
+  <span class="tool-title">☁️ Word Cloud</span>
+  <span style="font-size:12px;color:var(--muted)">handyteachertools.com</span>
+</nav>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div>
+      <h2>☁️ Word Cloud Generator</h2>
+      <p style="font-size:0.82rem;color:var(--muted);font-weight:600">Add words — bigger = more frequent.</p>
+    </div>
+
+    <!-- ADD SINGLE WORD -->
+    <div>
+      <label>Add a Word</label>
+      <div class="word-entry">
+        <input type="text" class="word-field" id="wordInput" placeholder="Type a word..." maxlength="30" onkeydown="if(event.key==='Enter')addWord()"/>
+        <button class="add-btn" onclick="addWord()">+Add</button>
+      </div>
+    </div>
+
+    <!-- BULK ADD -->
+    <div>
+      <label>Bulk Add (comma or line separated)</label>
+      <textarea class="bulk-input" id="bulkInput" placeholder="apple, banana, cherry&#10;or&#10;one per line"></textarea>
+      <button class="bulk-btn" onclick="bulkAdd()">📥 Add All</button>
+    </div>
+
+    <!-- WORD LIST -->
+    <div>
+      <label>Words (<span id="wordListCount">0</span>)</label>
+      <div class="word-list" id="wordList"></div>
+    </div>
+
+    <!-- THEME -->
+    <div>
+      <label>Color Theme</label>
+      <div class="theme-grid">
+        <button class="theme-btn active" onclick="setTheme('vivid')"   id="themeVivid">🌈 Vivid</button>
+        <button class="theme-btn"        onclick="setTheme('ocean')"   id="themeOcean">🌊 Ocean</button>
+        <button class="theme-btn"        onclick="setTheme('sunset')"  id="themeSunset">🌅 Sunset</button>
+        <button class="theme-btn"        onclick="setTheme('forest')"  id="themeForest">🌿 Forest</button>
+        <button class="theme-btn"        onclick="setTheme('candy')"   id="themeCandy">🍭 Candy</button>
+        <button class="theme-btn"        onclick="setTheme('mono')"    id="themeMono">⬜ Mono</button>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <label style="margin:0">Settings</label>
+      <div class="setting-row">
+        <label>Max Words</label>
+        <input type="range" class="mini-range" id="maxWords" min="10" max="100" value="50" oninput="updateSetting()"/>
+        <span class="range-val" id="maxWordsVal">50</span>
+      </div>
+      <div class="setting-row">
+        <label>Max Font Size</label>
+        <input type="range" class="mini-range" id="maxFont" min="40" max="120" value="80" oninput="updateSetting()"/>
+        <span class="range-val" id="maxFontVal">80</span>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button onclick="clearWords()">🗑️ Clear</button>
+      <button class="primary" onclick="generateCloud()">⚡ Generate</button>
+    </div>
+    <div class="action-row">
+      <button onclick="saveCloud()">💾 Save PNG</button>
+      <button onclick="loadExample()">📖 Example</button>
+    </div>
+  </div>
+
+  <!-- CLOUD CANVAS -->
+  <div class="cloud-area" id="cloudArea">
+    <canvas id="cloudCanvas"></canvas>
+    <div class="empty-cloud" id="emptyState">
+      <div class="icon">☁️</div>
+      <p>Add words and click Generate</p>
+    </div>
+  </div>
+
+</div>
+
+<footer><a href="index.html">← Back to all tools</a> · handyteachertools.com</footer>
+
+<script>
+  const THEMES = {
+    vivid:  ['#ff6b6b','#ffd93d','#6bcb77','#4d96ff','#c77dff','#ff9f1c','#06d6a0','#f72585'],
+    ocean:  ['#0077b6','#00b4d8','#90e0ef','#48cae4','#023e8a','#0096c7','#ade8f4','#caf0f8'],
+    sunset: ['#ff6000','#ff8500','#ffaa00','#ffd000','#ff003c','#ff5500','#ff8800','#ffbb00'],
+    forest: ['#606c38','#283618','#dda15e','#bc6c25','#99b08b','#4e6c50','#a4ac86','#ffe8a1'],
+    candy:  ['#ff85a1','#fbb1bd','#ff5978','#e0a0c0','#c77dff','#ff9ef7','#a663cc','#ffd6ff'],
+    mono:   ['#ffffff','#e2e8f0','#cbd5e1','#94a3b8','#64748b','#f8fafc','#e2e8f0','#f1f5f9'],
+  };
+
+  let wordMap = new Map(); // word → count
+  let currentTheme = 'vivid';
+  let maxWords = 50;
+  let maxFont = 80;
+
+  const canvas = document.getElementById('cloudCanvas');
+  const ctx = canvas.getContext('2d');
+  const cloudArea = document.getElementById('cloudArea');
+
+  function resizeCanvas() {
+    canvas.width  = cloudArea.clientWidth;
+    canvas.height = cloudArea.clientHeight;
+  }
+  window.addEventListener('resize', () => { resizeCanvas(); generateCloud(); });
+  resizeCanvas();
+
+  function addWord() {
+    const input = document.getElementById('wordInput');
+    const word = input.value.trim().toLowerCase();
+    if (!word) return;
+    wordMap.set(word, (wordMap.get(word) || 0) + 1);
+    input.value = '';
+    input.focus();
+    renderWordList();
+    generateCloud();
+  }
+
+  function bulkAdd() {
+    const raw = document.getElementById('bulkInput').value;
+    const words = raw.split(/[\n,]+/).map(w => w.trim().toLowerCase()).filter(w => w && w.length > 0);
+    words.forEach(w => wordMap.set(w, (wordMap.get(w) || 0) + 1));
+    document.getElementById('bulkInput').value = '';
+    renderWordList();
+    generateCloud();
+  }
+
+  function clearWords() {
+    wordMap.clear();
+    renderWordList();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    document.getElementById('emptyState').style.display = 'flex';
+  }
+
+  function renderWordList() {
+    const list = document.getElementById('wordList');
+    document.getElementById('wordListCount').textContent = wordMap.size;
+    list.innerHTML = '';
+    [...wordMap.entries()].sort((a,b) => b[1]-a[1]).slice(0, 40).forEach(([word, count], i) => {
+      const tag = document.createElement('span');
+      tag.className = 'word-tag';
+      tag.style.background = THEMES[currentTheme][i % THEMES[currentTheme].length];
+      tag.innerHTML = `${word}${count > 1 ? `<span class="word-count-badge">${count}</span>` : ''}<span class="del" onclick="removeWord('${word}')">×</span>`;
+      list.appendChild(tag);
+    });
+  }
+
+  function removeWord(word) {
+    wordMap.delete(word);
+    renderWordList();
+    generateCloud();
+  }
+
+  function setTheme(t) {
+    currentTheme = t;
+    document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('theme' + t.charAt(0).toUpperCase() + t.slice(1)).classList.add('active');
+    renderWordList();
+    generateCloud();
+  }
+
+  function updateSetting() {
+    maxWords = parseInt(document.getElementById('maxWords').value);
+    maxFont  = parseInt(document.getElementById('maxFont').value);
+    document.getElementById('maxWordsVal').textContent = maxWords;
+    document.getElementById('maxFontVal').textContent  = maxFont;
+    generateCloud();
+  }
+
+  function generateCloud() {
+    if (wordMap.size === 0) {
+      document.getElementById('emptyState').style.display = 'flex';
+      return;
+    }
+    document.getElementById('emptyState').style.display = 'none';
+
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    // Dark background
+    ctx.fillStyle = '#0d0d1a';
+    ctx.fillRect(0, 0, W, H);
+
+    // Get sorted words
+    const sorted = [...wordMap.entries()].sort((a,b) => b[1]-a[1]).slice(0, maxWords);
+    const maxCount = sorted[0][1];
+    const minCount = sorted[sorted.length-1][1];
+    const minFont = 14;
+
+    const placed = []; // [{x,y,w,h}]
+    const colors = THEMES[currentTheme];
+    const fonts = ["'Playfair Display', serif", "'Nunito', sans-serif"];
+
+    sorted.forEach(([word, count], idx) => {
+      const range = maxCount - minCount || 1;
+      const ratio = (count - minCount) / range;
+      const fontSize = Math.round(minFont + ratio * (maxFont - minFont));
+      const fontFace = idx < 5 ? fonts[0] : fonts[1];
+      const weight = count >= maxCount * 0.6 ? '900' : '700';
+
+      ctx.font = `${weight} ${fontSize}px ${fontFace}`;
+      const metrics = ctx.measureText(word);
+      const tw = metrics.width + 8;
+      const th = fontSize + 8;
+
+      const color = colors[idx % colors.length];
+      const angle = [0, 0, 0, Math.PI/2][Math.floor(Math.random() * 4)];
+
+      // Try to place
+      let placed_ok = false;
+      const cx = W/2, cy = H/2;
+      for (let r = 0; r < 300; r++) {
+        const t = r * 0.25;
+        const x = cx + (t * 3) * Math.cos(t) * (Math.random() > 0.5 ? 1 : -1);
+        const y = cy + (t * 2) * Math.sin(t) * (Math.random() > 0.5 ? 1 : -1);
+
+        // Bounds check
+        if (x - tw/2 < 4 || x + tw/2 > W-4 || y - th/2 < 4 || y + th/2 > H-4) continue;
+
+        // Collision check
+        const box = { x: x - tw/2, y: y - th/2, w: tw, h: th };
+        const collides = placed.some(p =>
+          box.x < p.x + p.w + 4 && box.x + box.w + 4 > p.x &&
+          box.y < p.y + p.h + 4 && box.y + box.h + 4 > p.y
+        );
+        if (collides) continue;
+
+        placed.push(box);
+
+        ctx.save();
+        ctx.translate(x, y);
+        if (angle !== 0) ctx.rotate(angle);
+        ctx.font = `${weight} ${fontSize}px ${fontFace}`;
+        ctx.fillStyle = color;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        // Glow for big words
+        if (fontSize > 50) {
+          ctx.shadowColor = color;
+          ctx.shadowBlur = 12;
+        }
+        ctx.fillText(word, 0, 0);
+        ctx.shadowBlur = 0;
+        ctx.restore();
+
+        placed_ok = true;
+        break;
+      }
+    });
+  }
+
+  function saveCloud() {
+    const a = document.createElement('a');
+    a.download = 'word-cloud.png';
+    a.href = canvas.toDataURL();
+    a.click();
+  }
+
+  function loadExample() {
+    const words = ['learning','science','math','reading','history','art','music','PE','lunch','friends','homework','study','teacher','school','books','pencil','test','project','fun','creativity','teamwork','respect','kindness','growth'];
+    wordMap.clear();
+    words.forEach((w,i) => wordMap.set(w, Math.max(1, 5 - Math.floor(i/5))));
+    renderWordList();
+    generateCloud();
+  }
+</script>
+</body>
+</html>

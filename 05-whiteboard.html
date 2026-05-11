@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Whiteboard — Handy Teacher Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Kalam:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --toolbar: #16213e;
+    --border: #0f3460;
+    --accent: #e94560;
+    --white: #f0f0f0;
+    --text: #e8eaf6;
+    --muted: #7986cb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; }
+  body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; display: flex; flex-direction: column; }
+
+  /* TOOLBAR */
+  .toolbar {
+    background: var(--toolbar);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    z-index: 10;
+    user-select: none;
+  }
+
+  .toolbar-brand { font-family: 'Kalam', cursive; font-size: 1.1rem; color: var(--white); font-weight: 700; margin-right: 8px; white-space: nowrap; }
+  .toolbar-brand a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.75rem; font-family: 'Nunito'; margin-right: 8px; }
+  .toolbar-brand a:hover { color: white; }
+
+  .divider { width: 1px; height: 32px; background: var(--border); flex-shrink: 0; }
+
+  .tool-btn {
+    width: 38px; height: 38px;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.06);
+    color: var(--text);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .tool-btn:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2); }
+  .tool-btn.active { background: rgba(233,69,96,0.2); border-color: var(--accent); }
+  .tool-btn[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  /* COLOR PALETTE */
+  .color-palette { display: flex; gap: 5px; align-items: center; }
+  .color-swatch {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .color-swatch:hover { transform: scale(1.2); }
+  .color-swatch.active { border-color: white; box-shadow: 0 0 0 2px rgba(255,255,255,0.4); }
+  input[type=color] { width: 26px; height: 26px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; cursor: pointer; padding: 0; background: none; }
+
+  /* SIZE SLIDER */
+  .size-wrap { display: flex; align-items: center; gap: 8px; }
+  .size-wrap span { font-size: 0.75rem; color: var(--muted); font-weight: 700; }
+  input[type=range].size-slider {
+    -webkit-appearance: none;
+    width: 80px; height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  input[type=range].size-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px; height: 16px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(233,69,96,0.5);
+  }
+  .size-preview {
+    background: white;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* OPACITY */
+  .opacity-wrap { display: flex; align-items: center; gap: 6px; }
+  .opacity-wrap span { font-size: 0.75rem; color: var(--muted); font-weight: 700; min-width: 28px; text-align: right; }
+  input[type=range].opacity-slider {
+    -webkit-appearance: none;
+    width: 60px; height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  input[type=range].opacity-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px; height: 16px;
+    background: var(--muted);
+    border-radius: 50%;
+  }
+
+  /* TEXT CONTROLS (shown when text tool active) */
+  .text-controls { display: none; align-items: center; gap: 8px; }
+  .text-controls.visible { display: flex; }
+  .font-size-select {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: white;
+    padding: 4px 8px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+
+  /* CANVAS */
+  .canvas-wrap {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+    touch-action: none;
+  }
+  canvas.cursor-eraser { cursor: cell; }
+  canvas.cursor-text    { cursor: text; }
+  canvas.cursor-select  { cursor: default; }
+
+  /* TEXT INPUT OVERLAY */
+  #textInput {
+    position: absolute;
+    background: transparent;
+    border: 2px dashed rgba(255,255,255,0.5);
+    border-radius: 4px;
+    color: white;
+    font-family: 'Kalam', cursive;
+    padding: 4px 8px;
+    outline: none;
+    min-width: 120px;
+    min-height: 40px;
+    resize: none;
+    display: none;
+    z-index: 10;
+    line-height: 1.3;
+    background: rgba(0,0,0,0.2);
+  }
+
+  /* ZOOM INDICATOR */
+  .zoom-indicator {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(0,0,0,0.6);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  /* BG OPTIONS */
+  .bg-btns { display: flex; gap: 4px; }
+  .bg-btn {
+    width: 26px; height: 26px;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .bg-btn:hover { transform: scale(1.1); }
+  .bg-btn.active { border-color: white; }
+  .bg-dark  { background: #1a1a2e; color: white; }
+  .bg-white { background: #f5f5f5; color: #333; }
+  .bg-green { background: #1b4332; color: #90ee90; }
+  .bg-grid  { background: #0a0a1a; color: var(--muted); }
+
+  /* UNDO/REDO counter */
+  .history-info { font-size: 11px; color: var(--muted); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="toolbar-brand">
+    <a href="index.html">← Home</a>
+    ✏️ Whiteboard
+  </div>
+  <div class="divider"></div>
+
+  <!-- DRAWING TOOLS -->
+  <button class="tool-btn active" id="toolPen"     onclick="setTool('pen')"     title="Pen (P)">✏️</button>
+  <button class="tool-btn"        id="toolMarker"  onclick="setTool('marker')"  title="Marker (M)">🖊️</button>
+  <button class="tool-btn"        id="toolLine"    onclick="setTool('line')"    title="Line (L)">╱</button>
+  <button class="tool-btn"        id="toolRect"    onclick="setTool('rect')"    title="Rectangle (R)">▭</button>
+  <button class="tool-btn"        id="toolCircle"  onclick="setTool('circle')"  title="Circle (C)">○</button>
+  <button class="tool-btn"        id="toolArrow"   onclick="setTool('arrow')"   title="Arrow (A)">→</button>
+  <button class="tool-btn"        id="toolText"    onclick="setTool('text')"    title="Text (T)">T</button>
+  <button class="tool-btn"        id="toolEraser"  onclick="setTool('eraser')"  title="Eraser (E)">🧹</button>
+
+  <div class="divider"></div>
+
+  <!-- COLORS -->
+  <div class="color-palette">
+    <div class="color-swatch active" style="background:#f0f0f0" data-color="#f0f0f0" onclick="setColor(this)" title="White"></div>
+    <div class="color-swatch" style="background:#ff4757" data-color="#ff4757" onclick="setColor(this)" title="Red"></div>
+    <div class="color-swatch" style="background:#ffa502" data-color="#ffa502" onclick="setColor(this)" title="Orange"></div>
+    <div class="color-swatch" style="background:#ffdd59" data-color="#ffdd59" onclick="setColor(this)" title="Yellow"></div>
+    <div class="color-swatch" style="background:#7bed9f" data-color="#7bed9f" onclick="setColor(this)" title="Green"></div>
+    <div class="color-swatch" style="background:#70a1ff" data-color="#70a1ff" onclick="setColor(this)" title="Blue"></div>
+    <div class="color-swatch" style="background:#ff6b81" data-color="#ff6b81" onclick="setColor(this)" title="Pink"></div>
+    <input type="color" id="customColor" value="#f0f0f0" oninput="setCustomColor(this.value)" title="Custom color"/>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SIZE -->
+  <div class="size-wrap">
+    <span>SIZE</span>
+    <input type="range" class="size-slider" id="sizeSlider" min="1" max="40" value="4" oninput="updateSize(this.value)"/>
+    <div class="size-preview" id="sizePreview" style="width:8px;height:8px;background:white"></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- TEXT CONTROLS -->
+  <div class="text-controls" id="textControls">
+    <span style="font-size:0.75rem;color:var(--muted);font-weight:700">SIZE</span>
+    <select class="font-size-select" id="fontSizeSelect" onchange="updateFontSize(this.value)">
+      <option value="20">Small</option>
+      <option value="32" selected>Medium</option>
+      <option value="48">Large</option>
+      <option value="72">XL</option>
+      <option value="96">XXL</option>
+    </select>
+    <div class="divider" style="height:24px"></div>
+  </div>
+
+  <!-- BACKGROUND -->
+  <div class="bg-btns">
+    <button class="bg-btn bg-dark active"  id="bgDark"  onclick="setBg('dark')"  title="Dark">🌙</button>
+    <button class="bg-btn bg-white"        id="bgWhite" onclick="setBg('white')" title="White">☀️</button>
+    <button class="bg-btn bg-green"        id="bgGreen" onclick="setBg('green')" title="Chalkboard">🟢</button>
+    <button class="bg-btn bg-grid"         id="bgGrid"  onclick="setBg('grid')"  title="Grid">⊞</button>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ACTIONS -->
+  <button class="tool-btn" onclick="undo()"  title="Undo (Ctrl+Z)">↩️</button>
+  <button class="tool-btn" onclick="redo()"  title="Redo (Ctrl+Y)">↪️</button>
+  <button class="tool-btn" onclick="clearCanvas()" title="Clear All">🗑️</button>
+  <button class="tool-btn" onclick="saveImage()"   title="Save Image">💾</button>
+
+  <span class="history-info" id="historyInfo"></span>
+</div>
+
+<div class="canvas-wrap" id="canvasWrap">
+  <canvas id="canvas"></canvas>
+  <textarea id="textInput" rows="1" placeholder="Type here..." onkeydown="handleTextKey(event)"></textarea>
+  <div class="zoom-indicator" id="zoomIndicator">100%</div>
+</div>
+
+<script>
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const wrap = document.getElementById('canvasWrap');
+  const textInput = document.getElementById('textInput');
+
+  let tool = 'pen';
+  let color = '#f0f0f0';
+  let size = 4;
+  let fontSize = 32;
+  let bgMode = 'dark';
+  let drawing = false;
+  let startX, startY, lastX, lastY;
+  let history = [];
+  let redoStack = [];
+  let bgCanvas = null; // for snapshot behind drawing
+  let textX, textY;
+
+  const BG_COLORS = {
+    dark: '#1a1a2e', white: '#f5f5f5', green: '#1b4332', grid: '#0a0a1a'
+  };
+
+  // Resize canvas
+  function resize() {
+    const snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    canvas.width  = wrap.clientWidth  * devicePixelRatio;
+    canvas.height = wrap.clientHeight * devicePixelRatio;
+    canvas.style.width  = wrap.clientWidth  + 'px';
+    canvas.style.height = wrap.clientHeight + 'px';
+    ctx.scale(devicePixelRatio, devicePixelRatio);
+    drawBackground();
+    ctx.putImageData(snapshot, 0, 0);
+  }
+
+  function drawBackground() {
+    const w = wrap.clientWidth, h = wrap.clientHeight;
+    ctx.fillStyle = BG_COLORS[bgMode];
+    ctx.fillRect(0, 0, w, h);
+    if (bgMode === 'grid') {
+      ctx.strokeStyle = 'rgba(99,120,170,0.2)';
+      ctx.lineWidth = 0.5;
+      for (let x = 0; x < w; x += 40) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
+      for (let y = 0; y < h; y += 40) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+    }
+  }
+
+  function saveHistory() {
+    history.push(canvas.toDataURL());
+    if (history.length > 40) history.shift();
+    redoStack = [];
+    updateHistoryInfo();
+  }
+
+  function updateHistoryInfo() {
+    document.getElementById('historyInfo').textContent = history.length > 0 ? `${history.length} steps` : '';
+  }
+
+  function undo() {
+    if (history.length === 0) return;
+    redoStack.push(canvas.toDataURL());
+    const img = new Image();
+    img.onload = () => { ctx.clearRect(0,0,canvas.width,canvas.height); ctx.drawImage(img,0,0); };
+    img.src = history.pop();
+    updateHistoryInfo();
+  }
+  function redo() {
+    if (redoStack.length === 0) return;
+    history.push(canvas.toDataURL());
+    const img = new Image();
+    img.onload = () => { ctx.clearRect(0,0,canvas.width,canvas.height); ctx.drawImage(img,0,0); };
+    img.src = redoStack.pop();
+    updateHistoryInfo();
+  }
+
+  function clearCanvas() {
+    if (!confirm('Clear the whiteboard?')) return;
+    saveHistory();
+    drawBackground();
+  }
+
+  function saveImage() {
+    const a = document.createElement('a');
+    a.download = 'whiteboard.png';
+    a.href = canvas.toDataURL();
+    a.click();
+  }
+
+  // Tool setup
+  function setTool(t) {
+    tool = t;
+    ['Pen','Marker','Line','Rect','Circle','Arrow','Text','Eraser'].forEach(name => {
+      document.getElementById('tool'+name).classList.toggle('active', t === name.toLowerCase());
+    });
+    canvas.className = '';
+    if (t === 'eraser') canvas.classList.add('cursor-eraser');
+    else if (t === 'text') canvas.classList.add('cursor-text');
+    document.getElementById('textControls').classList.toggle('visible', t === 'text');
+  }
+
+  function setColor(el) {
+    color = el.dataset.color;
+    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('customColor').value = color;
+  }
+
+  function setCustomColor(v) {
+    color = v;
+    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+  }
+
+  function updateSize(v) {
+    size = parseInt(v);
+    const px = Math.max(4, Math.min(40, size * 2));
+    document.getElementById('sizePreview').style.width = px + 'px';
+    document.getElementById('sizePreview').style.height = px + 'px';
+  }
+
+  function updateFontSize(v) { fontSize = parseInt(v); }
+
+  function setBg(mode) {
+    bgMode = mode;
+    ['dark','white','green','grid'].forEach(m => {
+      document.getElementById('bg'+m.charAt(0).toUpperCase()+m.slice(1)).classList.toggle('active', m === mode);
+    });
+    saveHistory();
+    // Redraw background but preserve strokes
+    const snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    drawBackground();
+    // Reapply strokes from saved image
+    if (history.length > 0) {
+      const img = new Image();
+      img.onload = () => ctx.drawImage(img, 0, 0);
+      img.src = history[history.length-1];
+    }
+  }
+
+  // Setup context
+  function setupCtx(preview) {
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    if (tool === 'eraser') {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.strokeStyle = 'rgba(0,0,0,1)';
+      ctx.lineWidth = size * 4;
+    } else if (tool === 'marker') {
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = 0.5;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = size * 3;
+    } else {
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = 1;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = size;
+    }
+  }
+
+  // Mouse / touch events
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const src = e.touches ? e.touches[0] : e;
+    return { x: src.clientX - rect.left, y: src.clientY - rect.top };
+  }
+
+  canvas.addEventListener('pointerdown', e => {
+    if (tool === 'text') { openTextInput(e); return; }
+    drawing = true;
+    const {x, y} = getPos(e);
+    startX = lastX = x; startY = lastY = y;
+    saveHistory();
+    setupCtx();
+    if (tool === 'pen' || tool === 'marker' || tool === 'eraser') {
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+    }
+    bgCanvas = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  });
+
+  canvas.addEventListener('pointermove', e => {
+    if (!drawing) return;
+    const {x, y} = getPos(e);
+    setupCtx();
+    if (tool === 'pen' || tool === 'marker' || tool === 'eraser') {
+      ctx.lineTo(x, y);
+      ctx.stroke();
+      lastX = x; lastY = y;
+    } else {
+      // Preview shapes
+      ctx.putImageData(bgCanvas, 0, 0);
+      drawShape(tool, startX, startY, x, y);
+    }
+  });
+
+  canvas.addEventListener('pointerup', e => {
+    if (!drawing) return;
+    drawing = false;
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+  });
+
+  function drawShape(t, x1, y1, x2, y2) {
+    setupCtx();
+    ctx.beginPath();
+    if (t === 'line') {
+      ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    } else if (t === 'rect') {
+      ctx.strokeRect(x1, y1, x2-x1, y2-y1);
+    } else if (t === 'circle') {
+      const rx = (x2-x1)/2, ry = (y2-y1)/2;
+      ctx.ellipse(x1+rx, y1+ry, Math.abs(rx), Math.abs(ry), 0, 0, Math.PI*2);
+      ctx.stroke();
+    } else if (t === 'arrow') {
+      const dx = x2-x1, dy = y2-y1;
+      const angle = Math.atan2(dy, dx);
+      const headLen = 20 + size;
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.lineTo(x2 - headLen*Math.cos(angle-Math.PI/7), y2 - headLen*Math.sin(angle-Math.PI/7));
+      ctx.moveTo(x2, y2);
+      ctx.lineTo(x2 - headLen*Math.cos(angle+Math.PI/7), y2 - headLen*Math.sin(angle+Math.PI/7));
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  // TEXT TOOL
+  function openTextInput(e) {
+    const {x, y} = getPos(e);
+    textX = x; textY = y;
+    textInput.style.display = 'block';
+    textInput.style.left = x + 'px';
+    textInput.style.top  = y + 'px';
+    textInput.style.fontSize = fontSize + 'px';
+    textInput.style.color = color;
+    textInput.value = '';
+    textInput.focus();
+  }
+
+  function handleTextKey(e) {
+    if (e.key === 'Escape') { commitText(); textInput.style.display = 'none'; }
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commitText(); }
+  }
+  textInput.addEventListener('blur', () => { if (textInput.style.display !== 'none') commitText(); });
+
+  function commitText() {
+    const val = textInput.value.trim();
+    if (val) {
+      saveHistory();
+      ctx.save();
+      ctx.globalAlpha = 1;
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.font = `${fontSize}px Kalam, cursive`;
+      ctx.fillStyle = color;
+      ctx.fillText(val, textX, textY + fontSize);
+      ctx.restore();
+    }
+    textInput.style.display = 'none';
+    textInput.value = '';
+  }
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', e => {
+    if (textInput === document.activeElement) return;
+    if (e.ctrlKey || e.metaKey) {
+      if (e.key === 'z') { e.preventDefault(); undo(); }
+      if (e.key === 'y') { e.preventDefault(); redo(); }
+      return;
+    }
+    const map = { p:'pen', m:'marker', l:'line', r:'rect', c:'circle', a:'arrow', t:'text', e:'eraser' };
+    if (map[e.key.toLowerCase()]) setTool(map[e.key.toLowerCase()]);
+  });
+
+  window.addEventListener('resize', resize);
+  resize();
+  drawBackground();
+</script>
+</body>
+</html>

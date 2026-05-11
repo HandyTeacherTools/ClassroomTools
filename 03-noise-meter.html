@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Noise Meter — Handy Teacher Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0f1923;
+    --panel: #1a2535;
+    --border: #253040;
+    --green: #00e676;
+    --yellow: #ffea00;
+    --orange: #ff9100;
+    --red: #ff1744;
+    --text: #e8f0fe;
+    --muted: #607080;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    width: 100%;
+    background: rgba(15,25,35,0.95);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    backdrop-filter: blur(10px);
+  }
+  nav a { color: var(--muted); text-decoration: none; font-weight: 700; font-size: 14px; transition: color 0.2s; }
+  nav a:hover { color: var(--green); }
+  nav .tool-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: var(--text); }
+
+  /* MAIN */
+  main {
+    flex: 1;
+    width: 100%;
+    max-width: 900px;
+    padding: 40px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+  }
+
+  /* BIG METER */
+  .meter-container {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 40px 40px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .meter-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(0,230,118,0.04) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  /* LEVEL LABEL */
+  .level-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 10vw, 6rem);
+    letter-spacing: 4px;
+    line-height: 1;
+    transition: color 0.4s ease;
+    text-shadow: 0 0 40px currentColor;
+  }
+
+  /* EMOJI FACE */
+  .level-face {
+    font-size: clamp(3rem, 8vw, 5rem);
+    line-height: 1;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 0 20px rgba(255,255,255,0.2));
+  }
+
+  /* BAR GRAPH */
+  .bar-track {
+    width: 100%;
+    height: 48px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    width: 0%;
+    transition: width 0.08s ease-out, background 0.3s ease;
+    background: var(--green);
+    position: relative;
+  }
+  .bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 60px;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.3));
+    border-radius: 0 100px 100px 0;
+  }
+
+  /* THRESHOLD MARKERS */
+  .bar-markers {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+  }
+  .bar-marker { font-size: 11px; color: var(--muted); font-weight: 700; text-align: center; }
+
+  /* VISUALIZER */
+  .visualizer-wrap {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    justify-content: center;
+  }
+  .vis-bar {
+    flex: 1;
+    max-width: 18px;
+    background: var(--green);
+    border-radius: 4px 4px 0 0;
+    height: 4px;
+    transition: height 0.06s ease-out, background 0.3s;
+    opacity: 0.7;
+  }
+
+  /* ZONES */
+  .zones {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    width: 100%;
+  }
+  .zone {
+    border-radius: 14px;
+    padding: 16px 12px;
+    text-align: center;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    cursor: default;
+  }
+  .zone.active { border-color: currentColor; transform: scale(1.04); }
+  .zone-icon { font-size: 1.8rem; line-height: 1; margin-bottom: 6px; }
+  .zone-name { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+  .zone-range { font-size: 0.72rem; color: var(--muted); margin-top: 2px; font-weight: 600; }
+
+  .zone-silent  { background: rgba(0,230,118,0.08);  color: var(--green); }
+  .zone-quiet   { background: rgba(255,234,0,0.08);  color: var(--yellow); }
+  .zone-noisy   { background: rgba(255,145,0,0.08);  color: var(--orange); }
+  .zone-loud    { background: rgba(255,23,68,0.08);   color: var(--red); }
+
+  /* CONTROLS */
+  .controls {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+  .btn {
+    padding: 14px 28px;
+    border-radius: 12px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-start {
+    background: var(--green);
+    color: #0f1923;
+    box-shadow: 0 0 24px rgba(0,230,118,0.3);
+  }
+  .btn-start:hover { transform: translateY(-2px); box-shadow: 0 0 36px rgba(0,230,118,0.5); }
+  .btn-stop {
+    background: rgba(255,23,68,0.15);
+    color: var(--red);
+    border: 2px solid rgba(255,23,68,0.3);
+  }
+  .btn-stop:hover { background: rgba(255,23,68,0.25); }
+  .btn-disabled { opacity: 0.4; pointer-events: none; }
+
+  /* SENSITIVITY CONTROL */
+  .sensitivity-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 20px;
+  }
+  .sensitivity-wrap label { font-size: 0.85rem; font-weight: 700; color: var(--muted); white-space: nowrap; }
+  input[type=range] {
+    -webkit-appearance: none;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    width: 140px;
+    cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px; height: 20px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(0,230,118,0.5);
+  }
+  .sensitivity-val { font-size: 0.85rem; font-weight: 800; color: var(--green); min-width: 20px; }
+
+  /* ALERT THRESHOLD */
+  .threshold-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 20px;
+  }
+  .threshold-wrap label { font-size: 0.85rem; font-weight: 700; color: var(--muted); white-space: nowrap; }
+  .threshold-btns { display: flex; gap: 6px; }
+  .threshold-btn {
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: rgba(255,255,255,0.05);
+    color: var(--muted);
+  }
+  .threshold-btn.active-thresh { border-color: currentColor; }
+  .threshold-btn.t-yellow { color: var(--yellow); }
+  .threshold-btn.t-orange { color: var(--orange); }
+  .threshold-btn.t-red    { color: var(--red); }
+  .threshold-btn.active-thresh.t-yellow { background: rgba(255,234,0,0.12); }
+  .threshold-btn.active-thresh.t-orange { background: rgba(255,145,0,0.12); }
+  .threshold-btn.active-thresh.t-red    { background: rgba(255,23,68,0.12); }
+
+  /* FLASH OVERLAY */
+  .flash-overlay {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    background: rgba(255,23,68,0.15);
+    transition: opacity 0.1s;
+    z-index: 100;
+  }
+  .flash-overlay.flash { opacity: 1; }
+
+  /* STATUS MSG */
+  .status-msg {
+    font-size: 0.9rem;
+    color: var(--muted);
+    font-weight: 700;
+    text-align: center;
+    min-height: 24px;
+  }
+
+  /* FOOTER */
+  footer { padding: 20px; font-size: 12px; color: var(--muted); font-weight: 600; }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--green); }
+
+  /* SCREENSHAKE */
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+  }
+  .shaking { animation: shake 0.4s ease; }
+
+  @media (max-width: 600px) {
+    .zones { grid-template-columns: repeat(2, 1fr); }
+    .controls { flex-direction: column; align-items: stretch; }
+    .btn { justify-content: center; }
+    .sensitivity-wrap, .threshold-wrap { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<div class="flash-overlay" id="flashOverlay"></div>
+
+<nav>
+  <a href="index.html">← All Tools</a>
+  <span class="tool-title">🔊 Noise Meter</span>
+  <span style="font-size:12px;color:var(--muted)">handyteachertools.com</span>
+</nav>
+
+<main>
+
+  <div class="meter-container" id="meterContainer">
+
+    <div class="level-face" id="levelFace">😴</div>
+    <div class="level-label" id="levelLabel" style="color:var(--green)">SILENT</div>
+
+    <div style="width:100%">
+      <div class="bar-track">
+        <div class="bar-fill" id="barFill"></div>
+      </div>
+      <div class="bar-markers">
+        <span class="bar-marker">0</span>
+        <span class="bar-marker">25</span>
+        <span class="bar-marker">50</span>
+        <span class="bar-marker">75</span>
+        <span class="bar-marker">100</span>
+      </div>
+    </div>
+
+    <div class="visualizer-wrap" id="visualizer"></div>
+
+    <div class="zones">
+      <div class="zone zone-silent active" id="zone0">
+        <div class="zone-icon">🤫</div>
+        <div class="zone-name">Silent</div>
+        <div class="zone-range">0–25%</div>
+      </div>
+      <div class="zone zone-quiet" id="zone1">
+        <div class="zone-icon">🙂</div>
+        <div class="zone-name">Quiet</div>
+        <div class="zone-range">25–50%</div>
+      </div>
+      <div class="zone zone-noisy" id="zone2">
+        <div class="zone-icon">😬</div>
+        <div class="zone-name">Noisy</div>
+        <div class="zone-range">50–75%</div>
+      </div>
+      <div class="zone zone-loud" id="zone3">
+        <div class="zone-icon">🚨</div>
+        <div class="zone-name">Too Loud!</div>
+        <div class="zone-range">75–100%</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="controls">
+    <button class="btn btn-start" id="btnStart" onclick="startMeter()">🎤 Start Listening</button>
+    <button class="btn btn-stop btn-disabled" id="btnStop" onclick="stopMeter()">⏹ Stop</button>
+  </div>
+
+  <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;width:100%">
+    <div class="sensitivity-wrap">
+      <label>🎚️ Sensitivity</label>
+      <input type="range" id="sensitivitySlider" min="1" max="10" value="5" oninput="updateSensitivity(this.value)"/>
+      <span class="sensitivity-val" id="sensitivityVal">5</span>
+    </div>
+    <div class="threshold-wrap">
+      <label>🔔 Alert at</label>
+      <div class="threshold-btns">
+        <button class="threshold-btn t-yellow" onclick="setThreshold('quiet')" id="tq">Quiet</button>
+        <button class="threshold-btn t-orange active-thresh" onclick="setThreshold('noisy')" id="tn">Noisy</button>
+        <button class="threshold-btn t-red" onclick="setThreshold('loud')" id="tl">Loud</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="status-msg" id="statusMsg">Click "Start Listening" to activate the microphone.</div>
+
+</main>
+
+<footer><a href="index.html">← Back to all tools</a> · handyteachertools.com</footer>
+
+<script>
+  // Build visualizer bars
+  const viz = document.getElementById('visualizer');
+  const VIZ_BARS = 40;
+  const vizBars = [];
+  for (let i = 0; i < VIZ_BARS; i++) {
+    const b = document.createElement('div');
+    b.className = 'vis-bar';
+    viz.appendChild(b);
+    vizBars.push(b);
+  }
+
+  let audioCtx, analyser, source, animFrame;
+  let sensitivity = 5;
+  let alertThreshold = 'noisy'; // quiet | noisy | loud
+  let lastZone = -1;
+  let flashTimeout = null;
+  let isRunning = false;
+  // Rolling buffer for smoothing
+  const smoothBuf = new Array(6).fill(0);
+  let smoothIdx = 0;
+
+  function updateSensitivity(v) {
+    sensitivity = parseInt(v);
+    document.getElementById('sensitivityVal').textContent = v;
+  }
+
+  function setThreshold(t) {
+    alertThreshold = t;
+    document.getElementById('tq').classList.toggle('active-thresh', t === 'quiet');
+    document.getElementById('tn').classList.toggle('active-thresh', t === 'noisy');
+    document.getElementById('tl').classList.toggle('active-thresh', t === 'loud');
+  }
+
+  async function startMeter() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 256;
+      source = audioCtx.createMediaStreamSource(stream);
+      source.connect(analyser);
+      isRunning = true;
+      document.getElementById('btnStart').classList.add('btn-disabled');
+      document.getElementById('btnStop').classList.remove('btn-disabled');
+      document.getElementById('statusMsg').textContent = '🎤 Microphone active — monitoring noise level...';
+      tick();
+    } catch(e) {
+      document.getElementById('statusMsg').textContent = '⚠️ Microphone access denied. Please allow microphone in your browser.';
+    }
+  }
+
+  function stopMeter() {
+    isRunning = false;
+    cancelAnimationFrame(animFrame);
+    if (audioCtx) audioCtx.close();
+    document.getElementById('btnStart').classList.remove('btn-disabled');
+    document.getElementById('btnStop').classList.add('btn-disabled');
+    document.getElementById('statusMsg').textContent = 'Stopped. Click "Start Listening" to resume.';
+    setDisplay(0);
+  }
+
+  function tick() {
+    if (!isRunning) return;
+    const dataArr = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteFrequencyData(dataArr);
+
+    // RMS level
+    let sum = 0;
+    for (let i = 0; i < dataArr.length; i++) sum += dataArr[i] * dataArr[i];
+    const rms = Math.sqrt(sum / dataArr.length);
+
+    // Apply sensitivity (1-10 maps to 0.5x-2.5x)
+    const sensMultiplier = 0.4 + (sensitivity / 10) * 2.0;
+    const raw = Math.min(100, (rms / 128) * 100 * sensMultiplier);
+
+    // Smooth
+    smoothBuf[smoothIdx % smoothBuf.length] = raw;
+    smoothIdx++;
+    const smoothed = smoothBuf.reduce((a,b) => a+b, 0) / smoothBuf.length;
+
+    setDisplay(smoothed, dataArr);
+    checkAlert(smoothed);
+
+    // Update visualizer
+    for (let i = 0; i < VIZ_BARS; i++) {
+      const idx = Math.floor((i / VIZ_BARS) * dataArr.length);
+      const h = Math.max(4, (dataArr[idx] / 255) * 80 * sensMultiplier);
+      vizBars[i].style.height = Math.min(80, h) + 'px';
+      vizBars[i].style.background = getColor(smoothed);
+      vizBars[i].style.opacity = 0.4 + (dataArr[idx] / 255) * 0.6;
+    }
+
+    animFrame = requestAnimationFrame(tick);
+  }
+
+  function getColor(pct) {
+    if (pct < 25) return 'var(--green)';
+    if (pct < 50) return 'var(--yellow)';
+    if (pct < 75) return 'var(--orange)';
+    return 'var(--red)';
+  }
+
+  function setDisplay(pct, dataArr) {
+    const bar = document.getElementById('barFill');
+    const label = document.getElementById('levelLabel');
+    const face = document.getElementById('levelFace');
+    const color = getColor(pct);
+
+    bar.style.width = pct + '%';
+    bar.style.background = color;
+    label.style.color = color;
+
+    let zone;
+    if (pct < 25)      { zone = 0; label.textContent = 'SILENT';   face.textContent = '😴'; }
+    else if (pct < 50) { zone = 1; label.textContent = 'QUIET';    face.textContent = '🙂'; }
+    else if (pct < 75) { zone = 2; label.textContent = 'NOISY';    face.textContent = '😬'; }
+    else               { zone = 3; label.textContent = 'TOO LOUD'; face.textContent = '🚨'; }
+
+    // Update zone highlights
+    for (let i = 0; i < 4; i++) {
+      document.getElementById('zone' + i).classList.toggle('active', i === zone);
+    }
+    lastZone = zone;
+  }
+
+  function checkAlert(pct) {
+    const alertZone = alertThreshold === 'quiet' ? 1 : alertThreshold === 'noisy' ? 2 : 3;
+    if (lastZone >= alertZone && pct >= (alertZone * 25)) {
+      triggerFlash();
+    }
+  }
+
+  let flashCooldown = false;
+  function triggerFlash() {
+    if (flashCooldown) return;
+    flashCooldown = true;
+    const overlay = document.getElementById('flashOverlay');
+    const container = document.getElementById('meterContainer');
+    overlay.classList.add('flash');
+    container.classList.add('shaking');
+    setTimeout(() => {
+      overlay.classList.remove('flash');
+      container.classList.remove('shaking');
+    }, 400);
+    setTimeout(() => { flashCooldown = false; }, 2000);
+  }
+</script>
+</body>
+</html>
