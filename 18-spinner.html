@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Classroom Spinner — Handy Teacher Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M5DCBRK7DE"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-M5DCBRK7DE');</script>
+<style>
+  :root{--bg:#0f0a1e;--surface:#1a1030;--border:#2d2050;--text:#f0ebff;--muted:#8070a0;--radius:16px;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;}
+
+  nav{background:rgba(15,10,30,0.97);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;}
+  nav a{color:var(--muted);text-decoration:none;font-weight:700;font-size:14px;}
+  nav a:hover{color:var(--text);}
+  nav .tool-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;color:#c084fc;}
+
+  .app{flex:1;display:grid;grid-template-columns:1fr 320px;height:calc(100vh - 49px);}
+
+  /* WHEEL SIDE */
+  .wheel-side{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:32px;position:relative;overflow:hidden;}
+
+  /* glow */
+  .wheel-side::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(192,132,252,0.06) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+
+  /* POINTER */
+  .wheel-wrap{position:relative;display:inline-block;}
+  .pointer{position:absolute;top:-18px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-top:28px solid #ffffff;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5));z-index:10;}
+
+  canvas{border-radius:50%;box-shadow:0 0 60px rgba(192,132,252,0.2),0 0 120px rgba(192,132,252,0.08);}
+
+  /* SPIN BTN */
+  .spin-btn{padding:18px 56px;background:linear-gradient(135deg,#c084fc,#818cf8);color:white;border:none;border-radius:100px;font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 24px rgba(192,132,252,0.35);}
+  .spin-btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 8px 36px rgba(192,132,252,0.5);}
+  .spin-btn:disabled{opacity:0.5;pointer-events:none;}
+
+  /* RESULT */
+  .result-wrap{text-align:center;min-height:60px;}
+  .result-label{font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:var(--muted);}
+  .result-text{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.8rem,4vw,3rem);letter-spacing:2px;color:#c084fc;text-shadow:0 0 30px rgba(192,132,252,0.4);animation:none;line-height:1.1;}
+  .result-text.pop{animation:resultPop 0.4s ease;}
+  @keyframes resultPop{0%{transform:scale(0.7);opacity:0.5;}60%{transform:scale(1.1);}100%{transform:scale(1);opacity:1;}}
+
+  /* SIDEBAR */
+  .sidebar{background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+  .sb-header{padding:18px 16px 12px;border-bottom:1px solid var(--border);}
+  .sb-header h2{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;color:#c084fc;margin-bottom:4px;}
+  .sb-header p{font-size:0.75rem;color:var(--muted);font-weight:600;}
+
+  .items-list{flex:1;overflow-y:auto;padding:10px;}
+  .spin-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;animation:slideIn 0.2s ease;}
+  @keyframes slideIn{from{opacity:0;transform:translateX(10px);}to{opacity:1;transform:translateX(0);}}
+  .item-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .item-input{flex:1;background:transparent;border:none;color:var(--text);font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:700;outline:none;}
+  .item-del{width:22px;height:22px;border-radius:50%;border:none;background:transparent;color:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.8rem;transition:all 0.15s;flex-shrink:0;}
+  .spin-item:hover .item-del{background:rgba(239,68,68,0.15);color:#ef4444;}
+
+  .add-area{padding:10px;border-top:1px solid var(--border);}
+  .add-row{display:flex;gap:6px;}
+  .add-input{flex:1;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:700;padding:9px 12px;outline:none;transition:border-color 0.2s;}
+  .add-input:focus{border-color:#c084fc;}
+  .add-btn{padding:9px 14px;background:#c084fc;border:none;border-radius:8px;color:#0f0a1e;font-family:'Nunito',sans-serif;font-weight:900;font-size:0.88rem;cursor:pointer;transition:opacity 0.15s;}
+  .add-btn:hover{opacity:0.85;}
+
+  .sb-actions{padding:10px;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;}
+  .sb-btn{flex:1;padding:9px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Nunito',sans-serif;font-size:0.78rem;font-weight:800;cursor:pointer;transition:all 0.15s;text-align:center;}
+  .sb-btn:hover{border-color:#c084fc;color:#c084fc;}
+
+  /* PRESETS */
+  .preset-area{padding:10px;border-bottom:1px solid var(--border);}
+  .preset-label{font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:7px;}
+  .preset-chips{display:flex;gap:5px;flex-wrap:wrap;}
+  .preset-chip{padding:5px 10px;border-radius:100px;border:1px solid var(--border);background:transparent;font-size:0.72rem;font-weight:800;color:var(--muted);cursor:pointer;transition:all 0.15s;}
+  .preset-chip:hover{border-color:#c084fc;color:#c084fc;}
+
+  footer{text-align:center;padding:10px;font-size:12px;color:var(--muted);font-weight:600;background:var(--surface);border-top:1px solid var(--border);}
+  footer a{color:var(--muted);text-decoration:none;}
+
+  @media(max-width:700px){.app{grid-template-columns:1fr;grid-template-rows:1fr auto;}.sidebar{max-height:40vh;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html">← All Tools</a>
+  <span class="tool-title">🎡 Classroom Spinner</span>
+  <span style="font-size:12px;color:var(--muted)">handyteachertools.com</span>
+</nav>
+
+<div class="app">
+  <!-- WHEEL -->
+  <div class="wheel-side">
+    <div class="wheel-wrap">
+      <div class="pointer"></div>
+      <canvas id="spinnerCanvas" width="400" height="400"></canvas>
+    </div>
+    <div class="result-wrap">
+      <div class="result-label" id="resultLabel">Ready to spin!</div>
+      <div class="result-text" id="resultText"></div>
+    </div>
+    <button class="spin-btn" id="spinBtn" onclick="spin()">SPIN!</button>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb-header">
+      <h2>🎡 Wheel Options</h2>
+      <p>Add up to 20 items. Click an item to edit it.</p>
+    </div>
+
+    <div class="preset-area">
+      <div class="preset-label">Quick Presets</div>
+      <div class="preset-chips">
+        <span class="preset-chip" onclick="loadPreset('yesno')">Yes/No</span>
+        <span class="preset-chip" onclick="loadPreset('groups')">4 Groups</span>
+        <span class="preset-chip" onclick="loadPreset('activities')">Activities</span>
+        <span class="preset-chip" onclick="loadPreset('numbers')">1–10</span>
+        <span class="preset-chip" onclick="loadPreset('abc')">A B C D</span>
+      </div>
+    </div>
+
+    <div class="items-list" id="itemsList"></div>
+
+    <div class="add-area">
+      <div class="add-row">
+        <input class="add-input" id="addInput" placeholder="Add an option…" maxlength="40" onkeydown="if(event.key==='Enter')addItem()"/>
+        <button class="add-btn" onclick="addItem()">+ Add</button>
+      </div>
+    </div>
+
+    <div class="sb-actions">
+      <button class="sb-btn" onclick="shuffleItems()">🔀 Shuffle</button>
+      <button class="sb-btn" onclick="clearItems()">🗑 Clear</button>
+      <button class="sb-btn" onclick="removeLastWinner()">↩ Remove Winner</button>
+    </div>
+  </div>
+</div>
+
+<footer><a href="index.html">← Back to all tools</a> · handyteachertools.com</footer>
+
+<script>
+const COLOURS=['#c084fc','#818cf8','#34d399','#fb923c','#f472b6','#38bdf8','#facc15','#a78bfa','#4ade80','#f87171','#e879f9','#22d3ee','#fbbf24','#60a5fa','#86efac','#fd7f36','#d946ef','#06b6d4','#fcd34d','#93c5fd'];
+const PRESETS={
+  yesno:['Yes','No'],
+  groups:['Group 1','Group 2','Group 3','Group 4'],
+  activities:['Read','Write','Discuss','Draw','Research','Present'],
+  numbers:['1','2','3','4','5','6','7','8','9','10'],
+  abc:['A','B','C','D'],
+};
+const DEFAULT=['Option 1','Option 2','Option 3','Option 4','Option 5','Option 6'];
+
+let items=[];
+let currentAngle=0;
+let spinning=false;
+let lastWinner=null;
+const canvas=document.getElementById('spinnerCanvas');
+const ctx=canvas.getContext('2d');
+
+function loadPreset(key){
+  items=PRESETS[key].map((t,i)=>({text:t,colour:COLOURS[i%COLOURS.length]}));
+  renderSidebar();drawWheel();
+}
+
+function addItem(){
+  const input=document.getElementById('addInput');
+  const val=input.value.trim();
+  if(!val||items.length>=20)return;
+  items.push({text:val,colour:COLOURS[items.length%COLOURS.length]});
+  input.value='';
+  renderSidebar();drawWheel();
+}
+
+function removeItem(i){
+  items.splice(i,1);
+  renderSidebar();drawWheel();
+}
+
+function shuffleItems(){
+  for(let i=items.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[items[i],items[j]]=[items[j],items[i]];}
+  renderSidebar();drawWheel();
+}
+
+function clearItems(){
+  if(!confirm('Clear all options?'))return;
+  items=[];renderSidebar();drawWheel();
+}
+
+function removeLastWinner(){
+  if(!lastWinner)return;
+  const idx=items.findIndex(it=>it.text===lastWinner);
+  if(idx>-1){items.splice(idx,1);lastWinner=null;renderSidebar();drawWheel();}
+}
+
+function renderSidebar(){
+  const list=document.getElementById('itemsList');
+  list.innerHTML='';
+  if(items.length===0){
+    list.innerHTML='<p style="text-align:center;color:var(--muted);font-size:0.82rem;font-weight:700;padding:20px">No options yet. Add some above or pick a preset.</p>';
+    return;
+  }
+  items.forEach((item,i)=>{
+    const el=document.createElement('div');
+    el.className='spin-item';
+    el.innerHTML=`<div class="item-dot" style="background:${item.colour}"></div><input class="item-input" value="${item.text}" maxlength="40" onchange="items[${i}].text=this.value;drawWheel()"/><button class="item-del" onclick="removeItem(${i})">×</button>`;
+    list.appendChild(el);
+  });
+}
+
+function drawWheel(){
+  const size=400;const cx=200,cy=200,r=190;
+  ctx.clearRect(0,0,size,size);
+  if(items.length===0){
+    ctx.save();
+    ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);
+    ctx.fillStyle='#2d2050';ctx.fill();
+    ctx.fillStyle='#8070a0';ctx.font='bold 18px Nunito';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('Add options →',cx,cy);
+    ctx.restore();return;
+  }
+  const slice=2*Math.PI/items.length;
+  items.forEach((item,i)=>{
+    const start=currentAngle+i*slice;
+    const end=start+slice;
+    // Slice
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,end);ctx.closePath();
+    ctx.fillStyle=item.colour;ctx.fill();
+    ctx.strokeStyle='rgba(0,0,0,0.15)';ctx.lineWidth=2;ctx.stroke();
+    // Text
+    const mid=start+slice/2;
+    const tx=cx+Math.cos(mid)*(r*0.65);
+    const ty=cy+Math.sin(mid)*(r*0.65);
+    ctx.save();ctx.translate(tx,ty);ctx.rotate(mid+Math.PI/2);
+    ctx.fillStyle='rgba(255,255,255,0.95)';
+    const fontSize=items.length>10?11:items.length>6?13:16;
+    ctx.font=`900 ${fontSize}px Nunito`;ctx.textAlign='center';ctx.textBaseline='middle';
+    // Wrap long text
+    const words=item.text.split(' ');
+    if(words.length>2&&item.text.length>10){
+      const half=Math.ceil(words.length/2);
+      ctx.fillText(words.slice(0,half).join(' '),0,-7);
+      ctx.fillText(words.slice(half).join(' '),0,7);
+    }else{
+      ctx.fillText(item.text,0,0);
+    }
+    ctx.restore();
+  });
+  // Centre circle
+  ctx.beginPath();ctx.arc(cx,cy,18,0,Math.PI*2);
+  ctx.fillStyle='#0f0a1e';ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,0.2)';ctx.lineWidth=2;ctx.stroke();
+}
+
+function spin(){
+  if(spinning||items.length<2)return;
+  spinning=true;
+  document.getElementById('spinBtn').disabled=true;
+  document.getElementById('resultText').textContent='';
+  document.getElementById('resultLabel').textContent='Spinning…';
+
+  const totalRotation=(Math.PI*2)*( 5+Math.random()*5 );
+  const duration=3000+Math.random()*1500;
+  const start=performance.now();
+  const startAngle=currentAngle;
+
+  function easeOut(t){return 1-Math.pow(1-t,4);}
+
+  function animate(now){
+    const elapsed=now-start;
+    const t=Math.min(elapsed/duration,1);
+    currentAngle=startAngle+totalRotation*easeOut(t);
+    drawWheel();
+    if(t<1){requestAnimationFrame(animate);}
+    else{
+      spinning=false;
+      document.getElementById('spinBtn').disabled=false;
+      showResult();
+    }
+  }
+  requestAnimationFrame(animate);
+}
+
+function showResult(){
+  const slice=2*Math.PI/items.length;
+  // Pointer is at top (−π/2), find which segment is there
+  const normalised=(((-currentAngle)%(Math.PI*2))+(Math.PI*2))%(Math.PI*2);
+  const idx=Math.floor(normalised/slice)%items.length;
+  const winner=items[idx];
+  lastWinner=winner.text;
+  document.getElementById('resultLabel').textContent='🎯 Result:';
+  const rt=document.getElementById('resultText');
+  rt.textContent=winner.text;
+  rt.style.color=winner.colour;
+  rt.classList.remove('pop');void rt.offsetWidth;rt.classList.add('pop');
+  try{
+    const ctx2=new(window.AudioContext||window.webkitAudioContext)();
+    [523,659,784,1047].forEach((f,i)=>{
+      const o=ctx2.createOscillator(),g=ctx2.createGain();
+      o.connect(g);g.connect(ctx2.destination);
+      o.frequency.value=f;
+      g.gain.setValueAtTime(0.25,ctx2.currentTime+i*0.1);
+      g.gain.exponentialRampToValueAtTime(0.001,ctx2.currentTime+i*0.1+0.2);
+      o.start(ctx2.currentTime+i*0.1);o.stop(ctx2.currentTime+i*0.1+0.25);
+    });
+  }catch(e){}
+}
+
+// Init
+items=DEFAULT.map((t,i)=>({text:t,colour:COLOURS[i]}));
+renderSidebar();drawWheel();
+
+document.addEventListener('keydown',e=>{if(e.key===' '&&e.target.tagName!=='INPUT'){e.preventDefault();spin();}});
+</script>
+</body>
+</html>

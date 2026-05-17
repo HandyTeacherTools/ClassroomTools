@@ -9,32 +9,32 @@
 <style>
   :root { --board: #2d4a3e; --chalk: #f5f0e8; --ink: #1a2e25; --muted: #6b7f76; --border: #e0dbd2; --apple: #4caf50; --gold-lt: #ffc107; --shadow: 0 4px 20px rgba(0,0,0,0.08); --radius: 16px; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--chalk); color: var(--ink); font-family: 'Nunito', sans-serif; min-height: 100vh; }
-  nav { background: var(--board); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
-  nav a { color: rgba(255,255,255,0.7); text-decoration: none; font-weight: 700; font-size: 14px; }
-  nav a:hover { color: white; }
-  nav .brand { font-weight: 900; font-size: 1.1rem; color: white; }
+  body { background: var(--chalk); colour: var(--ink); font-family: 'Nunito', sans-serif; min-height: 100vh; }
+  nav { background: var(--board); padding: 14px 24px; display: flex; align-items: centre; justify-content: space-between; }
+  nav a { colour: rgba(255,255,255,0.7); text-decoration: none; font-weight: 700; font-size: 14px; }
+  nav a:hover { colour: white; }
+  nav .brand { font-weight: 900; font-size: 1.1rem; colour: white; }
 
   .page { max-width: 700px; margin: 0 auto; padding: 56px 24px 80px; }
-  h1 { font-family: 'Lora', serif; font-size: 2.2rem; font-weight: 600; color: var(--board); margin-bottom: 8px; }
-  .subtitle { font-family: 'Lora', serif; font-style: italic; font-size: 1rem; color: var(--muted); margin-bottom: 40px; line-height: 1.6; }
+  h1 { font-family: 'Lora', serif; font-size: 2.2rem; font-weight: 600; colour: var(--board); margin-bottom: 8px; }
+  .subtitle { font-family: 'Lora', serif; font-style: italic; font-size: 1rem; colour: var(--muted); margin-bottom: 40px; line-height: 1.6; }
 
   /* CONTACT CARDS */
   .contact-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 48px; }
   .contact-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
   .contact-card .icon { font-size: 2rem; margin-bottom: 12px; }
-  .contact-card h3 { font-size: 1rem; font-weight: 800; color: var(--board); margin-bottom: 6px; }
-  .contact-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; font-weight: 600; margin-bottom: 12px; }
-  .contact-card a { color: var(--board); font-weight: 800; font-size: 0.9rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border: 2px solid var(--border); border-radius: 8px; transition: all 0.2s; }
-  .contact-card a:hover { border-color: var(--apple); color: var(--apple); }
+  .contact-card h3 { font-size: 1rem; font-weight: 800; colour: var(--board); margin-bottom: 6px; }
+  .contact-card p { font-size: 0.85rem; colour: var(--muted); line-height: 1.6; font-weight: 600; margin-bottom: 12px; }
+  .contact-card a { colour: var(--board); font-weight: 800; font-size: 0.9rem; text-decoration: none; display: inline-flex; align-items: centre; gap: 6px; padding: 8px 14px; border: 2px solid var(--border); border-radius: 8px; transition: all 0.2s; }
+  .contact-card a:hover { border-colour: var(--apple); colour: var(--apple); }
 
   /* FORM */
   .form-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow); margin-bottom: 40px; }
-  .form-card h2 { font-family: 'Lora', serif; font-size: 1.4rem; font-weight: 600; color: var(--board); margin-bottom: 8px; }
-  .form-card p { font-size: 0.88rem; color: var(--muted); font-weight: 600; margin-bottom: 24px; line-height: 1.5; }
+  .form-card h2 { font-family: 'Lora', serif; font-size: 1.4rem; font-weight: 600; colour: var(--board); margin-bottom: 8px; }
+  .form-card p { font-size: 0.88rem; colour: var(--muted); font-weight: 600; margin-bottom: 24px; line-height: 1.5; }
 
   .form-group { margin-bottom: 18px; }
-  .form-group label { display: block; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); margin-bottom: 7px; }
+  .form-group label { display: block; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; colour: var(--muted); margin-bottom: 7px; }
   .form-group input, .form-group textarea, .form-group select {
     width: 100%;
     border: 2px solid var(--border);
@@ -43,12 +43,12 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.95rem;
     font-weight: 600;
-    color: var(--ink);
+    colour: var(--ink);
     background: var(--chalk);
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-colour 0.2s;
   }
-  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--apple); background: white; }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-colour: var(--apple); background: white; }
   .form-group textarea { min-height: 130px; resize: vertical; }
   .form-group select { cursor: pointer; }
 
@@ -58,7 +58,7 @@
     width: 100%;
     padding: 16px;
     background: var(--apple);
-    color: white;
+    colour: white;
     border: none;
     border-radius: 12px;
     font-family: 'Nunito', sans-serif;
@@ -71,17 +71,17 @@
   }
   .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(76,175,80,0.35); }
 
-  .success-msg { display: none; text-align: center; padding: 24px; background: #e8f5e9; border: 2px solid #a5d6a7; border-radius: 12px; margin-top: 16px; }
+  .success-msg { display: none; text-align: centre; padding: 24px; background: #e8f5e9; border: 2px solid #a5d6a7; border-radius: 12px; margin-top: 16px; }
   .success-msg .icon { font-size: 2.5rem; margin-bottom: 8px; }
-  .success-msg p { color: #2e7d32; font-weight: 800; font-size: 1rem; }
+  .success-msg p { colour: #2e7d32; font-weight: 800; font-size: 1rem; }
 
   /* TOPIC CARDS */
   .topics { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-bottom: 40px; }
-  .topic-card { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; font-size: 0.85rem; font-weight: 700; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  .topic-card { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; font-size: 0.85rem; font-weight: 700; colour: var(--muted); display: flex; align-items: centre; gap: 8px; }
 
-  footer { background: var(--board); color: rgba(255,255,255,0.6); text-align: center; padding: 24px; font-size: 13px; font-weight: 600; }
-  footer a { color: rgba(255,255,255,0.8); text-decoration: none; margin: 0 8px; }
-  footer a:hover { color: var(--gold-lt); }
+  footer { background: var(--board); colour: rgba(255,255,255,0.6); text-align: centre; padding: 24px; font-size: 13px; font-weight: 600; }
+  footer a { colour: rgba(255,255,255,0.8); text-decoration: none; margin: 0 8px; }
+  footer a:hover { colour: var(--gold-lt); }
 
   @media (max-width: 500px) {
     .contact-cards { grid-template-columns: 1fr; }
@@ -126,7 +126,7 @@
   </div>
 
   <!-- WHAT WE CAN HELP WITH -->
-  <h2 style="font-family:'Lora',serif;font-size:1.3rem;font-weight:600;color:var(--board);margin-bottom:14px">What you can contact us about</h2>
+  <h2 style="font-family:'Lora',serif;font-size:1.3rem;font-weight:600;colour:var(--board);margin-bottom:14px">What you can contact us about</h2>
   <div class="topics">
     <div class="topic-card">💡 Tool suggestions</div>
     <div class="topic-card">🐛 Bug reports</div>
@@ -181,8 +181,8 @@
     </div>
   </div>
 
-  <p style="font-size:0.85rem;color:var(--muted);font-weight:600;line-height:1.6">
-    <strong style="color:var(--board)">Note:</strong> This contact form sends your message directly to our email. We do not store your message or contact details on our servers beyond what is needed to reply to you. See our <a href="privacy.html" style="color:var(--board);font-weight:800">Privacy Policy</a> for more details.
+  <p style="font-size:0.85rem;colour:var(--muted);font-weight:600;line-height:1.6">
+    <strong style="colour:var(--board)">Note:</strong> This contact form sends your message directly to our email. We do not store your message or contact details on our servers beyond what is needed to reply to you. See our <a href="privacy.html" style="colour:var(--board);font-weight:800">Privacy Policy</a> for more details.
   </p>
 </div>
 

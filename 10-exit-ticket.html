@@ -18,12 +18,12 @@
     --radius: 20px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+  body { background: var(--bg); colour: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
 
-  nav { background: rgba(28,28,46,0.95); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(10px); }
-  nav a { color: var(--muted); text-decoration: none; font-weight: 700; font-size: 14px; transition: color 0.2s; }
-  nav a:hover { color: var(--text); }
-  nav .tool-title { font-family: 'Lora', serif; font-size: 1.2rem; color: var(--accent); }
+  nav { background: rgba(28,28,46,0.95); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: centre; justify-content: space-between; backdrop-filter: blur(10px); }
+  nav a { colour: var(--muted); text-decoration: none; font-weight: 700; font-size: 14px; transition: colour 0.2s; }
+  nav a:hover { colour: var(--text); }
+  nav .tool-title { font-family: 'Lora', serif; font-size: 1.2rem; colour: var(--accent); }
 
   main { flex: 1; display: grid; grid-template-columns: 340px 1fr; height: calc(100vh - 49px); }
 
@@ -37,10 +37,10 @@
   }
   .sidebar-scroll { flex: 1; overflow-y: auto; padding: 20px 16px; display: flex; flex-direction: column; gap: 18px; }
 
-  .sidebar h2 { font-family: 'Lora', serif; font-size: 1.1rem; color: var(--accent); margin-bottom: 4px; }
-  .sidebar p.hint { font-size: 0.78rem; color: var(--muted); font-weight: 600; line-height: 1.5; }
+  .sidebar h2 { font-family: 'Lora', serif; font-size: 1.1rem; colour: var(--accent); margin-bottom: 4px; }
+  .sidebar p.hint { font-size: 0.78rem; colour: var(--muted); font-weight: 600; line-height: 1.5; }
 
-  label.field-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); display: block; margin-bottom: 6px; }
+  label.field-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; colour: var(--muted); display: block; margin-bottom: 6px; }
 
   /* CATEGORY TABS */
   .cat-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -52,12 +52,12 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.78rem;
     font-weight: 800;
-    color: var(--muted);
+    colour: var(--muted);
     cursor: pointer;
     transition: all 0.15s;
   }
-  .cat-tab:hover { border-color: var(--accent); color: var(--accent); }
-  .cat-tab.active { background: var(--accent); border-color: var(--accent); color: #1c1c2e; }
+  .cat-tab:hover { border-colour: var(--accent); colour: var(--accent); }
+  .cat-tab.active { background: var(--accent); border-colour: var(--accent); colour: #1c1c2e; }
 
   /* PROMPT LIST */
   .prompt-list { display: flex; flex-direction: column; gap: 6px; max-height: 220px; overflow-y: auto; }
@@ -68,13 +68,13 @@
     border-radius: 10px;
     font-size: 0.85rem;
     font-weight: 700;
-    color: var(--text);
+    colour: var(--text);
     cursor: pointer;
     transition: all 0.15s;
     line-height: 1.4;
   }
-  .prompt-item:hover { border-color: var(--accent); background: rgba(249,168,37,0.06); }
-  .prompt-item.selected { border-color: var(--accent); background: rgba(249,168,37,0.1); color: var(--accent); }
+  .prompt-item:hover { border-colour: var(--accent); background: rgba(249,168,37,0.06); }
+  .prompt-item.selected { border-colour: var(--accent); background: rgba(249,168,37,0.1); colour: var(--accent); }
 
   /* CUSTOM PROMPT */
   textarea.custom-prompt {
@@ -83,21 +83,21 @@
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 10px;
-    color: var(--text);
+    colour: var(--text);
     padding: 10px 12px;
     font-family: 'Nunito', sans-serif;
     font-size: 0.9rem;
     font-weight: 700;
     resize: vertical;
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-colour 0.2s;
     line-height: 1.5;
   }
-  textarea.custom-prompt:focus { border-color: var(--accent); }
+  textarea.custom-prompt:focus { border-colour: var(--accent); }
 
   /* SETTINGS */
   .settings-grid { display: flex; flex-direction: column; gap: 10px; }
-  .setting-row { display: flex; align-items: center; justify-content: space-between; }
+  .setting-row { display: flex; align-items: centre; justify-content: space-between; }
   .setting-row label.field-label { margin: 0; }
 
   .toggle { position: relative; width: 40px; height: 22px; cursor: pointer; flex-shrink: 0; }
@@ -109,13 +109,13 @@
 
   input[type=range].mini { -webkit-appearance: none; width: 80px; height: 4px; background: var(--border); border-radius: 2px; cursor: pointer; }
   input[type=range].mini::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; background: var(--accent); border-radius: 50%; }
-  .range-val { font-size: 0.8rem; font-weight: 800; color: var(--accent); min-width: 32px; text-align: right; }
+  .range-val { font-size: 0.8rem; font-weight: 800; colour: var(--accent); min-width: 32px; text-align: right; }
 
   /* COLOR PICKER */
-  .color-row { display: flex; gap: 6px; flex-wrap: wrap; }
-  .color-dot { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.15s; flex-shrink: 0; }
-  .color-dot:hover { transform: scale(1.15); }
-  .color-dot.active { border-color: white; box-shadow: 0 0 0 2px rgba(255,255,255,0.4); }
+  .colour-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .colour-dot { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.15s; flex-shrink: 0; }
+  .colour-dot:hover { transform: scale(1.15); }
+  .colour-dot.active { border-colour: white; box-shadow: 0 0 0 2px rgba(255,255,255,0.4); }
 
   /* DISPLAY BUTTON */
   .sidebar-footer { padding: 16px; border-top: 1px solid var(--border); }
@@ -128,13 +128,13 @@
     font-family: 'Nunito', sans-serif;
     font-size: 1.1rem;
     font-weight: 900;
-    color: #1c1c2e;
+    colour: #1c1c2e;
     cursor: pointer;
     transition: all 0.2s;
     box-shadow: 0 4px 20px rgba(249,168,37,0.3);
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: centre;
+    justify-content: centre;
     gap: 8px;
   }
   .btn-display:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(249,168,37,0.4); }
@@ -144,8 +144,8 @@
     position: relative;
     overflow: hidden;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: centre;
+    justify-content: centre;
     flex-direction: column;
     gap: 24px;
     padding: 40px 32px;
@@ -176,7 +176,7 @@
   }
   .ticket-icon {
     font-size: clamp(2.5rem, 5vw, 4rem);
-    text-align: center;
+    text-align: centre;
     display: block;
     margin-bottom: 20px;
     line-height: 1;
@@ -186,18 +186,18 @@
     font-size: clamp(1.4rem, 3vw, 2.4rem);
     font-weight: 600;
     line-height: 1.45;
-    text-align: center;
-    color: var(--text);
+    text-align: centre;
+    colour: var(--text);
     transition: all 0.3s;
   }
   .ticket-category {
-    text-align: center;
+    text-align: centre;
     margin-top: 20px;
     font-size: 0.78rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    color: var(--muted);
+    colour: var(--muted);
   }
 
   /* ANSWER LINES */
@@ -235,18 +235,18 @@
   .timer-label {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: centre;
     margin-top: 8px;
   }
-  .timer-label span { font-size: 0.85rem; font-weight: 800; color: var(--muted); }
-  .timer-label .time-left { font-size: 1.2rem; font-weight: 900; color: var(--accent); font-family: 'Lora', serif; }
+  .timer-label span { font-size: 0.85rem; font-weight: 800; colour: var(--muted); }
+  .timer-label .time-left { font-size: 1.2rem; font-weight: 900; colour: var(--accent); font-family: 'Lora', serif; }
 
   /* NAV CONTROLS on display */
   .display-controls {
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: centre;
   }
   .ctrl-btn {
     padding: 12px 22px;
@@ -256,19 +256,19 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.9rem;
     font-weight: 800;
-    color: var(--text);
+    colour: var(--text);
     cursor: pointer;
     transition: all 0.2s;
     display: flex;
-    align-items: center;
+    align-items: centre;
     gap: 6px;
   }
-  .ctrl-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .ctrl-btn.primary { background: var(--accent); border-color: var(--accent); color: #1c1c2e; }
+  .ctrl-btn:hover { border-colour: var(--accent); colour: var(--accent); }
+  .ctrl-btn.primary { background: var(--accent); border-colour: var(--accent); colour: #1c1c2e; }
   .ctrl-btn.primary:hover { opacity: 0.85; }
 
   /* PROGRESS DOTS */
-  .progress-dots { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+  .progress-dots { display: flex; gap: 6px; justify-content: centre; flex-wrap: wrap; }
   .progress-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.2s; }
   .progress-dot.done { background: var(--green); }
   .progress-dot.current { background: var(--accent); transform: scale(1.4); }
@@ -302,16 +302,16 @@
     border-radius: 8px;
     border: 1px solid var(--border);
     background: rgba(255,255,255,0.05);
-    color: var(--muted);
+    colour: var(--muted);
     font-size: 0.78rem;
     font-weight: 800;
     cursor: pointer;
     transition: all 0.15s;
   }
-  .fs-btn:hover { color: var(--text); border-color: var(--text); }
+  .fs-btn:hover { colour: var(--text); border-colour: var(--text); }
 
-  footer { text-align: center; padding: 10px; font-size: 12px; color: var(--muted); font-weight: 600; background: var(--card); border-top: 1px solid var(--border); }
-  footer a { color: var(--muted); text-decoration: none; }
+  footer { text-align: centre; padding: 10px; font-size: 12px; colour: var(--muted); font-weight: 600; background: var(--card); border-top: 1px solid var(--border); }
+  footer a { colour: var(--muted); text-decoration: none; }
 
   @media (max-width: 700px) {
     main { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
@@ -333,7 +333,7 @@
 <nav>
   <a href="index.html">← All Tools</a>
   <span class="tool-title">🎟️ Exit Ticket Display</span>
-  <span style="font-size:12px;color:var(--muted)">handyteachertools.com</span>
+  <span style="font-size:12px;colour:var(--muted)">handyteachertools.com</span>
 </nav>
 
 <main>
@@ -369,7 +369,7 @@
       <div>
         <label class="field-label">✏️ Custom Prompt</label>
         <textarea class="custom-prompt" id="customPrompt" placeholder="Type your own exit ticket prompt here..."></textarea>
-        <button style="margin-top:8px;width:100%;padding:9px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Nunito',sans-serif;font-weight:800;font-size:0.85rem;cursor:pointer;transition:all 0.2s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'" onclick="useCustom()">Use Custom Prompt →</button>
+        <button style="margin-top:8px;width:100%;padding:9px;border-radius:8px;border:1px solid var(--border);background:transparent;colour:var(--muted);font-family:'Nunito',sans-serif;font-weight:800;font-size:0.85rem;cursor:pointer;transition:all 0.2s" onmouseover="this.style.borderColor='var(--accent)';this.style.colour='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.colour='var(--muted)'" onclick="useCustom()">Use Custom Prompt →</button>
       </div>
 
       <!-- SETTINGS -->
@@ -390,15 +390,15 @@
             <label class="toggle"><input type="checkbox" id="showLines" checked/><span class="toggle-track"></span></label>
           </div>
           <div>
-            <label class="field-label" style="margin-bottom:8px">Accent Color</label>
-            <div class="color-row" id="colorRow">
-              <div class="color-dot active" style="background:#f9a825" data-color="#f9a825" onclick="setAccent(this)"></div>
-              <div class="color-dot" style="background:#7c4dff" data-color="#7c4dff" onclick="setAccent(this)"></div>
-              <div class="color-dot" style="background:#00e676" data-color="#00e676" onclick="setAccent(this)"></div>
-              <div class="color-dot" style="background:#ff4081" data-color="#ff4081" onclick="setAccent(this)"></div>
-              <div class="color-dot" style="background:#00bcd4" data-color="#00bcd4" onclick="setAccent(this)"></div>
-              <div class="color-dot" style="background:#ff6d00" data-color="#ff6d00" onclick="setAccent(this)"></div>
-              <div class="color-dot" style="background:#ffffff" data-color="#ffffff" onclick="setAccent(this)"></div>
+            <label class="field-label" style="margin-bottom:8px">Accent Colour</label>
+            <div class="colour-row" id="colorRow">
+              <div class="colour-dot active" style="background:#f9a825" data-colour="#f9a825" onclick="setAccent(this)"></div>
+              <div class="colour-dot" style="background:#7c4dff" data-colour="#7c4dff" onclick="setAccent(this)"></div>
+              <div class="colour-dot" style="background:#00e676" data-colour="#00e676" onclick="setAccent(this)"></div>
+              <div class="colour-dot" style="background:#ff4081" data-colour="#ff4081" onclick="setAccent(this)"></div>
+              <div class="colour-dot" style="background:#00bcd4" data-colour="#00bcd4" onclick="setAccent(this)"></div>
+              <div class="colour-dot" style="background:#ff6d00" data-colour="#ff6d00" onclick="setAccent(this)"></div>
+              <div class="colour-dot" style="background:#ffffff" data-colour="#ffffff" onclick="setAccent(this)"></div>
             </div>
           </div>
         </div>
@@ -514,8 +514,8 @@ function renderPromptList() {
 }
 
 function setAccent(el) {
-  accentColor = el.dataset.color;
-  document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+  accentColor = el.dataset.colour;
+  document.querySelectorAll('.colour-dot').forEach(d => d.classList.remove('active'));
   el.classList.add('active');
   applyAccent();
 }

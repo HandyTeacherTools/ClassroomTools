@@ -21,12 +21,12 @@
     --radius: 14px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; }
+  body { background: var(--bg); colour: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; }
 
-  nav { background: var(--board); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
-  nav a { color: rgba(255,255,255,0.6); text-decoration: none; font-weight: 700; font-size: 14px; }
-  nav a:hover { color: white; }
-  nav .tool-title { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: white; }
+  nav { background: var(--board); padding: 12px 24px; display: flex; align-items: centre; justify-content: space-between; }
+  nav a { colour: rgba(255,255,255,0.6); text-decoration: none; font-weight: 700; font-size: 14px; }
+  nav a:hover { colour: white; }
+  nav .tool-title { font-family: 'DM Serif Display', serif; font-size: 1.3rem; colour: white; }
 
   .app { display: grid; grid-template-columns: 280px 1fr; height: calc(100vh - 49px); }
 
@@ -42,7 +42,7 @@
     padding: 16px 16px 12px;
     border-bottom: 1px solid var(--border);
     background: var(--board);
-    color: white;
+    colour: white;
   }
   .sidebar-header h2 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; margin-bottom: 8px; }
 
@@ -52,14 +52,14 @@
     border: 1px solid rgba(255,255,255,0.2);
     border-radius: 8px;
     background: rgba(255,255,255,0.1);
-    color: white;
+    colour: white;
     font-family: 'Nunito', sans-serif;
     font-size: 0.82rem;
     resize: none;
     outline: none;
     height: 100px;
   }
-  .class-textarea::placeholder { color: rgba(255,255,255,0.4); }
+  .class-textarea::placeholder { colour: rgba(255,255,255,0.4); }
   .sidebar-header button {
     margin-top: 8px;
     width: 100%;
@@ -67,7 +67,7 @@
     border-radius: 8px;
     border: none;
     background: var(--accent2);
-    color: white;
+    colour: white;
     font-family: 'Nunito', sans-serif;
     font-weight: 800;
     font-size: 0.85rem;
@@ -78,7 +78,7 @@
 
   /* UNASSIGNED POOL */
   .pool-section { flex: 1; overflow-y: auto; padding: 12px; }
-  .pool-section h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); font-weight: 800; margin-bottom: 8px; }
+  .pool-section h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.8px; colour: var(--muted); font-weight: 800; margin-bottom: 8px; }
   .pool {
     min-height: 60px;
     background: #f8fafc;
@@ -89,9 +89,9 @@
     flex-wrap: wrap;
     gap: 6px;
     align-content: flex-start;
-    transition: border-color 0.2s, background 0.2s;
+    transition: border-colour 0.2s, background 0.2s;
   }
-  .pool.drag-over { border-color: var(--accent); background: #e8f4fd; }
+  .pool.drag-over { border-colour: var(--accent); background: #e8f4fd; }
 
   .student-chip {
     padding: 6px 12px;
@@ -103,7 +103,7 @@
     border: 2px solid transparent;
     transition: all 0.15s;
     white-space: nowrap;
-    color: white;
+    colour: white;
     box-shadow: 0 1px 4px rgba(0,0,0,0.15);
   }
   .student-chip:hover { transform: scale(1.05); box-shadow: 0 3px 8px rgba(0,0,0,0.2); }
@@ -117,7 +117,7 @@
     flex-direction: column;
     gap: 8px;
   }
-  .tools-bar h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); font-weight: 800; }
+  .tools-bar h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.8px; colour: var(--muted); font-weight: 800; }
   .layout-btns { display: flex; gap: 6px; flex-wrap: wrap; }
   .layout-btn {
     padding: 6px 12px;
@@ -127,11 +127,11 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.78rem;
     font-weight: 800;
-    color: var(--text);
+    colour: var(--text);
     cursor: pointer;
     transition: all 0.15s;
   }
-  .layout-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .layout-btn:hover { border-colour: var(--accent); colour: var(--accent); }
   .action-btns { display: flex; gap: 6px; }
   .action-btn {
     flex: 1;
@@ -142,12 +142,12 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.8rem;
     font-weight: 800;
-    color: var(--text);
+    colour: var(--text);
     cursor: pointer;
     transition: all 0.15s;
-    text-align: center;
+    text-align: centre;
   }
-  .action-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .action-btn:hover { border-colour: var(--accent); colour: var(--accent); }
 
   /* CLASSROOM */
   .classroom {
@@ -157,7 +157,7 @@
       radial-gradient(circle at 20px 20px, rgba(100,140,180,0.03) 1px, transparent 1px),
       radial-gradient(circle at 60px 60px, rgba(100,140,180,0.03) 1px, transparent 1px);
     background-size: 80px 80px;
-    background-color: #e8eef4;
+    background-colour: #e8eef4;
   }
 
   .classroom-inner {
@@ -169,13 +169,13 @@
 
   /* TEACHER DESK */
   .teacher-area {
-    text-align: center;
+    text-align: centre;
     margin-bottom: 32px;
   }
   .teacher-desk {
     display: inline-block;
     background: var(--board);
-    color: white;
+    colour: white;
     padding: 10px 48px;
     border-radius: 8px;
     font-weight: 800;
@@ -183,20 +183,20 @@
     letter-spacing: 1px;
     box-shadow: 0 3px 12px rgba(44,62,80,0.3);
   }
-  .teacher-label { font-size: 0.75rem; color: var(--muted); margin-top: 6px; }
+  .teacher-label { font-size: 0.75rem; colour: var(--muted); margin-top: 6px; }
 
   /* DESK GRID */
   .desk-grid {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    align-items: center;
+    align-items: centre;
   }
   .desk-row {
     display: flex;
     gap: 16px;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: centre;
   }
 
   /* INDIVIDUAL DESK */
@@ -208,43 +208,43 @@
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    align-items: centre;
+    justify-content: centre;
+    text-align: centre;
     padding: 6px;
     position: relative;
     transition: all 0.2s;
     box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     cursor: default;
   }
-  .desk.occupied { border-color: currentColor; }
-  .desk.drag-over { border-color: var(--accent); background: #e8f4fd; transform: scale(1.06); box-shadow: 0 4px 16px rgba(52,152,219,0.3); }
+  .desk.occupied { border-colour: currentColor; }
+  .desk.drag-over { border-colour: var(--accent); background: #e8f4fd; transform: scale(1.06); box-shadow: 0 4px 16px rgba(52,152,219,0.3); }
   .desk.empty-desk {
     border-style: dashed;
-    border-color: #c0cdd8;
+    border-colour: #c0cdd8;
     background: rgba(255,255,255,0.5);
     cursor: pointer;
     opacity: 0.6;
     transition: opacity 0.2s;
   }
-  .desk.empty-desk:hover { opacity: 1; border-color: var(--accent); }
+  .desk.empty-desk:hover { opacity: 1; border-colour: var(--accent); }
 
   .desk-student {
     font-size: 0.75rem;
     font-weight: 800;
     line-height: 1.2;
     word-break: break-word;
-    color: var(--text);
+    colour: var(--text);
   }
   .desk-avatar {
     width: 32px; height: 32px;
     border-radius: 50%;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: centre;
+    justify-content: centre;
     font-size: 0.65rem;
     font-weight: 900;
-    color: white;
+    colour: white;
     margin-bottom: 4px;
   }
   .desk-remove {
@@ -254,17 +254,17 @@
     border-radius: 50%;
     border: none;
     background: #e74c3c;
-    color: white;
+    colour: white;
     font-size: 10px;
     cursor: pointer;
     display: none;
-    align-items: center;
-    justify-content: center;
+    align-items: centre;
+    justify-content: centre;
     line-height: 1;
     box-shadow: 0 1px 4px rgba(0,0,0,0.2);
   }
   .desk:hover .desk-remove { display: flex; }
-  .desk-plus { font-size: 1.2rem; color: #a0b0c0; }
+  .desk-plus { font-size: 1.2rem; colour: #a0b0c0; }
 
   /* ZOOM CONTROLS */
   .zoom-controls {
@@ -286,12 +286,12 @@
     background: white;
     font-size: 1rem;
     cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
+    display: flex; align-items: centre; justify-content: centre;
     transition: background 0.15s;
     font-weight: 800;
   }
   .zoom-btn:hover { background: var(--bg); }
-  .zoom-label { display: flex; align-items: center; padding: 0 6px; font-size: 0.8rem; font-weight: 800; color: var(--muted); }
+  .zoom-label { display: flex; align-items: centre; padding: 0 6px; font-size: 0.8rem; font-weight: 800; colour: var(--muted); }
 
   /* PRINT */
   @media print {
@@ -314,7 +314,7 @@
 <nav>
   <a href="index.html">← All Tools</a>
   <span class="tool-title">🪑 Seating Chart Builder</span>
-  <span style="font-size:12px;color:rgba(255,255,255,0.4)">handyteachertools.com</span>
+  <span style="font-size:12px;colour:rgba(255,255,255,0.4)">handyteachertools.com</span>
 </nav>
 
 <div class="app">
@@ -459,7 +459,7 @@ Nina Patel</textarea>
   function renderDesks() {
     grid.innerHTML = '';
     if (desks.length === 0) {
-      grid.innerHTML = '<p style="color:var(--muted);font-size:0.9rem;text-align:center;padding:40px">Choose a layout →</p>';
+      grid.innerHTML = '<p style="colour:var(--muted);font-size:0.9rem;text-align:centre;padding:40px">Choose a layout →</p>';
       return;
     }
     const maxRow = Math.max(...desks.map(d => d.row));
@@ -543,7 +543,7 @@ Nina Patel</textarea>
   function zoom(delta) {
     scale = Math.max(0.5, Math.min(1.5, scale + delta));
     document.getElementById('classroomInner').style.transform = `scale(${scale})`;
-    document.getElementById('classroomInner').style.transformOrigin = 'top center';
+    document.getElementById('classroomInner').style.transformOrigin = 'top centre';
     document.getElementById('zoomLabel').textContent = Math.round(scale * 100) + '%';
   }
 
@@ -567,5 +567,6 @@ Nina Patel</textarea>
   // Auto-fill on first load
   randomFill();
 </script>
+<footer style="text-align:center;padding:12px;font-size:12px;color:var(--muted);font-weight:600;background:var(--card);border-top:1px solid var(--border)"><a href="index.html" style="color:var(--muted);text-decoration:none">← Back to all tools</a> · handyteachertools.com</footer>
 </body>
 </html>

@@ -9,19 +9,19 @@
 <style>
   :root { --board: #2d4a3e; --chalk: #f5f0e8; --ink: #1a2e25; --muted: #6b7f76; --border: #e0dbd2; --gold: #f9a825; --gold-lt: #ffc107; --apple: #4caf50; --radius: 16px; --shadow: 0 4px 20px rgba(0,0,0,0.08); }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--chalk); color: var(--ink); font-family: 'Nunito', sans-serif; min-height: 100vh; }
-  nav { background: var(--board); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
-  nav a { color: rgba(255,255,255,0.7); text-decoration: none; font-weight: 700; font-size: 14px; }
-  nav a:hover { color: white; }
-  nav .brand { font-weight: 900; font-size: 1.1rem; color: white; }
+  body { background: var(--chalk); colour: var(--ink); font-family: 'Nunito', sans-serif; min-height: 100vh; }
+  nav { background: var(--board); padding: 14px 24px; display: flex; align-items: centre; justify-content: space-between; }
+  nav a { colour: rgba(255,255,255,0.7); text-decoration: none; font-weight: 700; font-size: 14px; }
+  nav a:hover { colour: white; }
+  nav .brand { font-weight: 900; font-size: 1.1rem; colour: white; }
 
   /* HERO */
-  .hero { background: var(--board); padding: 64px 24px; text-align: center; position: relative; overflow: hidden; }
+  .hero { background: var(--board); padding: 64px 24px; text-align: centre; position: relative; overflow: hidden; }
   .hero::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.04) 39px, rgba(255,255,255,0.04) 40px); }
   .hero-inner { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
-  .hero h1 { font-family: 'Lora', serif; font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 600; color: white; margin-bottom: 16px; line-height: 1.3; }
-  .hero h1 em { color: var(--gold-lt); font-style: italic; }
-  .hero p { font-size: 1.05rem; color: rgba(255,255,255,0.75); line-height: 1.7; font-family: 'Lora', serif; font-style: italic; }
+  .hero h1 { font-family: 'Lora', serif; font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 600; colour: white; margin-bottom: 16px; line-height: 1.3; }
+  .hero h1 em { colour: var(--gold-lt); font-style: italic; }
+  .hero p { font-size: 1.05rem; colour: rgba(255,255,255,0.75); line-height: 1.7; font-family: 'Lora', serif; font-style: italic; }
 
   .page { max-width: 800px; margin: 0 auto; padding: 56px 24px 80px; }
 
@@ -29,31 +29,31 @@
   .values { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-bottom: 56px; }
   .value-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 20px; box-shadow: var(--shadow); }
   .value-icon { font-size: 2rem; margin-bottom: 12px; }
-  .value-card h3 { font-size: 1rem; font-weight: 800; color: var(--board); margin-bottom: 8px; }
-  .value-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; font-weight: 600; }
+  .value-card h3 { font-size: 1rem; font-weight: 800; colour: var(--board); margin-bottom: 8px; }
+  .value-card p { font-size: 0.85rem; colour: var(--muted); line-height: 1.6; font-weight: 600; }
 
-  h2 { font-family: 'Lora', serif; font-size: 1.6rem; font-weight: 600; color: var(--board); margin-bottom: 16px; }
-  p.body { font-size: 0.97rem; color: var(--ink); line-height: 1.85; margin-bottom: 18px; font-weight: 600; }
+  h2 { font-family: 'Lora', serif; font-size: 1.6rem; font-weight: 600; colour: var(--board); margin-bottom: 16px; }
+  p.body { font-size: 0.97rem; colour: var(--ink); line-height: 1.85; margin-bottom: 18px; font-weight: 600; }
   .section { margin-bottom: 48px; }
 
   /* TOOLS LIST */
   .tool-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 20px; }
-  .tool-pill { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); font-weight: 700; font-size: 0.88rem; transition: all 0.15s; box-shadow: var(--shadow); }
-  .tool-pill:hover { border-color: var(--apple); color: var(--board); transform: translateX(3px); }
+  .tool-pill { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; display: flex; align-items: centre; gap: 10px; text-decoration: none; colour: var(--ink); font-weight: 700; font-size: 0.88rem; transition: all 0.15s; box-shadow: var(--shadow); }
+  .tool-pill:hover { border-colour: var(--apple); colour: var(--board); transform: translateX(3px); }
 
   /* PROMISE BOX */
-  .promise-box { background: var(--board); color: white; border-radius: var(--radius); padding: 32px; margin: 40px 0; }
-  .promise-box h3 { font-family: 'Lora', serif; font-size: 1.3rem; color: var(--gold-lt); margin-bottom: 16px; }
+  .promise-box { background: var(--board); colour: white; border-radius: var(--radius); padding: 32px; margin: 40px 0; }
+  .promise-box h3 { font-family: 'Lora', serif; font-size: 1.3rem; colour: var(--gold-lt); margin-bottom: 16px; }
   .promise-box ul { margin-left: 20px; display: flex; flex-direction: column; gap: 10px; }
-  .promise-box li { font-size: 0.95rem; color: rgba(255,255,255,0.85); line-height: 1.6; font-weight: 600; }
+  .promise-box li { font-size: 0.95rem; colour: rgba(255,255,255,0.85); line-height: 1.6; font-weight: 600; }
 
-  .cta { text-align: center; margin-top: 48px; }
-  .cta a { display: inline-block; padding: 16px 40px; background: var(--apple); color: white; text-decoration: none; border-radius: 14px; font-weight: 900; font-size: 1.05rem; box-shadow: 0 4px 16px rgba(76,175,80,0.3); transition: all 0.2s; }
+  .cta { text-align: centre; margin-top: 48px; }
+  .cta a { display: inline-block; padding: 16px 40px; background: var(--apple); colour: white; text-decoration: none; border-radius: 14px; font-weight: 900; font-size: 1.05rem; box-shadow: 0 4px 16px rgba(76,175,80,0.3); transition: all 0.2s; }
   .cta a:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(76,175,80,0.4); }
 
-  footer { background: var(--board); color: rgba(255,255,255,0.6); text-align: center; padding: 24px; font-size: 13px; font-weight: 600; }
-  footer a { color: rgba(255,255,255,0.8); text-decoration: none; margin: 0 8px; }
-  footer a:hover { color: var(--gold-lt); }
+  footer { background: var(--board); colour: rgba(255,255,255,0.6); text-align: centre; padding: 24px; font-size: 13px; font-weight: 600; }
+  footer a { colour: rgba(255,255,255,0.8); text-decoration: none; margin: 0 8px; }
+  footer a:hover { colour: var(--gold-lt); }
 
   @media (max-width: 500px) { .values { grid-template-columns: 1fr; } }
 </style>

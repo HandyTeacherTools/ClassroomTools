@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Brain Break Picker — Handy Teacher Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Boogaloo&display=swap" rel="stylesheet"/>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M5DCBRK7DE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-M5DCBRK7DE');
+</script>
+<style>
+  :root {
+    --bg: #fff9f0;
+    --card: #ffffff;
+    --border: #f0e8dc;
+    --text: #2d1f0e;
+    --muted: #9b8070;
+    --radius: 20px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); colour: var(--text); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+
+  /* Fun confetti-dot background */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      radial-gradient(circle, #ffd16630 2px, transparent 2px),
+      radial-gradient(circle, #ff6b6b20 2px, transparent 2px),
+      radial-gradient(circle, #4ecdc420 2px, transparent 2px);
+    background-size: 60px 60px, 80px 80px, 100px 100px;
+    background-position: 0 0, 30px 30px, 10px 50px;
+    pointer-events: none;
+  }
+
+  nav { background: white; border-bottom: 2px solid var(--border); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
+  nav a { colour: var(--muted); color: var(--muted); text-decoration: none; font-weight: 700; font-size: 14px; }
+  nav a:hover { colour: var(--text); color: var(--text); }
+  nav .tool-title { font-family: 'Boogaloo', cursive; font-size: 1.4rem; colour: #ff6b6b; color: #ff6b6b; letter-spacing: 1px; }
+
+  main { flex: 1; max-width: 860px; margin: 0 auto; padding: 36px 20px 60px; width: 100%; position: relative; z-index: 1; }
+
+  /* FILTER TABS */
+  .filter-tabs { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 28px; }
+  .filter-tab {
+    padding: 9px 18px;
+    border-radius: 100px;
+    border: 2px solid var(--border);
+    background: white;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 800;
+    colour: var(--muted); color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .filter-tab:hover { border-colour: currentColour; border-color: currentColor; }
+  .filter-tab.active { colour: white; color: white; border-colour: transparent; border-color: transparent; }
+  .filter-tab[data-cat="all"].active    { background: #2d1f0e; }
+  .filter-tab[data-cat="move"].active   { background: #ff6b6b; }
+  .filter-tab[data-cat="breathe"].active { background: #4ecdc4; }
+  .filter-tab[data-cat="focus"].active  { background: #ffd166; colour: #2d1f0e; color: #2d1f0e; }
+  .filter-tab[data-cat="social"].active { background: #a29bfe; }
+  .filter-tab[data-cat="quick"].active  { background: #fd79a8; }
+
+  /* BIG PICK CARD */
+  .pick-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+    border: 2px solid var(--border);
+    padding: 48px 40px 40px;
+    text-align: center;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    transition: border-colour 0.4s;
+  }
+  .pick-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: var(--card-accent, #ff6b6b);
+    border-radius: var(--radius) var(--radius) 0 0;
+    transition: background 0.4s;
+  }
+
+  .activity-emoji {
+    font-size: clamp(3rem, 10vw, 5rem);
+    line-height: 1;
+    animation: none;
+  }
+  .activity-emoji.spinning { animation: spinIn 0.4s ease; }
+  @keyframes spinIn { from { transform: rotate(-20deg) scale(0.7); opacity: 0.4; } to { transform: rotate(0) scale(1); opacity: 1; } }
+
+  .activity-category {
+    font-size: 0.72rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    colour: var(--muted); color: var(--muted);
+  }
+  .activity-name {
+    font-family: 'Boogaloo', cursive;
+    font-size: clamp(2rem, 6vw, 3.2rem);
+    colour: var(--text); color: var(--text);
+    line-height: 1.1;
+    transition: colour 0.3s;
+  }
+  .activity-desc {
+    font-size: 1rem;
+    font-weight: 700;
+    colour: var(--muted); color: var(--muted);
+    line-height: 1.7;
+    max-width: 520px;
+  }
+  .activity-duration {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    colour: var(--muted); color: var(--muted);
+  }
+
+  .empty-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 2px dashed var(--border);
+    padding: 60px 40px;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .empty-card .icon { font-size: 3rem; margin-bottom: 12px; }
+  .empty-card p { font-size: 1rem; font-weight: 700; colour: var(--muted); color: var(--muted); }
+
+  /* PICK BUTTON */
+  .pick-btn {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto 24px;
+    padding: 20px;
+    background: #ff6b6b;
+    colour: white; color: white;
+    border: none;
+    border-radius: 16px;
+    font-family: 'Boogaloo', cursive;
+    font-size: 1.6rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: block;
+    box-shadow: 0 6px 24px rgba(255,107,107,0.3);
+  }
+  .pick-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 32px rgba(255,107,107,0.4); }
+  .pick-btn:active { transform: scale(0.97); }
+
+  /* ACTIVITIES GRID */
+  .grid-label { font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; colour: var(--muted); color: var(--muted); margin-bottom: 14px; }
+  .activities-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+  .activity-mini {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .activity-mini:hover { border-colour: currentColour; border-color: currentColor; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+  .activity-mini .mini-emoji { font-size: 1.5rem; flex-shrink: 0; }
+  .activity-mini .mini-info { min-width: 0; }
+  .activity-mini .mini-name { font-size: 0.88rem; font-weight: 800; colour: var(--text); color: var(--text); line-height: 1.2; }
+  .activity-mini .mini-dur { font-size: 0.72rem; font-weight: 700; colour: var(--muted); color: var(--muted); margin-top: 2px; }
+
+  /* TIMER */
+  .break-timer {
+    display: none;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 24px;
+    gap: 12px;
+    flex-direction: column;
+    align-items: center;
+  }
+  .break-timer.visible { display: flex; }
+  .break-timer-label { font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; colour: var(--muted); color: var(--muted); }
+  .break-timer-time { font-family: 'Boogaloo', cursive; font-size: 3rem; colour: var(--text); color: var(--text); line-height: 1; }
+  .break-timer-bar { width: 100%; max-width: 320px; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .break-timer-fill { height: 100%; background: #ff6b6b; border-radius: 4px; width: 100%; transition: width 1s linear; }
+  .timer-btns { display: flex; gap: 8px; }
+  .timer-btn { padding: 8px 16px; border-radius: 8px; border: 2px solid var(--border); background: white; font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 800; colour: var(--text); color: var(--text); cursor: pointer; transition: all 0.15s; }
+  .timer-btn:hover { border-colour: #ff6b6b; border-color: #ff6b6b; colour: #ff6b6b; color: #ff6b6b; }
+
+  footer { text-align: center; padding: 20px; font-size: 12px; colour: var(--muted); color: var(--muted); font-weight: 600; position: relative; z-index: 1; }
+  footer a { colour: var(--muted); color: var(--muted); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">← All Tools</a>
+  <span class="tool-title">🧠 Brain Break Picker</span>
+  <span style="font-size:12px;color:var(--muted)">handyteachertools.com</span>
+</nav>
+
+<main>
+
+  <!-- FILTERS -->
+  <div class="filter-tabs">
+    <button class="filter-tab active" data-cat="all"     onclick="setFilter('all')">🎲 All Breaks</button>
+    <button class="filter-tab"        data-cat="move"    onclick="setFilter('move')">🏃 Move</button>
+    <button class="filter-tab"        data-cat="breathe" onclick="setFilter('breathe')">🌬️ Breathe</button>
+    <button class="filter-tab"        data-cat="focus"   onclick="setFilter('focus')">🎯 Focus</button>
+    <button class="filter-tab"        data-cat="social"  onclick="setFilter('social')">🤝 Social</button>
+    <button class="filter-tab"        data-cat="quick"   onclick="setFilter('quick')">⚡ 1 Min</button>
+  </div>
+
+  <!-- CURRENT ACTIVITY -->
+  <div id="pickCard" class="pick-card" style="--card-accent:#ff6b6b">
+    <div class="activity-emoji" id="actEmoji">🎲</div>
+    <div class="activity-category" id="actCat">Ready to pick!</div>
+    <div class="activity-name" id="actName">Click below to pick a brain break</div>
+    <div class="activity-desc" id="actDesc">Pick randomly from all categories or filter to a specific type of activity.</div>
+    <div class="activity-duration" id="actDur">⏱ 2–5 minutes</div>
+  </div>
+
+  <!-- BREAK TIMER -->
+  <div class="break-timer" id="breakTimer">
+    <div class="break-timer-label">Break Timer</div>
+    <div class="break-timer-time" id="timerDisplay">2:00</div>
+    <div class="break-timer-bar"><div class="break-timer-fill" id="timerFill"></div></div>
+    <div class="timer-btns">
+      <button class="timer-btn" onclick="startBreakTimer()" id="timerStartBtn">▶ Start Timer</button>
+      <button class="timer-btn" onclick="stopBreakTimer()">⏹ Stop</button>
+    </div>
+  </div>
+
+  <!-- PICK BUTTON -->
+  <button class="pick-btn" onclick="pickRandom()">🎲 Pick a Brain Break!</button>
+
+  <!-- ALL ACTIVITIES GRID -->
+  <div class="grid-label" id="gridLabel">All Activities</div>
+  <div class="activities-grid" id="activitiesGrid"></div>
+
+</main>
+
+<footer><a href="index.html">← Back to all tools</a> · handyteachertools.com</footer>
+
+<script>
+const ACTIVITIES = [
+  // MOVE
+  { cat: 'move', emoji: '⭐', name: 'Star Jumps', desc: 'Do 20 star jumps as fast as you can. Keep count together as a class!', duration: '1 min', mins: 1, colour: '#ff6b6b' },
+  { cat: 'move', emoji: '🙅', name: 'Simon Says', desc: 'Quick round of Simon Says — teacher leads. Keep it quick with silly actions!', duration: '3 min', mins: 3, colour: '#ff6b6b' },
+  { cat: 'move', emoji: '💃', name: 'Freeze Dance', desc: 'Play 30 seconds of music — everyone dances. When it stops, freeze like a statue!', duration: '2 min', mins: 2, colour: '#ff6b6b' },
+  { cat: 'move', emoji: '🤸', name: 'Stretch Break', desc: 'Reach up high, touch your toes, roll your shoulders, twist side to side. Hold each for 5 seconds.', duration: '2 min', mins: 2, colour: '#ff6b6b' },
+  { cat: 'move', emoji: '🦶', name: 'Foot Tap Relay', desc: 'Stand up and tap your feet as fast as you can for 30 seconds. Who can keep going the longest?', duration: '1 min', mins: 1, colour: '#ff6b6b' },
+  { cat: 'move', emoji: '🤾', name: 'Air Catch', desc: 'Students mime throwing and catching an invisible ball with their neighbour. Get faster each round!', duration: '2 min', mins: 2, colour: '#ff6b6b' },
+  { cat: 'move', emoji: '🐻', name: 'Animal Walks', desc: 'Call out animals — everyone walks like that animal across their space. Try: bear, crab, penguin, frog!', duration: '3 min', mins: 3, colour: '#ff6b6b' },
+
+  // BREATHE
+  { cat: 'breathe', emoji: '🌬️', name: 'Box Breathing', desc: 'Breathe in for 4 counts → hold for 4 → breathe out for 4 → hold for 4. Repeat 4 times. Eyes closed.', duration: '2 min', mins: 2, colour: '#4ecdc4' },
+  { cat: 'breathe', emoji: '🎈', name: 'Balloon Breaths', desc: 'Imagine your belly is a balloon. Breathe in slowly to inflate it, breathe out slowly to deflate. Do this 5 times.', duration: '2 min', mins: 2, colour: '#4ecdc4' },
+  { cat: 'breathe', emoji: '🌊', name: 'Ocean Breathing', desc: 'Breathe in through your nose for 5 counts (the wave comes in), out through your mouth for 5 (the wave goes out). Repeat slowly.', duration: '2 min', mins: 2, colour: '#4ecdc4' },
+  { cat: 'breathe', emoji: '✋', name: 'Five Finger Breathing', desc: 'Trace your hand — breathe in up each finger, breathe out down each finger. Go slowly. Both hands.', duration: '2 min', mins: 2, colour: '#4ecdc4' },
+  { cat: 'breathe', emoji: '🕯️', name: 'Candle Breathing', desc: 'Imagine a candle in front of you. Breathe in through your nose, then blow the candle out slowly without putting it out. Repeat 6 times.', duration: '1 min', mins: 1, colour: '#4ecdc4' },
+
+  // FOCUS
+  { cat: 'focus', emoji: '🔢', name: 'Count Backwards', desc: 'Everyone silently counts backwards from 100 by 7s (100, 93, 86…). How far can you get in 60 seconds?', duration: '1 min', mins: 1, colour: '#ffd166' },
+  { cat: 'focus', emoji: '👁️', name: 'Spot the Difference', desc: 'Students close their eyes. Change 5 things in the room. Who can spot the most changes when they open their eyes?', duration: '3 min', mins: 3, colour: '#ffd166' },
+  { cat: 'focus', emoji: '🤫', name: 'Silent Minute', desc: 'One full minute of complete silence. No fidgeting. Eyes closed. Focus on your breathing. Ring a bell to start and end.', duration: '1 min', mins: 1, colour: '#ffd166' },
+  { cat: 'focus', emoji: '🎨', name: 'Doodle Break', desc: 'Students draw whatever comes to mind for 3 minutes. No instructions, no right answer. Share with a neighbour.', duration: '3 min', mins: 3, colour: '#ffd166' },
+  { cat: 'focus', emoji: '🪨', name: 'Statue Challenge', desc: 'Everyone freezes in the position they are in. Who can hold the stillest for 30 seconds? A great refocusing tool!', duration: '1 min', mins: 1, colour: '#ffd166' },
+  { cat: 'focus', emoji: '🧩', name: '20 Uses', desc: 'Give students an everyday object (pencil, chair, cup). How many uses can they think of in 2 minutes? Get creative!', duration: '2 min', mins: 2, colour: '#ffd166' },
+
+  // SOCIAL
+  { cat: 'social', emoji: '👋', name: 'Two Truths One Lie', desc: 'Each student writes 2 truths and 1 lie. Share with a neighbour and guess which is the lie!', duration: '4 min', mins: 4, colour: '#a29bfe' },
+  { cat: 'social', emoji: '🤝', name: 'Handshake Design', desc: 'Pairs design a unique handshake in 60 seconds, then perform it for the class. The sillier the better!', duration: '3 min', mins: 3, colour: '#a29bfe' },
+  { cat: 'social', emoji: '🎭', name: 'Emoji Round', desc: 'Go around the room — each student says one emoji that describes their current mood. No explanations needed!', duration: '2 min', mins: 2, colour: '#a29bfe' },
+  { cat: 'social', emoji: '📢', name: 'Compliment Circle', desc: 'Each student says one genuine compliment to the person on their left. Go around the whole room!', duration: '3 min', mins: 3, colour: '#a29bfe' },
+  { cat: 'social', emoji: '🤔', name: 'Would You Rather?', desc: 'Teacher asks a fun Would You Rather question. Students move to one side of the room for their choice and explain why!', duration: '3 min', mins: 3, colour: '#a29bfe' },
+
+  // QUICK (1 min or less)
+  { cat: 'quick', emoji: '👏', name: 'Clap Pattern', desc: 'Teacher claps a pattern — class echoes it back. Get faster and more complex each round. Keep going for 60 seconds!', duration: '1 min', mins: 1, colour: '#fd79a8' },
+  { cat: 'quick', emoji: '🤜', name: 'Rock Paper Scissors', desc: 'Everyone stands. Play Rock Paper Scissors with someone nearby. Loser sits down. Last one standing wins!', duration: '1 min', mins: 1, colour: '#fd79a8' },
+  { cat: 'quick', emoji: '😂', name: 'Class Laugh', desc: 'Everyone does a fake laugh together for 30 seconds. It always turns into a real one! Great energy reset.', duration: '30 sec', mins: 1, colour: '#fd79a8' },
+  { cat: 'quick', emoji: '🙌', name: 'High Five Round', desc: 'Everyone stands and gives a high five to 5 different people in 30 seconds. Sit down when done!', duration: '1 min', mins: 1, colour: '#fd79a8' },
+  { cat: 'quick', emoji: '🧠', name: 'One Word Whip', desc: 'Go around the room as fast as possible — each person says one word that comes to mind. No repeating. Keep it moving!', duration: '1 min', mins: 1, colour: '#fd79a8' },
+];
+
+let currentFilter = 'all';
+let currentActivity = null;
+let timerInterval = null;
+let timerTotal = 0;
+let timerRemaining = 0;
+let used = new Set();
+
+function setFilter(cat) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.toggle('active', t.dataset.cat === cat));
+  renderGrid();
+}
+
+function filteredActivities() {
+  return currentFilter === 'all' ? ACTIVITIES : ACTIVITIES.filter(a => a.cat === currentFilter);
+}
+
+function pickRandom() {
+  let pool = filteredActivities();
+  // Avoid repeats until all used
+  let available = pool.filter(a => !used.has(a.name));
+  if (available.length === 0) { used.clear(); available = pool; }
+  const pick = available[Math.floor(Math.random() * available.length)];
+  used.add(pick.name);
+  showActivity(pick);
+}
+
+function showActivity(a) {
+  currentActivity = a;
+
+  // Animate
+  const emoji = document.getElementById('actEmoji');
+  emoji.classList.remove('spinning');
+  void emoji.offsetWidth;
+  emoji.classList.add('spinning');
+
+  document.getElementById('actEmoji').textContent = a.emoji;
+  document.getElementById('actCat').textContent = catLabel(a.cat);
+  document.getElementById('actName').textContent = a.name;
+  document.getElementById('actDesc').textContent = a.desc;
+  document.getElementById('actDur').textContent = '⏱ ' + a.duration;
+
+  const card = document.getElementById('pickCard');
+  card.style.setProperty('--card-accent', a.colour);
+
+  // Show timer
+  timerTotal = a.mins * 60;
+  timerRemaining = timerTotal;
+  stopBreakTimer();
+  document.getElementById('breakTimer').classList.add('visible');
+  document.getElementById('timerDisplay').textContent = formatTime(timerRemaining);
+  document.getElementById('timerFill').style.width = '100%';
+  document.getElementById('timerStartBtn').textContent = '▶ Start Timer';
+}
+
+function catLabel(cat) {
+  return { move:'🏃 Movement', breathe:'🌬️ Breathing', focus:'🎯 Focus', social:'🤝 Social', quick:'⚡ Quick Break' }[cat] || cat;
+}
+
+function formatTime(secs) {
+  const m = Math.floor(secs / 60), s = secs % 60;
+  return m + ':' + String(s).padStart(2,'0');
+}
+
+function startBreakTimer() {
+  if (timerRemaining <= 0) timerRemaining = timerTotal;
+  clearInterval(timerInterval);
+  document.getElementById('timerStartBtn').textContent = '⏸ Pause';
+  document.getElementById('timerStartBtn').onclick = stopBreakTimer;
+
+  timerInterval = setInterval(() => {
+    timerRemaining--;
+    document.getElementById('timerDisplay').textContent = formatTime(timerRemaining);
+    document.getElementById('timerFill').style.width = (timerRemaining / timerTotal * 100) + '%';
+    if (timerRemaining <= 0) {
+      clearInterval(timerInterval);
+      document.getElementById('timerDisplay').textContent = 'Done! 🎉';
+      document.getElementById('timerStartBtn').textContent = '↺ Again';
+      document.getElementById('timerStartBtn').onclick = () => { timerRemaining = timerTotal; startBreakTimer(); };
+      beepDone();
+    }
+  }, 1000);
+}
+
+function stopBreakTimer() {
+  clearInterval(timerInterval);
+  document.getElementById('timerStartBtn').textContent = '▶ Start Timer';
+  document.getElementById('timerStartBtn').onclick = startBreakTimer;
+}
+
+function beepDone() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [523, 659, 784].forEach((f, i) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = f;
+      g.gain.setValueAtTime(0.3, ctx.currentTime + i * 0.15);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.15 + 0.25);
+      o.start(ctx.currentTime + i * 0.15);
+      o.stop(ctx.currentTime + i * 0.15 + 0.3);
+    });
+  } catch(e) {}
+}
+
+function renderGrid() {
+  const grid = document.getElementById('activitiesGrid');
+  const label = document.getElementById('gridLabel');
+  const list = filteredActivities();
+  label.textContent = currentFilter === 'all' ? `All Activities (${list.length})` : `${catLabel(currentFilter)} (${list.length})`;
+  grid.innerHTML = '';
+  list.forEach(a => {
+    const el = document.createElement('div');
+    el.className = 'activity-mini';
+    el.style.borderColour = 'transparent';
+    el.style.borderColor = 'transparent';
+    el.onmouseover = () => { el.style.borderColour = a.colour; el.style.borderColor = a.colour; };
+    el.onmouseout  = () => { el.style.borderColour = 'var(--border)'; el.style.borderColor = 'var(--border)'; };
+    el.innerHTML = `
+      <span class="mini-emoji">${a.emoji}</span>
+      <div class="mini-info">
+        <div class="mini-name">${a.name}</div>
+        <div class="mini-dur">⏱ ${a.duration}</div>
+      </div>
+    `;
+    el.onclick = () => showActivity(a);
+    grid.appendChild(el);
+  });
+}
+
+renderGrid();
+</script>
+</body>
+</html>

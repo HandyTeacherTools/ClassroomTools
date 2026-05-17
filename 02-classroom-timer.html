@@ -1,378 +1,576 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Classroom Timer</title>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Classroom Timer — Handy Teacher Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M5DCBRK7DE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-M5DCBRK7DE');
+</script>
 <style>
   :root {
-    --bg: #1a1a2e;
-    --surface: #16213e;
-    --panel: #0f3460;
-    --green: #4ecca3;
-    --yellow: #ffcc02;
-    --red: #e94560;
-    --text: #eaeaea;
-    --muted: #7a7a9a;
-    --active: var(--green);
+    --bg: #0f1923;
+    --panel: #1a2535;
+    --border: #253040;
+    --green: #00e676;
+    --yellow: #ffea00;
+    --orange: #ff9100;
+    --red: #ff1744;
+    --text: #f0f6fc;
+    --muted: #607080;
+    --radius: 20px;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Source Sans 3', sans-serif;
+    font-family: 'Nunito', sans-serif;
     min-height: 100vh;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  nav {
+    width: 100%;
+    background: rgba(15,25,35,0.97);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  nav a { color: var(--muted); text-decoration: none; font-weight: 700; font-size: 14px; transition: colour 0.2s; }
+  nav a:hover { colour: var(--text); color: var(--text); }
+  nav .tool-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; colour: var(--text); color: var(--text); }
+
+  main {
+    flex: 1;
+    width: 100%;
+    max-width: 700px;
+    padding: 40px 20px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 32px;
-    padding: 20px;
   }
 
-  .bg-grid {
-    position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    background-image: linear-gradient(rgba(78,204,163,0.04) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(78,204,163,0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
+  /* MODE TABS */
+  .mode-tabs {
+    display: flex;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 320px;
   }
-
-  .title {
-    font-family: 'Oswald', sans-serif;
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: 300;
-    letter-spacing: 8px;
-    text-transform: uppercase;
+  .mode-tab {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background: transparent;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 800;
+    colour: var(--muted);
     color: var(--muted);
-    position: relative; z-index: 1;
+    cursor: pointer;
+    transition: all 0.2s;
   }
+  .mode-tab.active { background: var(--green); colour: #0f1923; color: #0f1923; }
 
-  .clock-face {
-    position: relative; z-index: 1;
-    display: flex; flex-direction: column; align-items: center;
-    gap: 16px;
+  /* CIRCLE TIMER */
+  .circle-wrap {
+    position: relative;
+    width: 280px;
+    height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-
-  .ring-container {
-    position: relative; width: clamp(240px, 40vw, 380px); height: clamp(240px, 40vw, 380px);
+  .circle-svg {
+    position: absolute;
+    top: 0; left: 0;
+    transform: rotate(-90deg);
+    width: 100%; height: 100%;
   }
-  svg.ring { width: 100%; height: 100%; transform: rotate(-90deg); }
-  .ring-bg { fill: none; stroke: var(--surface); stroke-width: 12; }
-  .ring-progress {
-    fill: none; stroke: var(--active); stroke-width: 12;
+  .circle-bg { fill: none; stroke: var(--border); stroke-width: 10; }
+  .circle-progress {
+    fill: none;
+    stroke: var(--green);
+    stroke-width: 10;
     stroke-linecap: round;
-    transition: stroke-dashoffset 0.5s linear, stroke 0.5s;
-    filter: drop-shadow(0 0 8px var(--active));
+    stroke-dasharray: 817;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 0.5s linear, stroke 0.5s ease;
   }
-
-  .time-center {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
+  .circle-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     gap: 4px;
+    z-index: 1;
   }
   .time-display {
-    font-family: 'Oswald', sans-serif;
-    font-size: clamp(3.5rem, 10vw, 7rem);
-    font-weight: 700;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 12vw, 5.5rem);
     letter-spacing: 4px;
-    color: var(--text);
     line-height: 1;
-    transition: color 0.5s;
+    colour: var(--text);
+    color: var(--text);
+    transition: colour 0.5s;
   }
-  .time-display.warning { color: var(--yellow); }
-  .time-display.danger { color: var(--red); animation: pulse 0.5s infinite alternate; }
-  @keyframes pulse { from { opacity: 1; } to { opacity: 0.5; } }
-
-  .mode-label {
-    font-size: 0.8rem; letter-spacing: 4px; color: var(--muted); text-transform: uppercase;
+  .time-label {
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    colour: var(--muted);
+    color: var(--muted);
   }
 
+  /* CONTROLS */
   .controls {
-    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
-    position: relative; z-index: 1;
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
   }
-
   .btn {
-    font-family: 'Oswald', sans-serif;
-    font-size: 1.2rem; letter-spacing: 2px;
-    padding: 14px 32px;
-    border: 2px solid var(--active);
-    background: transparent; color: var(--active);
-    border-radius: 4px; cursor: pointer;
+    padding: 14px 28px;
+    border-radius: 14px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 900;
+    cursor: pointer;
     transition: all 0.2s;
-    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0.5px;
   }
-  .btn:hover { background: var(--active); color: var(--bg); }
-  .btn.primary { background: var(--active); color: var(--bg); }
-  .btn.primary:hover { background: transparent; color: var(--active); }
-  .btn.danger { border-color: var(--red); color: var(--red); }
-  .btn.danger:hover { background: var(--red); color: var(--bg); }
+  .btn-start { background: var(--green); colour: #0f1923; color: #0f1923; box-shadow: 0 0 24px rgba(0,230,118,0.25); }
+  .btn-start:hover { transform: translateY(-2px); box-shadow: 0 0 36px rgba(0,230,118,0.4); }
+  .btn-pause { background: var(--yellow); colour: #0f1923; color: #0f1923; box-shadow: 0 0 24px rgba(255,234,0,0.2); }
+  .btn-pause:hover { transform: translateY(-2px); }
+  .btn-reset { background: rgba(255,255,255,0.07); colour: var(--text); color: var(--text); border: 1px solid var(--border); }
+  .btn-reset:hover { background: rgba(255,255,255,0.12); }
 
-  .presets {
-    display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
-    position: relative; z-index: 1;
-  }
+  /* PRESETS */
+  .presets-section { width: 100%; }
+  .presets-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; colour: var(--muted); color: var(--muted); margin-bottom: 10px; text-align: center; }
+  .presets { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
   .preset-btn {
-    font-family: 'Oswald', sans-serif;
-    font-size: 0.95rem; letter-spacing: 2px;
-    padding: 8px 18px;
-    border: 1px solid var(--muted);
-    background: transparent; color: var(--muted);
-    border-radius: 4px; cursor: pointer;
-    transition: all 0.2s;
+    padding: 9px 18px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 800;
+    colour: var(--text);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .preset-btn:hover { border-colour: var(--green); border-color: var(--green); colour: var(--green); color: var(--green); }
+
+  /* CUSTOM INPUT */
+  .custom-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px 20px;
+    width: 100%;
+    max-width: 380px;
+  }
+  .custom-wrap label { font-size: 0.8rem; font-weight: 800; colour: var(--muted); color: var(--muted); white-space: nowrap; }
+  .time-inputs { display: flex; align-items: center; gap: 6px; }
+  .time-input {
+    width: 60px;
+    text-align: center;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    colour: var(--text);
+    color: var(--text);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    padding: 6px;
+    outline: none;
+  }
+  .time-input:focus { border-colour: var(--green); border-color: var(--green); }
+  .time-sep { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; colour: var(--muted); color: var(--muted); }
+  .set-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    background: var(--green);
+    colour: #0f1923;
+    color: #0f1923;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .set-btn:hover { opacity: 0.85; }
+
+  /* STOPWATCH LAPS */
+  .laps-wrap {
+    width: 100%;
+    max-width: 400px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    display: none;
+  }
+  .laps-header {
+    padding: 10px 16px;
+    font-size: 0.78rem;
+    font-weight: 800;
     text-transform: uppercase;
+    letter-spacing: 1px;
+    colour: var(--muted);
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
   }
-  .preset-btn:hover { border-color: var(--active); color: var(--active); }
-
-  .custom-row {
-    display: flex; align-items: center; gap: 12px;
-    position: relative; z-index: 1;
-  }
-  .custom-row input {
-    width: 70px; padding: 10px;
-    background: var(--surface); border: 1px solid var(--muted);
-    color: var(--text); font-family: 'Oswald', sans-serif;
-    font-size: 1.2rem; text-align: center;
-    border-radius: 4px; outline: none;
-  }
-  .custom-row input:focus { border-color: var(--active); }
-  .custom-row label { color: var(--muted); font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; }
-
-  .mode-switch {
-    display: flex; gap: 0;
-    border: 1px solid var(--muted); border-radius: 4px; overflow: hidden;
-    position: relative; z-index: 1;
-  }
-  .mode-btn {
-    font-family: 'Oswald', sans-serif;
-    font-size: 0.9rem; letter-spacing: 2px;
-    padding: 8px 20px;
-    border: none; background: transparent; color: var(--muted);
-    cursor: pointer; transition: all 0.2s;
-    text-transform: uppercase;
-  }
-  .mode-btn.active { background: var(--active); color: var(--bg); }
-
-  .done-overlay {
-    position: fixed; inset: 0; z-index: 100;
-    background: rgba(0,0,0,0.85);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 24px;
-    opacity: 0; pointer-events: none; transition: opacity 0.4s;
-  }
-  .done-overlay.show { opacity: 1; pointer-events: all; }
-  .done-text {
-    font-family: 'Oswald', sans-serif;
-    font-size: clamp(4rem, 12vw, 9rem);
+  .laps-list { max-height: 160px; overflow-y: auto; }
+  .lap-item {
+    padding: 8px 16px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.88rem;
     font-weight: 700;
-    color: var(--green);
-    filter: drop-shadow(0 0 40px var(--green));
-    animation: doneAnim 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
   }
-  @keyframes doneAnim { from { transform: scale(0.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-  .done-sub { font-size: 1.5rem; color: var(--muted); letter-spacing: 4px; text-transform: uppercase; }
+  .lap-num { colour: var(--muted); color: var(--muted); }
+  .lap-time { font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; colour: var(--green); color: var(--green); }
+
+  /* URGENCY STATES */
+  body.urgent-yellow .circle-progress { stroke: var(--yellow); }
+  body.urgent-yellow .time-display { colour: var(--yellow); color: var(--yellow); }
+  body.urgent-orange .circle-progress { stroke: var(--orange); }
+  body.urgent-orange .time-display { colour: var(--orange); color: var(--orange); }
+  body.urgent-red .circle-progress { stroke: var(--red); }
+  body.urgent-red .time-display { colour: var(--red); color: var(--red); text-shadow: 0 0 30px rgba(255,23,68,0.5); }
+  body.urgent-red { animation: redPulse 1s ease-in-out infinite; }
+  @keyframes redPulse { 0%,100% { background: #0f1923; } 50% { background: #1a0a0d; } }
+
+  /* FINISHED */
+  .finished-banner {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--red);
+    colour: white;
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    letter-spacing: 6px;
+    padding: 32px 64px;
+    border-radius: 24px;
+    box-shadow: 0 0 80px rgba(255,23,68,0.6);
+    z-index: 100;
+    cursor: pointer;
+    animation: bannerPop 0.4s ease;
+  }
+  @keyframes bannerPop { from { transform: translate(-50%,-50%) scale(0.7); opacity: 0; } to { transform: translate(-50%,-50%) scale(1); opacity: 1; } }
+
+  footer { padding: 20px; font-size: 12px; colour: var(--muted); color: var(--muted); font-weight: 600; }
+  footer a { colour: var(--muted); color: var(--muted); text-decoration: none; }
+  footer a:hover { colour: var(--green); color: var(--green); }
 </style>
 </head>
 <body>
-<div class="bg-grid"></div>
 
-<div class="title">Classroom Timer</div>
+<nav>
+  <a href="index.html">← All Tools</a>
+  <span class="tool-title">⏱️ Classroom Timer</span>
+  <span style="font-size:12px;color:var(--muted)">handyteachertools.com</span>
+</nav>
 
-<div class="mode-switch">
-  <button class="mode-btn active" onclick="setMode('countdown')">Countdown</button>
-  <button class="mode-btn" onclick="setMode('stopwatch')">Stopwatch</button>
-</div>
+<main>
 
-<div class="clock-face">
-  <div class="ring-container">
-    <svg class="ring" viewBox="0 0 200 200">
-      <circle class="ring-bg" cx="100" cy="100" r="88"/>
-      <circle class="ring-progress" id="ringProgress" cx="100" cy="100" r="88"
-        stroke-dasharray="553" stroke-dashoffset="0"/>
+  <!-- MODE TABS -->
+  <div class="mode-tabs">
+    <button class="mode-tab active" id="tabCountdown" onclick="setMode('countdown')">⏳ Countdown</button>
+    <button class="mode-tab" id="tabStopwatch" onclick="setMode('stopwatch')">⏱ Stopwatch</button>
+  </div>
+
+  <!-- CIRCLE DISPLAY -->
+  <div class="circle-wrap">
+    <svg class="circle-svg" viewBox="0 0 280 280">
+      <circle class="circle-bg" cx="140" cy="140" r="130"/>
+      <circle class="circle-progress" id="circleProgress" cx="140" cy="140" r="130"/>
     </svg>
-    <div class="time-center">
+    <div class="circle-inner">
       <div class="time-display" id="timeDisplay">05:00</div>
-      <div class="mode-label" id="modeLabel">Countdown</div>
+      <div class="time-label" id="timeLabel">Countdown</div>
     </div>
   </div>
-</div>
 
-<div class="controls">
-  <button class="btn primary" id="startBtn" onclick="toggleTimer()">Start</button>
-  <button class="btn danger" onclick="resetTimer()">Reset</button>
-</div>
+  <!-- MAIN CONTROLS -->
+  <div class="controls">
+    <button class="btn btn-start" id="btnStart" onclick="startTimer()">▶ Start</button>
+    <button class="btn btn-pause" id="btnPause" onclick="pauseTimer()" style="display:none">⏸ Pause</button>
+    <button class="btn btn-reset" onclick="resetTimer()">↺ Reset</button>
+    <button class="btn btn-reset" id="btnLap" onclick="addLap()" style="display:none">⊕ Lap</button>
+  </div>
 
-<div class="presets">
-  <button class="preset-btn" onclick="setPreset(60)">1 min</button>
-  <button class="preset-btn" onclick="setPreset(180)">3 min</button>
-  <button class="preset-btn" onclick="setPreset(300)">5 min</button>
-  <button class="preset-btn" onclick="setPreset(600)">10 min</button>
-  <button class="preset-btn" onclick="setPreset(900)">15 min</button>
-  <button class="preset-btn" onclick="setPreset(1800)">30 min</button>
-</div>
+  <!-- COUNTDOWN PRESETS -->
+  <div class="presets-section" id="presetsSection">
+    <div class="presets-label">Quick Presets</div>
+    <div class="presets">
+      <button class="preset-btn" onclick="setPreset(1,0)">1 min</button>
+      <button class="preset-btn" onclick="setPreset(2,0)">2 min</button>
+      <button class="preset-btn" onclick="setPreset(3,0)">3 min</button>
+      <button class="preset-btn" onclick="setPreset(5,0)">5 min</button>
+      <button class="preset-btn" onclick="setPreset(10,0)">10 min</button>
+      <button class="preset-btn" onclick="setPreset(15,0)">15 min</button>
+      <button class="preset-btn" onclick="setPreset(20,0)">20 min</button>
+      <button class="preset-btn" onclick="setPreset(30,0)">30 min</button>
+    </div>
+  </div>
 
-<div class="custom-row">
-  <label>Custom:</label>
-  <input type="number" id="customMin" min="0" max="99" value="5" placeholder="mm">
-  <label>min</label>
-  <input type="number" id="customSec" min="0" max="59" value="0" placeholder="ss">
-  <label>sec</label>
-  <button class="btn" onclick="applyCustom()" style="padding:10px 20px;font-size:1rem;">Set</button>
-</div>
+  <!-- CUSTOM TIME INPUT -->
+  <div class="custom-wrap" id="customWrap">
+    <label>Custom</label>
+    <div class="time-inputs">
+      <input class="time-input" type="number" id="customMins" min="0" max="99" value="5" placeholder="MM"/>
+      <span class="time-sep">:</span>
+      <input class="time-input" type="number" id="customSecs" min="0" max="59" value="0" placeholder="SS"/>
+    </div>
+    <button class="set-btn" onclick="setCustomTime()">Set</button>
+  </div>
 
-<div class="done-overlay" id="doneOverlay" onclick="dismissDone()">
-  <div class="done-text">⏰ TIME!</div>
-  <div class="done-sub">Tap anywhere to dismiss</div>
-</div>
+  <!-- LAPS (stopwatch only) -->
+  <div class="laps-wrap" id="lapsWrap">
+    <div class="laps-header">
+      <span>Lap Times</span>
+      <span id="lapCount">0 laps</span>
+    </div>
+    <div class="laps-list" id="lapsList"></div>
+  </div>
+
+</main>
+
+<div class="finished-banner" id="finishedBanner" onclick="dismissBanner()">TIME'S UP!</div>
+
+<footer><a href="index.html">← Back to all tools</a> · handyteachertools.com</footer>
 
 <script>
-  const CIRCUMFERENCE = 2 * Math.PI * 88; // 553
+  const CIRCUMFERENCE = 2 * Math.PI * 130; // 817
+
   let mode = 'countdown';
-  let totalSeconds = 300;
-  let remaining = 300;
-  let elapsed = 0;
   let running = false;
   let interval = null;
-  let beepCtx = null;
+  let totalSeconds = 300;  // 5 minutes default
+  let remaining = 300;
+  let elapsed = 0;
+  let lapCount = 0;
+  let lapStart = 0;
 
-  function getAudioCtx() {
-    if (!beepCtx) beepCtx = new (window.AudioContext || window.webkitAudioContext)();
-    return beepCtx;
+  // Audio context for alerts
+  let audioCtx = null;
+  function getAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return audioCtx;
   }
 
-  function beep(freq = 880, dur = 0.15, vol = 0.3) {
+  function beep(freq = 880, duration = 0.3, vol = 0.4) {
     try {
-      const ctx = getAudioCtx();
-      const o = ctx.createOscillator();
-      const g = ctx.createGain();
-      o.connect(g); g.connect(ctx.destination);
-      o.frequency.value = freq;
-      g.gain.setValueAtTime(vol, ctx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
-      o.start(); o.stop(ctx.currentTime + dur);
+      const ctx = getAudio();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(vol, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + duration);
     } catch(e) {}
   }
 
-  function playDone() {
-    [880, 1100, 1320].forEach((f, i) => setTimeout(() => beep(f, 0.3, 0.4), i * 200));
+  function alertFinished() {
+    // Three descending beeps
+    beep(880, 0.25, 0.5);
+    setTimeout(() => beep(660, 0.25, 0.5), 280);
+    setTimeout(() => beep(440, 0.5, 0.6), 560);
   }
 
   function setMode(m) {
     mode = m;
-    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
-    document.getElementById('modeLabel').textContent = m === 'countdown' ? 'Countdown' : 'Stopwatch';
+    document.getElementById('tabCountdown').classList.toggle('active', m === 'countdown');
+    document.getElementById('tabStopwatch').classList.toggle('active', m === 'stopwatch');
+    document.getElementById('presetsSection').style.display = m === 'countdown' ? 'block' : 'none';
+    document.getElementById('customWrap').style.display = m === 'countdown' ? 'flex' : 'none';
+    document.getElementById('lapsWrap').style.display = m === 'stopwatch' ? 'block' : 'none';
+    document.getElementById('btnLap').style.display = m === 'stopwatch' ? 'flex' : 'none';
+    document.getElementById('timeLabel').textContent = m === 'countdown' ? 'Countdown' : 'Stopwatch';
     resetTimer();
-    document.getElementById('timeDisplay').textContent = m === 'countdown' ? formatTime(remaining) : '00:00';
-    const presets = document.querySelector('.presets');
-    const customRow = document.querySelector('.custom-row');
-    presets.style.display = m === 'countdown' ? 'flex' : 'none';
-    customRow.style.display = m === 'countdown' ? 'flex' : 'none';
-    updateRing(m === 'countdown' ? 0 : 0);
   }
 
   function formatTime(secs) {
     const m = Math.floor(Math.abs(secs) / 60);
     const s = Math.abs(secs) % 60;
-    return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-  }
-
-  function updateRing(progress) { // 0 to 1
-    const offset = CIRCUMFERENCE * (1 - progress);
-    document.getElementById('ringProgress').style.strokeDashoffset = offset;
+    return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
   }
 
   function updateDisplay() {
-    const display = document.getElementById('timeDisplay');
-    const ring = document.getElementById('ringProgress');
-
     if (mode === 'countdown') {
-      display.textContent = formatTime(remaining);
-      const progress = remaining / totalSeconds;
-      updateRing(progress);
+      document.getElementById('timeDisplay').textContent = formatTime(Math.max(0, remaining));
+      const pct = totalSeconds > 0 ? remaining / totalSeconds : 0;
+      const offset = CIRCUMFERENCE * (1 - Math.max(0, pct));
+      document.getElementById('circleProgress').style.strokeDashoffset = offset;
 
-      display.className = 'time-display';
-      if (remaining <= 10) {
-        display.classList.add('danger');
-        ring.style.stroke = 'var(--red)';
-        ring.style.filter = 'drop-shadow(0 0 8px var(--red))';
-        if (remaining > 0 && remaining <= 10) beep(440, 0.05, 0.2);
-      } else if (remaining <= totalSeconds * 0.25) {
-        display.classList.add('warning');
-        ring.style.stroke = 'var(--yellow)';
-        ring.style.filter = 'drop-shadow(0 0 8px var(--yellow))';
-      } else {
-        ring.style.stroke = 'var(--green)';
-        ring.style.filter = 'drop-shadow(0 0 8px var(--green))';
-      }
+      // Urgency states
+      document.body.className = '';
+      if (remaining <= 0)  document.body.classList.add('urgent-red');
+      else if (remaining <= 10) document.body.classList.add('urgent-red');
+      else if (remaining <= 30) document.body.classList.add('urgent-orange');
+      else if (pct <= 0.5)      document.body.classList.add('urgent-yellow');
+
     } else {
-      display.textContent = formatTime(elapsed);
-      updateRing((elapsed % 60) / 60);
+      document.getElementById('timeDisplay').textContent = formatTime(elapsed);
+      // Spinning ring for stopwatch
+      const spinPct = (elapsed % 60) / 60;
+      document.getElementById('circleProgress').style.strokeDashoffset = CIRCUMFERENCE * (1 - spinPct);
     }
   }
 
-  function toggleTimer() {
-    if (running) {
-      clearInterval(interval);
-      running = false;
-      document.getElementById('startBtn').textContent = 'Resume';
-      document.getElementById('startBtn').classList.remove('primary');
-    } else {
-      running = true;
-      document.getElementById('startBtn').textContent = 'Pause';
-      document.getElementById('startBtn').classList.add('primary');
+  function startTimer() {
+    if (running) return;
+    running = true;
+    document.getElementById('btnStart').style.display = 'none';
+    document.getElementById('btnPause').style.display = 'flex';
+
+    if (mode === 'stopwatch') {
+      lapStart = elapsed;
       interval = setInterval(() => {
-        if (mode === 'countdown') {
-          remaining--;
-          if (remaining <= 0) {
-            remaining = 0;
-            updateDisplay();
-            clearInterval(interval);
-            running = false;
-            document.getElementById('startBtn').textContent = 'Start';
-            playDone();
-            document.getElementById('doneOverlay').classList.add('show');
-          }
-        } else {
-          elapsed++;
-        }
+        elapsed++;
         updateDisplay();
+      }, 1000);
+    } else {
+      if (remaining <= 0) remaining = totalSeconds;
+      interval = setInterval(() => {
+        remaining--;
+        updateDisplay();
+        if (remaining <= 0) {
+          clearInterval(interval);
+          running = false;
+          document.getElementById('btnStart').style.display = 'flex';
+          document.getElementById('btnPause').style.display = 'none';
+          showFinished();
+        }
       }, 1000);
     }
   }
 
+  function pauseTimer() {
+    if (!running) return;
+    running = false;
+    clearInterval(interval);
+    document.getElementById('btnStart').style.display = 'flex';
+    document.getElementById('btnStart').innerHTML = '▶ Resume';
+    document.getElementById('btnPause').style.display = 'none';
+  }
+
   function resetTimer() {
-    clearInterval(interval); running = false;
-    document.getElementById('startBtn').textContent = 'Start';
-    document.getElementById('startBtn').classList.add('primary');
-    if (mode === 'countdown') { remaining = totalSeconds; }
-    else { elapsed = 0; }
+    running = false;
+    clearInterval(interval);
+    document.body.className = '';
+    document.getElementById('btnStart').style.display = 'flex';
+    document.getElementById('btnStart').innerHTML = '▶ Start';
+    document.getElementById('btnPause').style.display = 'none';
+    document.getElementById('finishedBanner').style.display = 'none';
+
+    if (mode === 'countdown') {
+      remaining = totalSeconds;
+    } else {
+      elapsed = 0;
+      lapCount = 0;
+      lapStart = 0;
+      document.getElementById('lapsList').innerHTML = '';
+      document.getElementById('lapCount').textContent = '0 laps';
+    }
+    document.getElementById('circleProgress').style.strokeDashoffset = 0;
     updateDisplay();
-    const ring = document.getElementById('ringProgress');
-    ring.style.stroke = 'var(--green)';
-    ring.style.filter = 'drop-shadow(0 0 8px var(--green))';
   }
 
-  function setPreset(secs) {
-    totalSeconds = secs;
-    remaining = secs;
-    clearInterval(interval); running = false;
-    document.getElementById('startBtn').textContent = 'Start';
-    document.getElementById('startBtn').classList.add('primary');
+  function setPreset(mins, secs) {
+    totalSeconds = mins * 60 + secs;
+    remaining = totalSeconds;
+    if (running) { clearInterval(interval); running = false; }
+    document.getElementById('btnStart').style.display = 'flex';
+    document.getElementById('btnStart').innerHTML = '▶ Start';
+    document.getElementById('btnPause').style.display = 'none';
+    document.body.className = '';
     updateDisplay();
   }
 
-  function applyCustom() {
-    const m = parseInt(document.getElementById('customMin').value) || 0;
-    const s = parseInt(document.getElementById('customSec').value) || 0;
-    setPreset(m * 60 + s);
+  function setCustomTime() {
+    const m = parseInt(document.getElementById('customMins').value) || 0;
+    const s = parseInt(document.getElementById('customSecs').value) || 0;
+    if (m === 0 && s === 0) return;
+    setPreset(m, s);
   }
 
-  function dismissDone() {
-    document.getElementById('doneOverlay').classList.remove('show');
-    resetTimer();
+  function addLap() {
+    if (!running) return;
+    lapCount++;
+    const lapTime = elapsed - lapStart;
+    lapStart = elapsed;
+
+    const list = document.getElementById('lapsList');
+    const item = document.createElement('div');
+    item.className = 'lap-item';
+    item.innerHTML = `<span class="lap-num">Lap ${lapCount}</span><span class="lap-time">${formatTime(lapTime)}</span>`;
+    list.insertBefore(item, list.firstChild);
+    document.getElementById('lapCount').textContent = lapCount + ' lap' + (lapCount !== 1 ? 's' : '');
+    beep(660, 0.1, 0.2);
   }
 
+  function showFinished() {
+    alertFinished();
+    const banner = document.getElementById('finishedBanner');
+    banner.style.display = 'block';
+    setTimeout(() => { if (banner.style.display !== 'none') dismissBanner(); }, 5000);
+  }
+
+  function dismissBanner() {
+    document.getElementById('finishedBanner').style.display = 'none';
+  }
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT') return;
+    if (e.key === ' ') { e.preventDefault(); running ? pauseTimer() : startTimer(); }
+    if (e.key === 'r' || e.key === 'R') resetTimer();
+    if (e.key === 'l' || e.key === 'L') addLap();
+  });
+
+  // Init
+  document.getElementById('circleProgress').style.strokeDasharray = CIRCUMFERENCE;
   updateDisplay();
 </script>
 </body>

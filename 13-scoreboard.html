@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Scoreboard — Handy Teacher Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M5DCBRK7DE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-M5DCBRK7DE');
+</script>
+<style>
+  :root { --bg: #0a0a0a; --surface: #111; --border: #222; --text: #f8f8f8; --muted: #555; --radius: 12px; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); colour: var(--text); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+
+  nav { background: #000; border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+  nav a { colour: var(--muted); color: var(--muted); text-decoration: none; font-weight: 700; font-size: 14px; }
+  nav a:hover { colour: var(--text); color: var(--text); }
+  nav .tool-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; colour: #ffd700; color: #ffd700; }
+
+  /* SETUP PANEL */
+  .setup-panel {
+    max-width: 680px;
+    margin: 40px auto;
+    padding: 0 20px;
+    width: 100%;
+  }
+  .setup-panel h1 { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; letter-spacing: 3px; colour: #ffd700; color: #ffd700; margin-bottom: 6px; }
+  .setup-panel p { colour: var(--muted); color: var(--muted); font-size: 0.9rem; font-weight: 600; margin-bottom: 28px; }
+
+  .team-setup { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .team-setup-row { display: flex; align-items: center; gap: 10px; }
+  .colour-pick { width: 36px; height: 36px; border-radius: 8px; border: 2px solid var(--border); cursor: pointer; padding: 2px; background: none; }
+  .team-name-input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    colour: var(--text); color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    padding: 11px 14px;
+    outline: none;
+    transition: border-colour 0.2s;
+  }
+  .team-name-input:focus { border-colour: #ffd700; border-color: #ffd700; }
+  .remove-team-btn { width: 34px; height: 34px; border-radius: 50%; border: none; background: rgba(255,100,100,0.15); colour: #ff6464; color: #ff6464; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; flex-shrink: 0; }
+  .remove-team-btn:hover { background: rgba(255,100,100,0.3); }
+
+  .add-team-btn {
+    width: 100%;
+    padding: 11px;
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    background: transparent;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 800;
+    colour: var(--muted); color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .add-team-btn:hover { border-colour: #ffd700; border-color: #ffd700; colour: #ffd700; color: #ffd700; }
+
+  .launch-btn {
+    width: 100%;
+    padding: 16px;
+    background: #ffd700;
+    colour: #000; color: #000;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+    box-shadow: 0 4px 24px rgba(255,215,0,0.25);
+  }
+  .launch-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(255,215,0,0.4); }
+
+  /* SCOREBOARD */
+  .scoreboard { display: none; flex: 1; flex-direction: column; }
+  .sb-header {
+    background: #000;
+    border-bottom: 3px solid #ffd700;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .sb-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 3px; colour: #ffd700; color: #ffd700; }
+  .sb-controls { display: flex; gap: 8px; flex-wrap: wrap; }
+  .sb-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 800;
+    colour: var(--text); color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .sb-btn:hover { border-colour: #ffd700; border-color: #ffd700; colour: #ffd700; color: #ffd700; }
+  .sb-btn.danger:hover { border-colour: #ff6464; border-color: #ff6464; colour: #ff6464; color: #ff6464; }
+
+  /* TEAMS GRID */
+  .teams-grid {
+    flex: 1;
+    display: grid;
+    padding: 24px;
+    gap: 20px;
+    align-items: stretch;
+  }
+
+  /* TEAM CARD */
+  .team-card {
+    background: var(--surface);
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border: 2px solid var(--border);
+    transition: all 0.3s;
+  }
+  .team-card.leader { border-colour: #ffd700; border-color: #ffd700; box-shadow: 0 0 30px rgba(255,215,0,0.15); }
+  .team-card.leader::before { content: '👑'; position: absolute; top: 12px; right: 14px; font-size: 1.4rem; }
+
+  .team-top {
+    height: 8px;
+    flex-shrink: 0;
+  }
+  .team-body {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .team-name-display {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    letter-spacing: 2px;
+    colour: var(--text); color: var(--text);
+    text-align: center;
+    line-height: 1;
+  }
+  .team-score {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 10vw, 7rem);
+    line-height: 1;
+    colour: var(--text); color: var(--text);
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .team-score.bump { animation: scoreBump 0.3s ease; }
+  @keyframes scoreBump { 0%,100% { transform: scale(1); } 40% { transform: scale(1.25); } }
+
+  /* SCORE BUTTONS */
+  .score-btns { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .score-btn {
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.12s;
+    min-width: 48px;
+  }
+  .score-btn:active { transform: scale(0.93); }
+  .score-btn.plus { colour: #000; color: #000; }
+  .score-btn.minus { background: rgba(255,255,255,0.07); colour: rgba(255,255,255,0.5); color: rgba(255,255,255,0.5); }
+  .score-btn.minus:hover { background: rgba(255,100,100,0.15); colour: #ff6464; color: #ff6464; }
+
+  /* SCORE POPUP */
+  .score-popup { position: fixed; pointer-events: none; font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; letter-spacing: 2px; z-index: 1000; animation: floatUp 0.8s ease forwards; }
+  @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-80px); } }
+
+  /* CONFETTI */
+  .conf-piece { position: fixed; pointer-events: none; z-index: 999; width: 10px; height: 10px; border-radius: 2px; animation: confDrop linear forwards; }
+  @keyframes confDrop { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
+
+  /* HISTORY */
+  .history-bar {
+    background: #000;
+    border-top: 1px solid var(--border);
+    padding: 8px 24px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    overflow-x: auto;
+    min-height: 40px;
+  }
+  .history-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; colour: var(--muted); color: var(--muted); flex-shrink: 0; }
+  .history-event { font-size: 0.78rem; font-weight: 700; colour: rgba(255,255,255,0.5); color: rgba(255,255,255,0.5); white-space: nowrap; flex-shrink: 0; }
+  .history-event:first-of-type { colour: rgba(255,255,255,0.8); color: rgba(255,255,255,0.8); }
+
+  footer { text-align: center; padding: 12px; font-size: 12px; colour: var(--muted); color: var(--muted); font-weight: 600; background: #000; border-top: 1px solid var(--border); }
+  footer a { colour: var(--muted); color: var(--muted); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">← All Tools</a>
+  <span class="tool-title">🏆 Scoreboard</span>
+  <span style="font-size:12px;color:var(--muted)">handyteachertools.com</span>
+</nav>
+
+<!-- SETUP -->
+<div class="setup-panel" id="setupPanel">
+  <h1>🏆 Scoreboard Setup</h1>
+  <p>Add your teams, pick their colours, then launch the scoreboard.</p>
+
+  <div class="team-setup" id="teamSetup"></div>
+  <button class="add-team-btn" onclick="addTeamSetup()">+ Add Team</button>
+  <br/>
+  <button class="launch-btn" onclick="launchScoreboard()">🚀 Launch Scoreboard</button>
+</div>
+
+<!-- SCOREBOARD -->
+<div class="scoreboard" id="scoreboard">
+  <div class="sb-header">
+    <span class="sb-title">🏆 Scoreboard</span>
+    <div class="sb-controls">
+      <button class="sb-btn" onclick="celebrateLeader()">🎉 Celebrate!</button>
+      <button class="sb-btn" onclick="resetScores()">↺ Reset Scores</button>
+      <button class="sb-btn danger" onclick="backToSetup()">⚙ Edit Teams</button>
+    </div>
+  </div>
+  <div class="teams-grid" id="teamsGrid"></div>
+  <div class="history-bar" id="historyBar">
+    <span class="history-label">History</span>
+    <span style="font-size:0.78rem;color:var(--muted);font-weight:600">No scores yet</span>
+  </div>
+</div>
+
+<footer><a href="index.html">← Back to all tools</a> · handyteachertools.com</footer>
+
+<script>
+const DEFAULT_TEAMS = [
+  { name: 'Team Red',   colour: '#e74c3c', score: 0 },
+  { name: 'Team Blue',  colour: '#3498db', score: 0 },
+  { name: 'Team Green', colour: '#2ecc71', score: 0 },
+  { name: 'Team Gold',  colour: '#f1c40f', score: 0 },
+];
+const SCORE_VALUES = [1, 2, 3, 5, 10];
+
+let teams = [];
+let history = [];
+
+function addTeamSetup(t = null) {
+  const setup = document.getElementById('teamSetup');
+  const idx = setup.children.length;
+  if (idx >= 8) return;
+  const colour = t?.colour || ['#e74c3c','#3498db','#2ecc71','#f1c40f','#9b59b6','#1abc9c','#e67e22','#e91e63'][idx] || '#888';
+  const name   = t?.name || `Team ${idx + 1}`;
+  const row = document.createElement('div');
+  row.className = 'team-setup-row';
+  row.innerHTML = `
+    <input type="color" class="colour-pick" value="${colour}" title="Pick colour"/>
+    <input class="team-name-input" type="text" value="${name}" placeholder="Team name…" maxlength="24"/>
+    <button class="remove-team-btn" onclick="this.closest('.team-setup-row').remove()">×</button>
+  `;
+  setup.appendChild(row);
+}
+
+function launchScoreboard() {
+  const rows = document.querySelectorAll('.team-setup-row');
+  teams = [...rows].map(r => ({
+    name:   r.querySelector('.team-name-input').value.trim() || 'Team',
+    colour: r.querySelector('.colour-pick').value,
+    score:  0,
+  })).filter(t => t.name);
+  if (teams.length < 2) { alert('Please add at least 2 teams.'); return; }
+  history = [];
+  document.getElementById('setupPanel').style.display = 'none';
+  document.getElementById('scoreboard').style.display = 'flex';
+  setGridCols();
+  renderScoreboard();
+}
+
+function setGridCols() {
+  const grid = document.getElementById('teamsGrid');
+  const n = teams.length;
+  grid.style.gridTemplateColumns = n <= 2 ? '1fr 1fr' : n <= 4 ? 'repeat(2, 1fr)' : n <= 6 ? 'repeat(3, 1fr)' : 'repeat(4, 1fr)';
+}
+
+function renderScoreboard() {
+  const grid = document.getElementById('teamsGrid');
+  grid.innerHTML = '';
+  const maxScore = Math.max(...teams.map(t => t.score));
+
+  teams.forEach((team, i) => {
+    const isLeader = team.score > 0 && team.score === maxScore;
+    const card = document.createElement('div');
+    card.className = 'team-card' + (isLeader ? ' leader' : '');
+    card.id = `card-${i}`;
+
+    const plusBtns = SCORE_VALUES.map(v =>
+      `<button class="score-btn plus" style="background:${team.colour}" onclick="addScore(${i},${v},event)">+${v}</button>`
+    ).join('');
+
+    card.innerHTML = `
+      <div class="team-top" style="background:${team.colour}"></div>
+      <div class="team-body">
+        <div class="team-name-display" style="colour:${team.colour};color:${team.colour}">${team.name}</div>
+        <div class="team-score" id="score-${i}">${team.score}</div>
+        <div class="score-btns">
+          ${plusBtns}
+          <button class="score-btn minus" onclick="addScore(${i},-1,event)">−1</button>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function addScore(i, delta, event) {
+  teams[i].score = Math.max(0, teams[i].score + delta);
+
+  // Bump animation
+  const scoreEl = document.getElementById(`score-${i}`);
+  scoreEl.textContent = teams[i].score;
+  scoreEl.classList.remove('bump');
+  void scoreEl.offsetWidth;
+  scoreEl.classList.add('bump');
+
+  // Floating popup
+  if (event) {
+    const popup = document.createElement('div');
+    popup.className = 'score-popup';
+    popup.textContent = (delta > 0 ? '+' : '') + delta;
+    popup.style.colour = delta > 0 ? teams[i].colour : '#ff6464';
+    popup.style.color = delta > 0 ? teams[i].colour : '#ff6464';
+    popup.style.left = event.clientX - 20 + 'px';
+    popup.style.top  = event.clientY - 20 + 'px';
+    document.body.appendChild(popup);
+    setTimeout(() => popup.remove(), 850);
+  }
+
+  // History
+  if (delta !== 0) {
+    const entry = `${delta > 0 ? '+' : ''}${delta} → ${teams[i].name}`;
+    history.unshift(entry);
+    if (history.length > 20) history.pop();
+    renderHistory();
+  }
+
+  // Re-render for leader crown
+  renderScoreboard();
+}
+
+function renderHistory() {
+  const bar = document.getElementById('historyBar');
+  bar.innerHTML = `<span class="history-label">History</span>`;
+  history.slice(0, 15).forEach((h, idx) => {
+    const el = document.createElement('span');
+    el.className = 'history-event';
+    el.textContent = h + (idx < history.length - 1 ? ' ·' : '');
+    bar.appendChild(el);
+  });
+}
+
+function resetScores() {
+  if (!confirm('Reset all scores to zero?')) return;
+  teams.forEach(t => t.score = 0);
+  history = [];
+  renderScoreboard();
+  renderHistory();
+}
+
+function backToSetup() {
+  document.getElementById('scoreboard').style.display = 'none';
+  document.getElementById('setupPanel').style.display = 'block';
+}
+
+function celebrateLeader() {
+  const maxScore = Math.max(...teams.map(t => t.score));
+  if (maxScore === 0) return;
+  const leaders = teams.filter(t => t.score === maxScore);
+  // Confetti in leader colours
+  leaders.forEach(l => spawnConfetti(l.colour));
+  // Beep
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [523, 659, 784, 1047, 1319].forEach((f, i) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = f;
+      g.gain.setValueAtTime(0.4, ctx.currentTime + i*0.1);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i*0.1 + 0.25);
+      o.start(ctx.currentTime + i*0.1);
+      o.stop(ctx.currentTime + i*0.1 + 0.3);
+    });
+  } catch(e) {}
+}
+
+function spawnConfetti(colour) {
+  for (let i = 0; i < 40; i++) {
+    const p = document.createElement('div');
+    p.className = 'conf-piece';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.top = '-10px';
+    p.style.background = colour;
+    p.style.animationDuration = (1.2 + Math.random() * 1.5) + 's';
+    p.style.animationDelay = Math.random() * 0.5 + 's';
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 3000);
+  }
+}
+
+// Init setup with defaults
+DEFAULT_TEAMS.forEach(t => addTeamSetup(t));
+</script>
+</body>
+</html>

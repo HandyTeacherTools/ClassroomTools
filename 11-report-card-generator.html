@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Report Card Builder — Handy Teacher Tools</title>
+<meta name="description" content="Free report card comment builder for teachers. Select student traits and grades to generate professional, personalised comments instantly."/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M5DCBRK7DE"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-M5DCBRK7DE');</script>
+<style>
+  :root{--bg:#f7f4ee;--card:#fff;--board:#2d4a3e;--accent:#c0392b;--gold:#f9a825;--text:#1a2320;--muted:#7a8c85;--border:#e0dbd0;--shadow:0 4px 24px rgba(0,0,0,0.08);--radius:16px;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-height:100vh;}
+  nav{background:var(--board);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;}
+  nav a{color:rgba(255,255,255,0.65);text-decoration:none;font-weight:700;font-size:14px;}
+  nav a:hover{color:white;}
+  nav .tool-title{font-family:'DM Serif Display',serif;font-size:1.25rem;color:white;}
+  .hero{background:var(--board);padding:40px 24px 36px;text-align:center;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,0.03) 39px,rgba(255,255,255,0.03) 40px);}
+  .hero-inner{position:relative;z-index:1;max-width:640px;margin:0 auto;}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,4vw,2.6rem);color:white;margin-bottom:10px;}
+  .hero h1 em{color:var(--gold);font-style:italic;}
+  .hero p{font-size:1rem;color:rgba(255,255,255,0.72);font-weight:600;margin-bottom:16px;}
+  .hero-pills{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+  .hero-pill{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:100px;padding:5px 14px;font-size:12px;font-weight:700;color:rgba(255,255,255,0.85);}
+  .app{max-width:1100px;margin:0 auto;padding:32px 20px 80px;display:grid;grid-template-columns:380px 1fr;gap:28px;align-items:start;}
+  .panel{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden;margin-bottom:0;}
+  .panel+.panel{margin-top:18px;}
+  .ph{background:var(--board);padding:14px 20px;display:flex;align-items:center;gap:10px;}
+  .ph .step{width:26px;height:26px;background:var(--gold);color:#1a2320;border-radius:50%;font-size:0.8rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .ph h2{font-family:'DM Serif Display',serif;font-size:1.05rem;color:white;}
+  .pb{padding:18px 20px;display:flex;flex-direction:column;gap:14px;}
+  .field{display:flex;flex-direction:column;gap:5px;}
+  .field label{font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.7px;color:var(--muted);}
+  .field input,.field select{border:2px solid var(--border);border-radius:10px;padding:9px 13px;font-family:'Nunito',sans-serif;font-size:0.92rem;font-weight:600;color:var(--text);background:var(--bg);outline:none;width:100%;transition:border-color 0.2s;}
+  .field input:focus,.field select:focus{border-color:var(--board);background:white;}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .subjects-list{display:flex;flex-direction:column;gap:7px;}
+  .subject-row{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--bg);border:1px solid var(--border);border-radius:10px;}
+  .subject-name{flex:1;font-size:0.85rem;font-weight:800;color:var(--text);}
+  .grade-btns{display:flex;gap:4px;}
+  .gb{width:30px;height:26px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:'Nunito',sans-serif;font-size:0.72rem;font-weight:900;color:var(--muted);cursor:pointer;transition:all 0.12s;}
+  .gb.sel-A{background:#27ae60;color:white;border-color:#27ae60;}
+  .gb.sel-B{background:#2980b9;color:white;border-color:#2980b9;}
+  .gb.sel-C{background:#f39c12;color:white;border-color:#f39c12;}
+  .gb.sel-D{background:#e67e22;color:white;border-color:#e67e22;}
+  .gb.sel-F{background:#c0392b;color:white;border-color:#c0392b;}
+  .trait-chips{display:flex;flex-wrap:wrap;gap:6px;}
+  .tc{padding:6px 12px;border-radius:100px;border:2px solid var(--border);background:white;font-size:0.75rem;font-weight:800;color:var(--muted);cursor:pointer;transition:all 0.15s;user-select:none;}
+  .tc:hover{border-color:var(--board);color:var(--board);}
+  .tc.selected{background:var(--board);border-color:var(--board);color:white;}
+  .tone-row{display:flex;gap:6px;}
+  .tone-btn{flex:1;padding:8px 4px;border-radius:9px;border:2px solid var(--border);background:white;font-family:'Nunito',sans-serif;font-size:0.72rem;font-weight:800;color:var(--muted);cursor:pointer;text-align:center;transition:all 0.15s;}
+  .tone-btn:hover{border-color:var(--board);}
+  .tone-btn.active{background:var(--board);border-color:var(--board);color:white;}
+  .len-row{display:flex;background:var(--bg);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+  .len-btn{flex:1;padding:8px;border:none;background:transparent;font-family:'Nunito',sans-serif;font-size:0.75rem;font-weight:800;color:var(--muted);cursor:pointer;transition:all 0.15s;text-align:center;line-height:1.4;}
+  .len-btn.active{background:var(--board);color:white;}
+  .btn-generate{width:100%;padding:16px;background:var(--accent);color:white;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:1.05rem;font-weight:900;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 20px rgba(192,57,43,0.25);display:flex;align-items:center;justify-content:center;gap:8px;}
+  .btn-generate:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(192,57,43,0.35);}
+  .output-panel{display:flex;flex-direction:column;gap:18px;}
+  .output-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .tb-btn{padding:9px 16px;border-radius:10px;border:1px solid var(--border);background:white;font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:800;color:var(--text);cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:6px;}
+  .tb-btn:hover{border-color:var(--board);color:var(--board);}
+  .tb-btn.primary{background:var(--board);border-color:var(--board);color:white;}
+  .tb-btn.primary:hover{opacity:0.85;}
+  .comment-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden;animation:fadeUp 0.3s ease both;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+  .cc-header{background:var(--board);padding:13px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .cc-student{display:flex;align-items:center;gap:10px;}
+  .cc-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:0.82rem;color:white;flex-shrink:0;}
+  .cc-info h3{font-size:0.92rem;font-weight:800;color:white;}
+  .cc-info span{font-size:0.72rem;color:rgba(255,255,255,0.6);font-weight:600;}
+  .cc-actions{display:flex;gap:7px;}
+  .cc-btn{padding:6px 12px;border-radius:7px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.85);font-family:'Nunito',sans-serif;font-size:0.75rem;font-weight:800;cursor:pointer;transition:all 0.15s;}
+  .cc-btn:hover{background:rgba(255,255,255,0.2);color:white;}
+  .cc-body{padding:18px 22px;}
+  .cc-text{font-size:0.95rem;line-height:1.85;color:var(--text);font-weight:600;border:none;outline:none;width:100%;resize:none;font-family:'Nunito',sans-serif;background:transparent;min-height:80px;}
+  .cc-footer{padding:10px 20px;border-top:1px solid var(--border);background:#fafaf8;display:flex;align-items:center;justify-content:space-between;}
+  .cc-wordcount{font-size:0.72rem;color:var(--muted);font-weight:700;}
+  .grade-tags{display:flex;gap:5px;flex-wrap:wrap;}
+  .grade-tag{padding:2px 9px;border-radius:100px;font-size:0.68rem;font-weight:800;color:white;}
+  .gt-A{background:#27ae60;}.gt-B{background:#2980b9;}.gt-C{background:#f39c12;}.gt-D{background:#e67e22;}.gt-F{background:#c0392b;}
+  .empty-state{background:var(--card);border-radius:var(--radius);border:2px dashed var(--border);padding:60px 24px;text-align:center;}
+  .empty-state .icon{font-size:3.5rem;margin-bottom:14px;}
+  .empty-state h3{font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--board);margin-bottom:8px;}
+  .empty-state p{font-size:0.88rem;color:var(--muted);font-weight:600;max-width:300px;margin:0 auto;line-height:1.6;}
+  @media print{nav,.hero,.panel,.output-toolbar,footer{display:none!important;}.app{grid-template-columns:1fr;padding:0;}.comment-card{box-shadow:none;border:1px solid #ccc;margin-bottom:16px;page-break-inside:avoid;}}
+  footer{background:var(--board);color:rgba(255,255,255,0.6);text-align:center;padding:22px;font-size:13px;font-weight:600;}
+  footer a{color:rgba(255,255,255,0.8);text-decoration:none;margin:0 8px;}
+  footer a:hover{color:var(--gold);}
+  @media(max-width:800px){.app{grid-template-columns:1fr;}.field-row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">← All Tools</a>
+  <span class="tool-title">📋 Report Card Builder</span>
+  <span style="font-size:12px;color:rgba(255,255,255,0.4)">handyteachertools.com</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <h1>Report Card <em>Comment Builder</em></h1>
+    <p>Select student details and traits to generate professional, personalised comments in seconds.</p>
+    <div class="hero-pills">
+      <span class="hero-pill">✅ 100% Free</span>
+      <span class="hero-pill">✏️ Fully Editable</span>
+      <span class="hero-pill">🖨️ Print Ready</span>
+      <span class="hero-pill">🔒 No Data Stored</span>
+    </div>
+  </div>
+</div>
+
+<div class="app">
+
+  <!-- LEFT -->
+  <div>
+    <!-- STEP 1 -->
+    <div class="panel">
+      <div class="ph"><div class="step">1</div><h2>Student Details</h2></div>
+      <div class="pb">
+        <div class="field-row">
+          <div class="field"><label>First Name</label><input type="text" id="firstName" placeholder="e.g. Alice"/></div>
+          <div class="field"><label>Pronoun</label>
+            <select id="pronoun">
+              <option value="she">She / Her</option>
+              <option value="he">He / Him</option>
+              <option value="they">They / Them</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Grade / Year</label>
+            <select id="gradeYear">
+              <option>Grade 1</option><option>Grade 2</option><option>Grade 3</option>
+              <option>Grade 4</option><option>Grade 5</option><option>Grade 6</option>
+              <option>Grade 7</option><option>Grade 8</option><option selected>Grade 9</option>
+              <option>Grade 10</option><option>Grade 11</option><option>Grade 12</option>
+            </select>
+          </div>
+          <div class="field"><label>Term</label>
+            <select id="term">
+              <option>Term 1</option><option>Term 2</option><option selected>Term 3</option>
+              <option>Term 4</option><option>Semester 1</option><option>Semester 2</option>
+              <option>Full Year</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="panel">
+      <div class="ph"><div class="step">2</div><h2>Subjects & Grades</h2></div>
+      <div class="pb">
+        <div class="subjects-list" id="subjectsList"></div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="panel">
+      <div class="ph"><div class="step">3</div><h2>Student Traits</h2></div>
+      <div class="pb">
+        <p style="font-size:0.78rem;color:var(--muted);font-weight:600">Select traits that apply — these shape the comment:</p>
+        <div class="trait-chips" id="traitChips"></div>
+        <div class="field" style="margin-top:4px">
+          <label>Additional Notes (optional)</label>
+          <textarea id="extraNotes" style="border:2px solid var(--border);border-radius:10px;padding:9px 12px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:600;color:var(--text);background:var(--bg);outline:none;resize:none;min-height:56px;width:100%;transition:border-color 0.2s;" placeholder="e.g. Showed great improvement in group work this term." onfocus="this.style.borderColor='var(--board)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="panel">
+      <div class="ph"><div class="step">4</div><h2>Comment Style</h2></div>
+      <div class="pb">
+        <div class="field"><label>Tone</label><div class="tone-row" id="toneRow"></div></div>
+        <div class="field">
+          <label>Length</label>
+          <div class="len-row">
+            <button class="len-btn" data-len="short" onclick="setLen('short')">Short<br/><small style="opacity:0.6">~50 words</small></button>
+            <button class="len-btn active" data-len="medium" onclick="setLen('medium')">Medium<br/><small style="opacity:0.6">~90 words</small></button>
+            <button class="len-btn" data-len="long" onclick="setLen('long')">Long<br/><small style="opacity:0.6">~130 words</small></button>
+          </div>
+        </div>
+        <button class="btn-generate" onclick="generateComment()">📝 Build Comment</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="output-panel">
+    <div class="output-toolbar" id="outputToolbar" style="display:none">
+      <button class="tb-btn primary" onclick="copyAll()">📋 Copy All</button>
+      <button class="tb-btn" onclick="window.print()">🖨️ Print</button>
+      <button class="tb-btn" onclick="clearAll()">🗑️ Clear</button>
+      <span style="flex:1"></span>
+      <span id="commentCount" style="font-size:0.82rem;font-weight:800;color:var(--muted)"></span>
+    </div>
+    <div class="empty-state" id="emptyState">
+      <div class="icon">📝</div>
+      <h3>Comments appear here</h3>
+      <p>Fill in the student details on the left and click Build Comment.</p>
+    </div>
+    <div id="commentsContainer"></div>
+  </div>
+
+</div>
+
+<footer>
+  <a href="about.html">About</a><a href="contact.html">Contact</a>
+  <a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Use</a>
+  <a href="cookies.html">Cookie Policy</a><br/><br/>
+  © 2025 HandyTeacherTools.com · Free for all teachers · No data collected
+</footer>
+
+<script>
+const SUBJECTS=['English','Mathematics','Science','History','Geography','Physical Education','Art','Music'];
+const TRAITS=['Hardworking','Creative','Curious','Enthusiastic','Responsible','Kind','Shows leadership','Collaborative','Independent','Focused','Resilient','Well organised','Thoughtful','Articulate','Participates well','Needs encouragement','Has room to grow','Improved significantly','Gives consistent effort','Demonstrates natural ability'];
+const TONES=[{key:'encouraging',label:'😊 Encouraging'},{key:'professional',label:'👔 Professional'},{key:'warm',label:'🤗 Warm'},{key:'balanced',label:'⚖️ Balanced'}];
+const AVATAR_COLOURS=['#c0392b','#2980b9','#8e44ad','#f39c12','#27ae60','#e91e63','#00bcd4','#ff5722'];
+
+const OPENERS={
+  encouraging:['{name} has had a wonderful {term} in {grade}.','{name} has approached {term} with great enthusiasm and commitment.','{name} has made excellent progress this {term} in {grade}.','It has been a pleasure watching {name} grow throughout {term}.'],
+  professional:['{name} has demonstrated a solid work ethic throughout {term} in {grade}.','{name} has performed consistently in {grade} during {term}.','Throughout {term}, {name} has engaged productively with the {grade} curriculum.','{name} has continued to develop {poss} skills throughout {term}.'],
+  warm:['What a wonderful {term} it has been for {name}!','{name} brings such positive energy to {grade} every day.','It has been a true joy having {name} in {grade} this {term}.','{name} has had a fantastic {term} and should be very proud.'],
+  balanced:['{name} has had a productive {term} in {grade}, with both strengths and areas to develop.','This {term} has seen {name} make meaningful progress in {grade}.','{name} has worked steadily throughout {term} in {grade}.','Overall, {name} has had a positive {term} in {grade}.'],
+};
+
+const GRADE_SENTENCES={
+  A:['{sub} is a clear strength for {name}, who consistently produces excellent work.','{name} excels in {sub}, demonstrating a thorough understanding of the material.','In {sub}, {name} achieves at an outstanding level and shows impressive depth of knowledge.'],
+  B:['{name} performs well in {sub} and demonstrates a solid understanding of key concepts.','In {sub}, {name} shows good ability and engages confidently with the material.','{name} is achieving at a strong level in {sub}, with work that is consistently of high quality.'],
+  C:['{name} is working at a satisfactory level in {sub} and demonstrates a reasonable understanding.','In {sub}, {name} shows developing competence and continues to build on key skills.','{name} is progressing in {sub} and benefits from continued practice and review.'],
+  D:['{name} is developing foundational skills in {sub} and would benefit from additional support.','In {sub}, {name} is working to consolidate key concepts and grow in confidence.'],
+  F:['{name} is finding {sub} challenging at this time and would benefit from dedicated support.','Progress in {sub} has been limited this {term}, and {name} is encouraged to seek additional help.'],
+};
+
+const TRAIT_SENTENCES={
+  'Hardworking':['{name} consistently demonstrates a strong work ethic.','{pronoun} approaches every task with diligence and determination.'],
+  'Creative':['{name} regularly brings creative thinking to {poss} work.','{pronoun} approaches problems with imagination and originality.'],
+  'Curious':['{name} shows a genuine curiosity and eagerness to learn.','{pronoun} asks thoughtful questions and explores topics with enthusiasm.'],
+  'Enthusiastic':['{name} brings enthusiasm and positive energy to every lesson.','{pronoun} participates with great eagerness throughout the class.'],
+  'Responsible':['{name} is a responsible student who meets deadlines and manages {poss} time well.','{pronoun} can always be counted on to take {poss} learning seriously.'],
+  'Kind':['{name} is a kind and considerate member of the class.','{pronoun} treats classmates and teachers with great respect.'],
+  'Shows leadership':['{name} naturally takes on a leadership role in group situations.','{pronoun} supports {poss} peers and models positive behaviours for the class.'],
+  'Collaborative':['{name} works exceptionally well in group settings.','{pronoun} is a valued team member who contributes meaningfully to collaborative tasks.'],
+  'Independent':['{name} works independently and manages {poss} own learning effectively.','{pronoun} shows great self-direction and initiative in completing tasks.'],
+  'Focused':['{name} maintains excellent focus and concentration throughout lessons.','{pronoun} stays on task and makes the most of every learning opportunity.'],
+  'Resilient':['{name} demonstrates admirable resilience when faced with challenges.','{pronoun} perseveres through difficult tasks and rarely gives up.'],
+  'Well organised':['{name} is a highly organised student who manages {poss} materials and time well.','{pronoun} consistently comes to class prepared and ready to learn.'],
+  'Thoughtful':['{name} approaches tasks thoughtfully and with care.','{pronoun} takes time to reflect before responding, producing considered work.'],
+  'Articulate':['{name} communicates ideas clearly and with confidence.','{pronoun} expresses {poss} thoughts in a well-structured and articulate manner.'],
+  'Participates well':['{name} participates actively and constructively in class discussions.','{pronoun} is not afraid to share ideas and contributes positively to class conversations.'],
+  'Needs encouragement':['{name} responds well to encouragement and continues to grow with support.','{pronoun} benefits from regular positive reinforcement and thrives when confidence is built.'],
+  'Has room to grow':['There is clear room for growth, and with continued effort, {name} is well placed to improve.','With additional focus and effort, {name} has the potential to achieve at a higher level.'],
+  'Improved significantly':['{name} has made significant improvement this {term}, which is a credit to {poss} dedication.','The growth {name} has shown this {term} is commendable and reflects real commitment.'],
+  'Gives consistent effort':['{name} brings consistent effort to {poss} work, which is evident in {poss} results.','{pronoun} reliably gives {poss} best effort regardless of the task.'],
+  'Demonstrates natural ability':['{name} demonstrates a natural ability that serves {obj} well across the curriculum.','{pronoun} has a clear talent that shines through in {poss} work.'],
+};
+
+const CLOSERS={
+  short:{
+    encouraging:['Keep up the fantastic work, {name}!','{name} should be very proud of this term.'],
+    professional:['It is anticipated that {name} will continue to build on this progress.','{name} is encouraged to maintain this level of effort going forward.'],
+    warm:['We look forward to seeing what {name} achieves next!','What a wonderful student — keep shining, {name}!'],
+    balanced:['With continued effort, {name} is well placed to achieve strong results.','{name} is encouraged to build on the progress made this term.'],
+  },
+  medium:{
+    encouraging:['With continued dedication, the future looks very bright for {name}. Keep up the outstanding effort!','It has been a pleasure teaching {name} this term. Keep up this wonderful momentum!'],
+    professional:['It is expected that {name} will continue to develop {poss} skills throughout the remainder of the year.','{name} is encouraged to consolidate {poss} learning and maintain this level of engagement.'],
+    warm:['It has truly been a joy having {name} in the class this term. We look forward to seeing {obj} continue to flourish!','The whole class has benefited from having {name} with us. We are excited to see what comes next!'],
+    balanced:['With sustained effort and focus, {name} is well positioned to reach {poss} goals. Well done on a solid term.','{name} should be encouraged by the progress made and continue building on these foundations.'],
+  },
+  long:{
+    encouraging:['It has been an absolute pleasure having {name} in class this {term}. {pronoun} is an asset to the classroom and a joy to teach. We look forward with great excitement to what the future holds — keep up this wonderful effort, {name}!','The progress {name} has made this {term} reflects tremendous commitment and character. {pronoun} should feel very proud. We have every confidence in {poss} continued success and look forward to watching {obj} thrive.'],
+    professional:['{name} is well positioned to continue developing throughout the year. Maintaining this level of engagement and continuing to pursue excellence will serve {obj} well in future study.','{name} is strongly encouraged to continue engaging with the curriculum and to seek additional support where needed. With sustained commitment, there is every reason to anticipate continued growth.'],
+    warm:['Having {name} in class this {term} has been a genuine highlight. {pronoun} brings warmth, enthusiasm, and a wonderful spirit that uplifts the entire room. We cannot wait to see all the incredible things {name} will go on to accomplish!','What a remarkable student {name} is! The kindness, effort, and dedication {name} has brought to {grade} this {term} has not gone unnoticed. We are so proud and so excited to see {poss} journey continue.'],
+    balanced:['Overall, this has been a solid {term} for {name}. With continued focus on the areas identified for growth, and by building on the genuine strengths already evident, {name} is well placed to have a successful year ahead.','By maintaining the positives and addressing areas for growth with the same determination, {name} has every reason to expect continued improvement and strong results going forward.'],
+  },
+};
+
+let subjects=SUBJECTS.map(s=>({name:s,grade:null}));
+let selectedTraits=[];
+let selectedTone='encouraging';
+let selectedLen='medium';
+
+function init(){renderSubjects();renderTraits();renderTones();}
+
+function renderSubjects(){
+  const list=document.getElementById('subjectsList');
+  list.innerHTML='';
+  subjects.forEach((s,i)=>{
+    const row=document.createElement('div');
+    row.className='subject-row';
+    row.innerHTML=`<span class="subject-name">${s.name}</span><div class="grade-btns">${['A','B','C','D','F'].map(g=>`<button class="gb ${s.grade===g?'sel-'+g:''}" onclick="setGrade(${i},'${g}')">${g}</button>`).join('')}</div>`;
+    list.appendChild(row);
+  });
+}
+
+function setGrade(i,g){subjects[i].grade=subjects[i].grade===g?null:g;renderSubjects();}
+
+function renderTraits(){
+  const wrap=document.getElementById('traitChips');
+  wrap.innerHTML='';
+  TRAITS.forEach(t=>{
+    const chip=document.createElement('div');
+    chip.className='tc'+(selectedTraits.includes(t)?' selected':'');
+    chip.textContent=t;
+    chip.onclick=()=>{
+      if(selectedTraits.includes(t))selectedTraits=selectedTraits.filter(x=>x!==t);
+      else selectedTraits.push(t);
+      renderTraits();
+    };
+    wrap.appendChild(chip);
+  });
+}
+
+function renderTones(){
+  const row=document.getElementById('toneRow');
+  row.innerHTML='';
+  TONES.forEach(t=>{
+    const btn=document.createElement('button');
+    btn.className='tone-btn'+(t.key===selectedTone?' active':'');
+    btn.innerHTML=t.label;
+    btn.onclick=()=>{selectedTone=t.key;renderTones();};
+    row.appendChild(btn);
+  });
+}
+
+function setLen(l){
+  selectedLen=l;
+  document.querySelectorAll('.len-btn').forEach(b=>b.classList.toggle('active',b.dataset.len===l));
+}
+
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+
+function pronouns(p){
+  if(p==='she')return{pronoun:'She',poss:'her',obj:'her'};
+  if(p==='he')return{pronoun:'He',poss:'his',obj:'him'};
+  return{pronoun:'They',poss:'their',obj:'them'};
+}
+
+function fill(tpl,vars){return tpl.replace(/\{(\w+)\}/g,(_,k)=>vars[k]??k);}
+
+function buildComment(){
+  const name=document.getElementById('firstName').value.trim()||'This student';
+  const pronoun=document.getElementById('pronoun').value;
+  const gradeYear=document.getElementById('gradeYear').value;
+  const term=document.getElementById('term').value;
+  const notes=document.getElementById('extraNotes').value.trim();
+  const{pronoun:pro,poss,obj}=pronouns(pronoun);
+  const vars={name,pronoun:pro,poss,obj,grade:gradeYear,term,sub:''};
+  const parts=[];
+
+  parts.push(fill(pick(OPENERS[selectedTone]),vars));
+
+  const graded=subjects.filter(s=>s.grade);
+  if(graded.length>0){
+    const count=selectedLen==='short'?Math.min(1,graded.length):selectedLen==='medium'?Math.min(2,graded.length):Math.min(3,graded.length);
+    graded.slice(0,count).forEach(s=>{parts.push(fill(pick(GRADE_SENTENCES[s.grade]),{...vars,sub:s.name}));});
+  }
+
+  if(selectedTraits.length>0){
+    const count=selectedLen==='short'?1:selectedLen==='medium'?2:3;
+    [...selectedTraits].sort(()=>0.5-Math.random()).slice(0,count).forEach(trait=>{
+      if(TRAIT_SENTENCES[trait])parts.push(fill(pick(TRAIT_SENTENCES[trait]),vars));
+    });
+  }
+
+  if(notes)parts.push(notes.endsWith('.')?notes:notes+'.');
+
+  const closerBank=CLOSERS[selectedLen]?.[selectedTone]||CLOSERS.medium.encouraging;
+  parts.push(fill(pick(closerBank),vars));
+
+  return parts.join(' ');
+}
+
+function generateComment(){
+  const name=document.getElementById('firstName').value.trim();
+  if(!name){document.getElementById('firstName').focus();return;}
+  const comment=buildComment();
+  const gradeYear=document.getElementById('gradeYear').value;
+  const term=document.getElementById('term').value;
+  document.getElementById('emptyState').style.display='none';
+  document.getElementById('outputToolbar').style.display='flex';
+  addCommentCard(name,gradeYear,term,comment);
+  updateCount();
+}
+
+function addCommentCard(name,gradeYear,term,comment){
+  const container=document.getElementById('commentsContainer');
+  const colIdx=container.children.length%AVATAR_COLOURS.length;
+  const initials=name.slice(0,2).toUpperCase();
+  const gradedSubjs=subjects.filter(s=>s.grade);
+  const card=document.createElement('div');
+  card.className='comment-card';
+  card.innerHTML=`
+    <div class="cc-header">
+      <div class="cc-student">
+        <div class="cc-avatar" style="background:${AVATAR_COLOURS[colIdx]}">${initials}</div>
+        <div class="cc-info"><h3>${name}</h3><span>${gradeYear} · ${term}</span></div>
+      </div>
+      <div class="cc-actions">
+        <button class="cc-btn" onclick="regenerate(this)">🔄 Regenerate</button>
+        <button class="cc-btn" onclick="copyOne(this)">📋 Copy</button>
+        <button class="cc-btn" onclick="this.closest('.comment-card').remove();updateCount()">🗑</button>
+      </div>
+    </div>
+    <div class="cc-body"><textarea class="cc-text" oninput="updateWC(this)">${comment}</textarea></div>
+    <div class="cc-footer">
+      <span class="cc-wordcount">${countWords(comment)} words</span>
+      <div class="grade-tags">${gradedSubjs.map(s=>`<span class="grade-tag gt-${s.grade}">${s.name}: ${s.grade}</span>`).join('')}</div>
+    </div>`;
+  container.appendChild(card);
+}
+
+function regenerate(btn){
+  const ta=btn.closest('.comment-card').querySelector('.cc-text');
+  ta.value=buildComment();
+  updateWC(ta);
+}
+
+function updateWC(ta){ta.closest('.comment-card').querySelector('.cc-wordcount').textContent=countWords(ta.value)+' words';}
+function countWords(t){return t.trim().split(/\s+/).filter(w=>w).length;}
+
+function copyOne(btn){
+  const text=btn.closest('.comment-card').querySelector('.cc-text').value;
+  navigator.clipboard.writeText(text).then(()=>{btn.textContent='✅ Copied!';setTimeout(()=>btn.textContent='📋 Copy',2000);});
+}
+
+function copyAll(){
+  const cards=document.querySelectorAll('.comment-card');
+  const parts=[...cards].map(card=>`${card.querySelector('h3').textContent}:\n${card.querySelector('.cc-text').value}`);
+  navigator.clipboard.writeText(parts.join('\n\n---\n\n')).then(()=>{
+    const btn=event.target;btn.textContent='✅ All Copied!';setTimeout(()=>btn.textContent='📋 Copy All',2000);
+  });
+}
+
+function clearAll(){
+  if(!confirm('Clear all generated comments?'))return;
+  document.getElementById('commentsContainer').innerHTML='';
+  document.getElementById('outputToolbar').style.display='none';
+  document.getElementById('emptyState').style.display='block';
+  updateCount();
+}
+
+function updateCount(){
+  const n=document.querySelectorAll('.comment-card').length;
+  document.getElementById('commentCount').textContent=n>0?`${n} comment${n!==1?'s':''} generated`:'';
+  if(n===0){document.getElementById('outputToolbar').style.display='none';document.getElementById('emptyState').style.display='block';}
+}
+
+init();
+</script>
+</body>
+</html>

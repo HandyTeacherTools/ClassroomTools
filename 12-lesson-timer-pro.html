@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Lesson Timer Pro — Handy Teacher Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M5DCBRK7DE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-M5DCBRK7DE');
+</script>
+<style>
+  :root {
+    --bg: #0e0e16;
+    --surface: #16161f;
+    --surface2: #1e1e2a;
+    --border: #2a2a3a;
+    --accent: #7c6aff;
+    --accent2: #ff6a6a;
+    --green: #3ddc84;
+    --yellow: #ffd166;
+    --text: #f0eeff;
+    --muted: #6b6b8a;
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: var(--bg); colour: var(--text); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+
+  /* starfield bg */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.08) 0%, transparent 100%),
+      radial-gradient(1px 1px at 80% 10%, rgba(255,255,255,0.06) 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 70%, rgba(255,255,255,0.05) 0%, transparent 100%),
+      radial-gradient(1px 1px at 10% 80%, rgba(255,255,255,0.07) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 60%, rgba(255,255,255,0.04) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: relative; z-index: 10;
+    background: rgba(14,14,22,0.95);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    backdrop-filter: blur(10px);
+  }
+  nav a { colour: var(--muted); color: var(--muted); text-decoration: none; font-weight: 700; font-size: 14px; transition: colour 0.2s; }
+  nav a:hover { colour: var(--text); color: var(--text); }
+  nav .tool-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; colour: var(--accent); color: var(--accent); }
+
+  .app {
+    flex: 1;
+    position: relative; z-index: 1;
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    height: calc(100vh - 49px);
+    overflow: hidden;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.15rem;
+    colour: var(--text); color: var(--text);
+    margin-bottom: 4px;
+  }
+  .sidebar-header p { font-size: 0.78rem; colour: var(--muted); color: var(--muted); font-weight: 600; }
+
+  .segments-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+
+  /* SEGMENT ITEM */
+  .segment-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex; align-items: center; gap: 10px;
+    transition: all 0.2s;
+    cursor: default;
+    position: relative;
+  }
+  .segment-item.current {
+    border-colour: var(--accent);
+    border-color: var(--accent);
+    background: rgba(124,106,255,0.08);
+    box-shadow: 0 0 20px rgba(124,106,255,0.15);
+  }
+  .segment-item.done {
+    opacity: 0.45;
+  }
+  .segment-item.done .seg-label { text-decoration: line-through; }
+
+  .seg-drag { colour: var(--muted); color: var(--muted); font-size: 1rem; cursor: grab; flex-shrink: 0; }
+  .seg-colour-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .seg-info { flex: 1; min-width: 0; }
+  .seg-label {
+    font-size: 0.9rem; font-weight: 800;
+    colour: var(--text); color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    border: none; background: transparent;
+    font-family: 'Nunito', sans-serif;
+    outline: none; width: 100%;
+  }
+  .seg-label:focus { colour: var(--accent); color: var(--accent); }
+  .seg-duration {
+    font-size: 0.75rem; font-weight: 800;
+    colour: var(--muted); color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .seg-mins {
+    width: 48px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    colour: var(--text); color: var(--text);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    text-align: center;
+    padding: 5px 4px;
+    outline: none;
+    transition: border-colour 0.2s;
+  }
+  .seg-mins:focus { border-colour: var(--accent); border-color: var(--accent); }
+
+  .seg-del {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,106,106,0.1);
+    colour: var(--accent2); color: var(--accent2);
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+    flex-shrink: 0;
+  }
+  .seg-del:hover { background: rgba(255,106,106,0.25); }
+
+  .current-indicator {
+    position: absolute;
+    left: -1px; top: 50%; transform: translateY(-50%);
+    width: 3px; height: 70%;
+    background: var(--accent);
+    border-radius: 0 3px 3px 0;
+  }
+
+  /* ADD SEGMENT */
+  .add-seg-area { padding: 12px; border-top: 1px solid var(--border); }
+  .add-seg-row { display: flex; gap: 8px; }
+  .add-seg-input {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    colour: var(--text); color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    padding: 9px 12px;
+    outline: none;
+    transition: border-colour 0.2s;
+  }
+  .add-seg-input:focus { border-colour: var(--accent); border-color: var(--accent); }
+  .add-seg-mins {
+    width: 56px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    colour: var(--text); color: var(--text);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    text-align: center;
+    padding: 9px 4px;
+    outline: none;
+  }
+  .add-seg-btn {
+    padding: 9px 16px;
+    background: var(--accent);
+    border: none;
+    border-radius: 10px;
+    colour: white; color: white;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+  }
+  .add-seg-btn:hover { opacity: 0.85; }
+
+  /* PRESETS */
+  .presets-area { padding: 0 12px 12px; }
+  .presets-label { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; colour: var(--muted); color: var(--muted); margin-bottom: 8px; }
+  .preset-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .preset-chip {
+    padding: 5px 12px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    font-size: 0.75rem; font-weight: 800;
+    colour: var(--muted); color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .preset-chip:hover { border-colour: var(--accent); border-color: var(--accent); colour: var(--accent); color: var(--accent); }
+
+  /* ── DISPLAY ── */
+  .display {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 32px;
+    overflow: hidden;
+  }
+
+  /* Progress rail */
+  .lesson-rail {
+    width: 100%;
+    max-width: 640px;
+    height: 8px;
+    background: var(--surface2);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  .lesson-rail-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(to right, var(--accent), var(--green));
+    width: 0%;
+    transition: width 0.5s linear;
+  }
+
+  /* Segment chips along top */
+  .segment-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 640px;
+    width: 100%;
+  }
+  .seg-chip {
+    padding: 5px 14px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    colour: rgba(255,255,255,0.4); color: rgba(255,255,255,0.4);
+    border: 1px solid var(--border);
+    transition: all 0.3s;
+    white-space: nowrap;
+  }
+  .seg-chip.chip-done { colour: rgba(255,255,255,0.25); color: rgba(255,255,255,0.25); text-decoration: line-through; border-colour: transparent; border-color: transparent; }
+  .seg-chip.chip-current { colour: white; color: white; border-colour: currentColour; border-color: currentColor; font-size: 0.8rem; }
+
+  /* CURRENT SEGMENT LABEL */
+  .current-seg-label {
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    colour: var(--muted); color: var(--muted);
+    text-align: center;
+  }
+  .current-seg-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    colour: var(--text); color: var(--text);
+    text-align: center;
+    margin-top: 2px;
+  }
+
+  /* BIG TIME */
+  .big-time {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 16vw, 10rem);
+    letter-spacing: 6px;
+    line-height: 1;
+    colour: var(--text); color: var(--text);
+    transition: colour 0.5s; color: var(--text);
+    text-align: center;
+    text-shadow: 0 0 60px rgba(124,106,255,0.2);
+  }
+  .big-time.urgent { colour: var(--yellow); color: var(--yellow); text-shadow: 0 0 40px rgba(255,209,102,0.3); }
+  .big-time.critical { colour: var(--accent2); color: var(--accent2); text-shadow: 0 0 40px rgba(255,106,106,0.4); animation: pulse 0.8s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.7; } }
+
+  /* NEXT UP */
+  .next-up {
+    font-size: 0.82rem;
+    font-weight: 800;
+    colour: var(--muted); color: var(--muted);
+    text-align: center;
+    min-height: 20px;
+    transition: all 0.3s;
+  }
+  .next-up span { colour: var(--text); color: var(--text); }
+
+  /* CONTROLS */
+  .display-controls { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+  .ctrl {
+    padding: 14px 32px;
+    border-radius: 14px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 900;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .ctrl-play { background: var(--accent); colour: white; color: white; box-shadow: 0 4px 24px rgba(124,106,255,0.3); }
+  .ctrl-play:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(124,106,255,0.45); }
+  .ctrl-pause { background: var(--yellow); colour: #0e0e16; color: #0e0e16; }
+  .ctrl-pause:hover { transform: translateY(-2px); }
+  .ctrl-skip { background: var(--surface2); colour: var(--text); color: var(--text); border: 1px solid var(--border); }
+  .ctrl-skip:hover { border-colour: var(--accent); border-color: var(--accent); colour: var(--accent); color: var(--accent); }
+  .ctrl-reset { background: var(--surface2); colour: var(--muted); color: var(--muted); border: 1px solid var(--border); }
+  .ctrl-reset:hover { colour: var(--accent2); color: var(--accent2); border-colour: var(--accent2); border-color: var(--accent2); }
+
+  /* TOTAL TIME */
+  .total-info {
+    font-size: 0.8rem;
+    colour: var(--muted); color: var(--muted);
+    font-weight: 700;
+    text-align: center;
+  }
+  .total-info span { colour: var(--text); color: var(--text); font-weight: 800; }
+
+  /* TRANSITION OVERLAY */
+  .transition-overlay {
+    position: fixed; inset: 0;
+    background: var(--accent);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .transition-overlay.show { opacity: 1; pointer-events: all; }
+  .transition-overlay .next-label { font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 3px; colour: rgba(255,255,255,0.7); color: rgba(255,255,255,0.7); margin-bottom: 12px; }
+  .transition-overlay .next-name { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 6vw, 4rem); colour: white; color: white; text-align: center; padding: 0 24px; }
+  .transition-overlay .tap-hint { margin-top: 32px; font-size: 0.85rem; font-weight: 700; colour: rgba(255,255,255,0.5); color: rgba(255,255,255,0.5); }
+
+  /* DONE OVERLAY */
+  .done-overlay {
+    position: fixed; inset: 0;
+    background: rgba(14,14,22,0.95);
+    display: none;
+    flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 200;
+    gap: 20px;
+  }
+  .done-overlay.show { display: flex; }
+  .done-icon { font-size: 5rem; animation: popIn 0.5s ease; }
+  @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .done-title { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; letter-spacing: 4px; colour: var(--green); color: var(--green); text-shadow: 0 0 40px rgba(61,220,132,0.4); }
+  .done-sub { font-size: 1rem; font-weight: 700; colour: var(--muted); color: var(--muted); }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 40px;
+    colour: var(--muted); color: var(--muted);
+  }
+  .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+  .empty-state p { font-size: 0.9rem; font-weight: 700; line-height: 1.6; max-width: 280px; margin: 0 auto; }
+
+  footer { position: relative; z-index: 1; text-align: center; padding: 12px; font-size: 12px; colour: var(--muted); color: var(--muted); font-weight: 600; background: var(--surface); border-top: 1px solid var(--border); }
+  footer a { colour: var(--muted); color: var(--muted); text-decoration: none; }
+
+  @media (max-width: 700px) {
+    .app { grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: auto; }
+    .sidebar { height: auto; max-height: 45vh; }
+    .display { min-height: 50vh; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">← All Tools</a>
+  <span class="tool-title">⏳ Lesson Timer Pro</span>
+  <span style="font-size:12px;color:var(--muted)">handyteachertools.com</span>
+</nav>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>📋 Lesson Plan</h2>
+      <p>Build your lesson segments — drag to reorder, click to edit.</p>
+    </div>
+
+    <div class="segments-list" id="segmentsList"></div>
+
+    <div class="add-seg-area">
+      <div class="add-seg-row">
+        <input class="add-seg-input" id="newSegName" placeholder="Segment name…" maxlength="40" onkeydown="if(event.key==='Enter')addSegment()"/>
+        <input class="add-seg-mins" type="number" id="newSegMins" min="1" max="90" value="5" title="Minutes"/>
+        <button class="add-seg-btn" onclick="addSegment()">+ Add</button>
+      </div>
+    </div>
+
+    <div class="presets-area">
+      <div class="presets-label">Load a template</div>
+      <div class="preset-chips">
+        <span class="preset-chip" onclick="loadPreset('standard')">📚 Standard 60min</span>
+        <span class="preset-chip" onclick="loadPreset('double')">📖 Double Period</span>
+        <span class="preset-chip" onclick="loadPreset('short')">⚡ Short 30min</span>
+        <span class="preset-chip" onclick="loadPreset('exam')">📝 Exam Class</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISPLAY -->
+  <div class="display" id="display">
+
+    <div id="emptyState" class="empty-state">
+      <div class="icon">⏳</div>
+      <p>Add segments to your lesson plan on the left, then press Start.</p>
+    </div>
+
+    <div id="timerUI" style="display:none;flex-direction:column;align-items:center;gap:20px;width:100%;max-width:640px">
+
+      <div class="segment-chips" id="segmentChips"></div>
+
+      <div class="lesson-rail">
+        <div class="lesson-rail-fill" id="railFill"></div>
+      </div>
+
+      <div>
+        <div class="current-seg-label">NOW</div>
+        <div class="current-seg-name" id="currentSegName">—</div>
+      </div>
+
+      <div class="big-time" id="bigTime">00:00</div>
+
+      <div class="next-up" id="nextUp"></div>
+
+      <div class="display-controls">
+        <button class="ctrl ctrl-play" id="btnPlay" onclick="togglePlay()">▶ Start</button>
+        <button class="ctrl ctrl-skip" onclick="skipSegment()">⏭ Skip</button>
+        <button class="ctrl ctrl-reset" onclick="resetAll()">↺ Reset</button>
+      </div>
+
+      <div class="total-info" id="totalInfo"></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- TRANSITION OVERLAY -->
+<div class="transition-overlay" id="transitionOverlay" onclick="dismissTransition()">
+  <div class="next-label">Up Next</div>
+  <div class="next-name" id="transitionName">—</div>
+  <div class="tap-hint">Tap anywhere to continue</div>
+</div>
+
+<!-- DONE OVERLAY -->
+<div class="done-overlay" id="doneOverlay">
+  <div class="done-icon">🎉</div>
+  <div class="done-title">Lesson Complete!</div>
+  <div class="done-sub" id="doneSub">Great work</div>
+  <button class="ctrl ctrl-play" style="margin-top:12px" onclick="resetAll()">↺ Start Again</button>
+</div>
+
+<footer><a href="index.html">← Back to all tools</a> · handyteachertools.com</footer>
+
+<script>
+const SEG_COLOURS = ['#7c6aff','#3ddc84','#ffd166','#ff6a6a','#06d6a0','#4cc9f0','#f72585','#ff9f1c','#a8dadc','#e9c46a'];
+const PRESETS = {
+  standard: [
+    { label: 'Warm Up', mins: 5 },
+    { label: 'Review Previous', mins: 8 },
+    { label: 'New Content', mins: 20 },
+    { label: 'Guided Practice', mins: 12 },
+    { label: 'Independent Work', mins: 10 },
+    { label: 'Exit Ticket', mins: 5 },
+  ],
+  double: [
+    { label: 'Warm Up', mins: 5 },
+    { label: 'Homework Review', mins: 10 },
+    { label: 'Lesson Part 1', mins: 20 },
+    { label: 'Brain Break', mins: 3 },
+    { label: 'Lesson Part 2', mins: 20 },
+    { label: 'Group Activity', mins: 20 },
+    { label: 'Discussion', mins: 10 },
+    { label: 'Exit Ticket', mins: 5 },
+  ],
+  short: [
+    { label: 'Warm Up', mins: 3 },
+    { label: 'Mini Lesson', mins: 12 },
+    { label: 'Quick Practice', mins: 10 },
+    { label: 'Share Out', mins: 5 },
+  ],
+  exam: [
+    { label: 'Instructions', mins: 5 },
+    { label: 'Exam Time', mins: 50 },
+    { label: 'Review & Submit', mins: 5 },
+  ],
+};
+
+let segments = [];
+let currentIdx = 0;
+let remaining = 0;
+let totalLesson = 0;
+let elapsed = 0;
+let running = false;
+let interval = null;
+
+function loadPreset(key) {
+  segments = PRESETS[key].map((s, i) => ({ ...s, id: Date.now() + i, colour: SEG_COLOURS[i % SEG_COLOURS.length] }));
+  currentIdx = 0; remaining = 0; elapsed = 0; running = false;
+  clearInterval(interval);
+  renderSidebar(); renderDisplay();
+}
+
+function addSegment() {
+  const name = document.getElementById('newSegName').value.trim();
+  const mins = parseInt(document.getElementById('newSegMins').value) || 5;
+  if (!name) { document.getElementById('newSegName').focus(); return; }
+  segments.push({ label: name, mins, id: Date.now(), colour: SEG_COLOURS[segments.length % SEG_COLOURS.length] });
+  document.getElementById('newSegName').value = '';
+  renderSidebar(); renderDisplay();
+}
+
+function removeSegment(id) {
+  segments = segments.filter(s => s.id !== id);
+  if (currentIdx >= segments.length) currentIdx = Math.max(0, segments.length - 1);
+  renderSidebar(); renderDisplay();
+}
+
+function renderSidebar() {
+  const list = document.getElementById('segmentsList');
+  list.innerHTML = '';
+  if (segments.length === 0) {
+    list.innerHTML = '<p style="text-align:center;color:var(--muted);font-size:0.82rem;font-weight:700;padding:20px">No segments yet. Add one below or load a template.</p>';
+    return;
+  }
+  segments.forEach((s, i) => {
+    const el = document.createElement('div');
+    el.className = 'segment-item' + (i === currentIdx && running ? ' current' : '') + (i < currentIdx ? ' done' : '');
+    el.innerHTML = `
+      ${i === currentIdx && running ? '<div class="current-indicator"></div>' : ''}
+      <span class="seg-drag">⠿</span>
+      <span class="seg-colour-dot" style="background:${s.colour}"></span>
+      <div class="seg-info">
+        <input class="seg-label" value="${s.label}" onchange="s.label=this.value;renderDisplay()"/>
+        <div class="seg-duration">${s.mins} min${s.mins !== 1 ? 's' : ''}</div>
+      </div>
+      <input class="seg-mins" type="number" min="1" max="90" value="${s.mins}" onchange="updateMins(${s.id},this.value)"/>
+      <button class="seg-del" onclick="removeSegment(${s.id})">×</button>
+    `;
+    list.appendChild(el);
+  });
+}
+
+function updateMins(id, val) {
+  const s = segments.find(x => x.id === id);
+  if (s) { s.mins = Math.max(1, parseInt(val) || 1); renderSidebar(); renderDisplay(); }
+}
+
+function renderDisplay() {
+  const hasSegs = segments.length > 0;
+  document.getElementById('emptyState').style.display = hasSegs ? 'none' : 'block';
+  document.getElementById('timerUI').style.display = hasSegs ? 'flex' : 'none';
+  if (!hasSegs) return;
+
+  totalLesson = segments.reduce((a, s) => a + s.mins * 60, 0);
+
+  // Chips
+  const chips = document.getElementById('segmentChips');
+  chips.innerHTML = '';
+  segments.forEach((s, i) => {
+    const chip = document.createElement('div');
+    chip.className = 'seg-chip' + (i < currentIdx ? ' chip-done' : i === currentIdx ? ' chip-current' : '');
+    chip.style.colour = i === currentIdx ? s.colour : '';
+    chip.style.color = i === currentIdx ? s.colour : '';
+    chip.style.borderColour = i === currentIdx ? s.colour : '';
+    chip.style.borderColor = i === currentIdx ? s.colour : '';
+    chip.textContent = s.label;
+    chips.appendChild(chip);
+  });
+
+  // Current segment info
+  const cur = segments[currentIdx];
+  document.getElementById('currentSegName').textContent = cur ? cur.label : '—';
+  if (!running && remaining === 0 && cur) remaining = cur.mins * 60;
+  document.getElementById('bigTime').textContent = formatTime(remaining);
+
+  // Next up
+  const next = segments[currentIdx + 1];
+  document.getElementById('nextUp').innerHTML = next
+    ? `Next: <span style="color:${next.colour}">${next.label}</span> (${next.mins} min${next.mins !== 1 ? 's' : ''})`
+    : running ? '<span style="color:var(--green)">Last segment!</span>' : '';
+
+  // Rail
+  const totalElapsed = segments.slice(0, currentIdx).reduce((a, s) => a + s.mins * 60, 0) + (cur ? cur.mins * 60 - remaining : 0);
+  const pct = totalLesson > 0 ? (totalElapsed / totalLesson) * 100 : 0;
+  document.getElementById('railFill').style.width = pct + '%';
+
+  // Total info
+  const totalMins = Math.round(totalLesson / 60);
+  const doneSegs = currentIdx;
+  document.getElementById('totalInfo').innerHTML = `<span>${doneSegs}/${segments.length}</span> segments · <span>${totalMins}</span> min lesson`;
+
+  // Urgency
+  const bigTime = document.getElementById('bigTime');
+  bigTime.classList.remove('urgent', 'critical');
+  if (remaining <= 10 && remaining > 0) bigTime.classList.add('critical');
+  else if (remaining <= 60) bigTime.classList.add('urgent');
+}
+
+function formatTime(secs) {
+  const m = Math.floor(secs / 60);
+  const s = secs % 60;
+  return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
+
+function togglePlay() {
+  if (segments.length === 0) return;
+  running ? pauseTimer() : startTimer();
+}
+
+function startTimer() {
+  if (remaining === 0) remaining = segments[currentIdx].mins * 60;
+  running = true;
+  document.getElementById('btnPlay').innerHTML = '⏸ Pause';
+  document.getElementById('btnPlay').className = 'ctrl ctrl-pause';
+  document.getElementById('btnPlay').onclick = togglePlay;
+
+  interval = setInterval(() => {
+    remaining--;
+    elapsed++;
+    renderDisplay();
+    if (remaining <= 0) advanceSegment();
+  }, 1000);
+}
+
+function pauseTimer() {
+  running = false;
+  clearInterval(interval);
+  document.getElementById('btnPlay').innerHTML = '▶ Resume';
+  document.getElementById('btnPlay').className = 'ctrl ctrl-play';
+}
+
+function advanceSegment() {
+  clearInterval(interval);
+  running = false;
+  beepTransition();
+
+  if (currentIdx >= segments.length - 1) {
+    showDone(); return;
+  }
+
+  currentIdx++;
+  remaining = segments[currentIdx].mins * 60;
+
+  // Show transition overlay
+  const overlay = document.getElementById('transitionOverlay');
+  overlay.style.background = segments[currentIdx].colour;
+  document.getElementById('transitionName').textContent = segments[currentIdx].label;
+  overlay.classList.add('show');
+
+  renderSidebar();
+  renderDisplay();
+}
+
+function dismissTransition() {
+  document.getElementById('transitionOverlay').classList.remove('show');
+  startTimer();
+}
+
+function skipSegment() {
+  if (segments.length === 0) return;
+  clearInterval(interval);
+  running = false;
+  if (currentIdx >= segments.length - 1) { showDone(); return; }
+  currentIdx++;
+  remaining = segments[currentIdx].mins * 60;
+  document.getElementById('btnPlay').innerHTML = '▶ Start';
+  document.getElementById('btnPlay').className = 'ctrl ctrl-play';
+  renderSidebar(); renderDisplay();
+}
+
+function resetAll() {
+  clearInterval(interval);
+  running = false;
+  currentIdx = 0;
+  elapsed = 0;
+  remaining = segments.length > 0 ? segments[0].mins * 60 : 0;
+  document.getElementById('btnPlay').innerHTML = '▶ Start';
+  document.getElementById('btnPlay').className = 'ctrl ctrl-play';
+  document.getElementById('doneOverlay').classList.remove('show');
+  document.getElementById('transitionOverlay').classList.remove('show');
+  renderSidebar(); renderDisplay();
+}
+
+function showDone() {
+  beepDone();
+  const total = Math.round(totalLesson / 60);
+  document.getElementById('doneSub').textContent = `${segments.length} segments · ${total} minutes`;
+  document.getElementById('doneOverlay').classList.add('show');
+}
+
+function beepTransition() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [523, 659, 784].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.3, ctx.currentTime + i * 0.12);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.12 + 0.2);
+      osc.start(ctx.currentTime + i * 0.12);
+      osc.stop(ctx.currentTime + i * 0.12 + 0.3);
+    });
+  } catch(e) {}
+}
+
+function beepDone() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [523, 659, 784, 1047].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.4, ctx.currentTime + i * 0.15);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.15 + 0.3);
+      osc.start(ctx.currentTime + i * 0.15);
+      osc.stop(ctx.currentTime + i * 0.15 + 0.4);
+    });
+  } catch(e) {}
+}
+
+// Load default preset
+loadPreset('standard');
+</script>
+</body>
+</html>

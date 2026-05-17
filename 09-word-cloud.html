@@ -17,12 +17,12 @@
     --radius: 16px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+  body { background: var(--bg); colour: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
 
-  nav { background: var(--card); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
-  nav a { color: var(--muted); text-decoration: none; font-weight: 700; font-size: 14px; transition: color 0.2s; }
-  nav a:hover { color: var(--text); }
-  nav .tool-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--text); }
+  nav { background: var(--card); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: centre; justify-content: space-between; }
+  nav a { colour: var(--muted); text-decoration: none; font-weight: 700; font-size: 14px; transition: colour 0.2s; }
+  nav a:hover { colour: var(--text); }
+  nav .tool-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; colour: var(--text); }
 
   .app { flex: 1; display: grid; grid-template-columns: 320px 1fr; height: calc(100vh - 49px); }
 
@@ -36,9 +36,9 @@
     gap: 16px;
     overflow-y: auto;
   }
-  .sidebar h2 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--text); margin-bottom: 4px; }
+  .sidebar h2 { font-family: 'Playfair Display', serif; font-size: 1.1rem; colour: var(--text); margin-bottom: 4px; }
 
-  label { font-size: 0.78rem; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; display: block; margin-bottom: 6px; }
+  label { font-size: 0.78rem; font-weight: 800; colour: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; display: block; margin-bottom: 6px; }
 
   .word-input-area {
     display: flex;
@@ -56,21 +56,21 @@
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 8px;
-    color: var(--text);
+    colour: var(--text);
     padding: 10px 12px;
     font-family: 'Nunito', sans-serif;
     font-size: 0.9rem;
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-colour 0.2s;
   }
-  input[type=text].word-field:focus { border-color: var(--accent); }
+  input[type=text].word-field:focus { border-colour: var(--accent); }
 
   .add-btn {
     padding: 10px 14px;
     background: var(--accent);
     border: none;
     border-radius: 8px;
-    color: white;
+    colour: white;
     font-family: 'Nunito', sans-serif;
     font-weight: 800;
     font-size: 0.9rem;
@@ -86,22 +86,22 @@
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 8px;
-    color: var(--text);
+    colour: var(--text);
     padding: 10px 12px;
     font-family: 'Nunito', sans-serif;
     font-size: 0.85rem;
     resize: vertical;
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-colour 0.2s;
   }
-  textarea.bulk-input:focus { border-color: var(--accent); }
+  textarea.bulk-input:focus { border-colour: var(--accent); }
   .bulk-btn {
     width: 100%;
     padding: 9px;
     background: var(--border);
     border: none;
     border-radius: 8px;
-    color: var(--text);
+    colour: var(--text);
     font-family: 'Nunito', sans-serif;
     font-weight: 800;
     font-size: 0.85rem;
@@ -122,13 +122,13 @@
   }
   .word-tag {
     display: inline-flex;
-    align-items: center;
+    align-items: centre;
     gap: 6px;
     padding: 5px 10px 5px 12px;
     border-radius: 100px;
     font-size: 0.8rem;
     font-weight: 800;
-    color: white;
+    colour: white;
     cursor: default;
     transition: all 0.15s;
   }
@@ -151,16 +151,16 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.75rem;
     font-weight: 800;
-    color: var(--muted);
+    colour: var(--muted);
     cursor: pointer;
-    text-align: center;
+    text-align: centre;
     transition: all 0.15s;
   }
-  .theme-btn:hover { border-color: var(--accent); color: var(--text); }
-  .theme-btn.active { border-color: var(--accent); color: var(--text); background: rgba(124,58,237,0.1); }
+  .theme-btn:hover { border-colour: var(--accent); colour: var(--text); }
+  .theme-btn.active { border-colour: var(--accent); colour: var(--text); background: rgba(124,58,237,0.1); }
 
   /* SETTINGS */
-  .setting-row { display: flex; align-items: center; justify-content: space-between; }
+  .setting-row { display: flex; align-items: centre; justify-content: space-between; }
   .setting-row label { margin: 0; }
   input[type=range].mini-range {
     -webkit-appearance: none;
@@ -176,7 +176,7 @@
     background: var(--accent);
     border-radius: 50%;
   }
-  .range-val { font-size: 0.8rem; font-weight: 800; color: var(--accent); min-width: 28px; text-align: right; }
+  .range-val { font-size: 0.8rem; font-weight: 800; colour: var(--accent); min-width: 28px; text-align: right; }
 
   .action-row { display: flex; gap: 8px; }
   .action-row button {
@@ -188,21 +188,21 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.85rem;
     font-weight: 800;
-    color: var(--text);
+    colour: var(--text);
     cursor: pointer;
     transition: all 0.2s;
   }
-  .action-row button:hover { border-color: var(--accent); color: var(--accent); }
-  .action-row button.primary { background: var(--accent); border-color: var(--accent); }
-  .action-row button.primary:hover { opacity: 0.85; color: white; }
+  .action-row button:hover { border-colour: var(--accent); colour: var(--accent); }
+  .action-row button.primary { background: var(--accent); border-colour: var(--accent); }
+  .action-row button.primary:hover { opacity: 0.85; colour: white; }
 
   /* CLOUD CANVAS */
   .cloud-area {
     position: relative;
     overflow: hidden;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: centre;
+    justify-content: centre;
   }
   canvas { display: block; }
 
@@ -211,17 +211,17 @@
     inset: 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--muted);
+    align-items: centre;
+    justify-content: centre;
+    colour: var(--muted);
     gap: 12px;
     pointer-events: none;
   }
   .empty-cloud .icon { font-size: 4rem; opacity: 0.3; }
   .empty-cloud p { font-size: 1rem; font-weight: 700; opacity: 0.5; }
 
-  footer { text-align: center; padding: 12px; font-size: 12px; color: var(--muted); font-weight: 600; }
-  footer a { color: var(--muted); text-decoration: none; }
+  footer { text-align: centre; padding: 12px; font-size: 12px; colour: var(--muted); font-weight: 600; }
+  footer a { colour: var(--muted); text-decoration: none; }
 
   @media (max-width: 700px) {
     .app { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
@@ -242,7 +242,7 @@
 <nav>
   <a href="index.html">← All Tools</a>
   <span class="tool-title">☁️ Word Cloud</span>
-  <span style="font-size:12px;color:var(--muted)">handyteachertools.com</span>
+  <span style="font-size:12px;colour:var(--muted)">handyteachertools.com</span>
 </nav>
 
 <div class="app">
@@ -251,7 +251,7 @@
   <div class="sidebar">
     <div>
       <h2>☁️ Word Cloud Generator</h2>
-      <p style="font-size:0.82rem;color:var(--muted);font-weight:600">Add words — bigger = more frequent.</p>
+      <p style="font-size:0.82rem;colour:var(--muted);font-weight:600">Add words — bigger = more frequent.</p>
     </div>
 
     <!-- ADD SINGLE WORD -->
@@ -278,7 +278,7 @@
 
     <!-- THEME -->
     <div>
-      <label>Color Theme</label>
+      <label>Colour Theme</label>
       <div class="theme-grid">
         <button class="theme-btn active" onclick="setTheme('vivid')"   id="themeVivid">🌈 Vivid</button>
         <button class="theme-btn"        onclick="setTheme('ocean')"   id="themeOcean">🌊 Ocean</button>
@@ -436,7 +436,7 @@
     const minFont = 14;
 
     const placed = []; // [{x,y,w,h}]
-    const colors = THEMES[currentTheme];
+    const colours = THEMES[currentTheme];
     const fonts = ["'Playfair Display', serif", "'Nunito', sans-serif"];
 
     sorted.forEach(([word, count], idx) => {
@@ -451,7 +451,7 @@
       const tw = metrics.width + 8;
       const th = fontSize + 8;
 
-      const color = colors[idx % colors.length];
+      const colour = colours[idx % colours.length];
       const angle = [0, 0, 0, Math.PI/2][Math.floor(Math.random() * 4)];
 
       // Try to place
@@ -479,13 +479,13 @@
         ctx.translate(x, y);
         if (angle !== 0) ctx.rotate(angle);
         ctx.font = `${weight} ${fontSize}px ${fontFace}`;
-        ctx.fillStyle = color;
-        ctx.textAlign = 'center';
+        ctx.fillStyle = colour;
+        ctx.textAlign = 'centre';
         ctx.textBaseline = 'middle';
 
         // Glow for big words
         if (fontSize > 50) {
-          ctx.shadowColor = color;
+          ctx.shadowColor = colour;
           ctx.shadowBlur = 12;
         }
         ctx.fillText(word, 0, 0);

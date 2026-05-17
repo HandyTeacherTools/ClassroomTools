@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Flashcard Display — Handy Teacher Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=DM+Serif+Display:ital@0;1&family=Fira+Code:wght@500&display=swap" rel="stylesheet"/>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M5DCBRK7DE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-M5DCBRK7DE');
+</script>
+<style>
+  :root {
+    --bg: #f4f1ec;
+    --card: #ffffff;
+    --board: #2c3e50;
+    --accent: #e74c3c;
+    --green: #27ae60;
+    --blue: #2980b9;
+    --purple: #8e44ad;
+    --gold: #f39c12;
+    --text: #1a1a2e;
+    --muted: #7f8c8d;
+    --border: #e0dbd0;
+    --shadow: 0 8px 40px rgba(0,0,0,0.1);
+    --radius: 20px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); colour: var(--text); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+
+  nav { background: var(--board); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+  nav a { colour: rgba(255,255,255,0.6); color: rgba(255,255,255,0.6); text-decoration: none; font-weight: 700; font-size: 14px; }
+  nav a:hover { colour: white; color: white; }
+  nav .tool-title { font-family: 'DM Serif Display', serif; font-size: 1.25rem; colour: white; color: white; }
+
+  /* LAYOUT */
+  .app { flex: 1; display: grid; grid-template-columns: 300px 1fr; height: calc(100vh - 49px); }
+
+  /* SIDEBAR */
+  .sidebar { background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+
+  .sidebar-section { padding: 16px; border-bottom: 1px solid var(--border); }
+  .sidebar-section h3 { font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; colour: var(--muted); color: var(--muted); margin-bottom: 10px; }
+
+  /* SUBJECT TABS */
+  .subject-tabs { display: flex; flex-direction: column; gap: 6px; }
+  .subject-tab {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    background: white;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 800;
+    colour: var(--muted); color: var(--muted);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .subject-tab:hover { border-colour: var(--board); border-color: var(--board); colour: var(--board); color: var(--board); }
+  .subject-tab.active { border-colour: var(--board); border-color: var(--board); background: var(--board); colour: white; color: white; }
+  .subject-tab .count { margin-left: auto; font-size: 0.72rem; opacity: 0.7; }
+
+  /* DECK LIST */
+  .deck-list { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+  .deck-item {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: white;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .deck-item:hover { border-colour: var(--board); border-color: var(--board); }
+  .deck-item.active { border-colour: var(--accent); border-color: var(--accent); background: #fff5f5; }
+  .deck-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .deck-info { flex: 1; min-width: 0; }
+  .deck-name { font-size: 0.85rem; font-weight: 800; colour: var(--text); color: var(--text); }
+  .deck-count { font-size: 0.72rem; font-weight: 700; colour: var(--muted); color: var(--muted); }
+
+  /* SETTINGS */
+  .settings-section { padding: 14px 16px; border-top: 1px solid var(--border); margin-top: auto; display: flex; flex-direction: column; gap: 10px; }
+  .setting-row { display: flex; align-items: center; justify-content: space-between; }
+  .setting-row label { font-size: 0.8rem; font-weight: 700; colour: var(--muted); color: var(--muted); }
+  .toggle { position: relative; width: 38px; height: 21px; cursor: pointer; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-track { position: absolute; inset: 0; background: var(--border); border-radius: 100px; transition: background 0.2s; }
+  .toggle input:checked + .toggle-track { background: var(--green); }
+  .toggle-track::after { content: ''; position: absolute; top: 2px; left: 2px; width: 17px; height: 17px; background: white; border-radius: 50%; transition: left 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
+  .toggle input:checked + .toggle-track::after { left: 19px; }
+
+  /* CUSTOM DECK INPUT */
+  .custom-section { padding: 12px 16px; border-top: 1px solid var(--border); }
+  .custom-section h3 { font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; colour: var(--muted); color: var(--muted); margin-bottom: 8px; }
+  .custom-section p { font-size: 0.75rem; colour: var(--muted); color: var(--muted); font-weight: 600; margin-bottom: 8px; line-height: 1.5; }
+  .custom-section textarea {
+    width: 100%; height: 90px;
+    background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+    colour: var(--text); color: var(--text);
+    font-family: 'Nunito', sans-serif; font-size: 0.8rem; font-weight: 600;
+    padding: 8px 10px; resize: none; outline: none;
+    transition: border-colour 0.2s;
+  }
+  .custom-section textarea:focus { border-colour: var(--accent); border-color: var(--accent); }
+  .load-custom-btn { width: 100%; padding: 9px; border-radius: 8px; border: none; background: var(--accent); colour: white; color: white; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: opacity 0.2s; margin-top: 6px; }
+  .load-custom-btn:hover { opacity: 0.85; }
+
+  /* ── FLASHCARD DISPLAY ── */
+  .display {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    gap: 24px;
+    overflow: hidden;
+  }
+
+  /* Progress */
+  .progress-info { display: flex; align-items: center; gap: 16px; width: 100%; max-width: 640px; }
+  .progress-bar { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.3s ease; }
+  .progress-text { font-size: 0.82rem; font-weight: 800; colour: var(--muted); color: var(--muted); white-space: nowrap; }
+
+  /* THE CARD */
+  .flashcard-wrap {
+    width: 100%;
+    max-width: 640px;
+    perspective: 1000px;
+    cursor: pointer;
+  }
+  .flashcard {
+    position: relative;
+    width: 100%;
+    min-height: 320px;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
+  }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .card-face {
+    position: absolute;
+    inset: 0;
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 2px solid var(--border);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 40px;
+    gap: 12px;
+    overflow: hidden;
+  }
+  .card-face.back { transform: rotateY(180deg); }
+  .card-face::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; border-radius: var(--radius) var(--radius) 0 0; }
+  .card-face.front::before { background: var(--card-colour, var(--accent)); }
+  .card-face.back::before  { background: var(--green); }
+
+  .card-label { font-size: 0.72rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; colour: var(--muted); color: var(--muted); }
+  .card-content {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.6rem, 5vw, 3rem);
+    colour: var(--text); color: var(--text);
+    text-align: center;
+    line-height: 1.3;
+  }
+  .card-content.math {
+    font-family: 'Fira Code', monospace;
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 500;
+  }
+  .card-hint { font-size: 0.85rem; font-weight: 700; colour: var(--muted); color: var(--muted); text-align: center; font-style: italic; }
+  .flip-hint { font-size: 0.75rem; font-weight: 800; colour: var(--muted); color: var(--muted); display: flex; align-items: center; gap: 5px; }
+
+  /* CONTROLS */
+  .card-controls { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; align-items: center; }
+  .card-btn {
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 900;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .card-btn:active { transform: scale(0.95); }
+  .btn-prev { background: var(--bg); colour: var(--text); color: var(--text); border: 2px solid var(--border); }
+  .btn-prev:hover { border-colour: var(--board); border-color: var(--board); }
+  .btn-flip { background: var(--accent); colour: white; color: white; box-shadow: 0 4px 16px rgba(231,76,60,0.25); }
+  .btn-flip:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(231,76,60,0.35); }
+  .btn-next { background: var(--board); colour: white; color: white; box-shadow: 0 4px 16px rgba(44,62,80,0.2); }
+  .btn-next:hover { transform: translateY(-2px); }
+  .btn-shuffle { background: var(--bg); colour: var(--muted); color: var(--muted); border: 2px solid var(--border); font-size: 0.85rem; }
+  .btn-shuffle:hover { border-colour: var(--purple); border-color: var(--purple); colour: var(--purple); color: var(--purple); }
+
+  /* KEYBOARD HINT */
+  .keyboard-hints {
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+    font-size: 0.72rem; font-weight: 700; colour: var(--muted); color: var(--muted);
+  }
+  .key-hint { display: flex; align-items: center; gap: 5px; }
+  .key { background: var(--bg); border: 1px solid var(--border); border-radius: 5px; padding: 2px 7px; font-family: 'Fira Code', monospace; font-size: 0.7rem; }
+
+  /* ANSWER REVEAL */
+  .answer-wrap { text-align: center; }
+  .answer-big {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 7vw, 4.5rem);
+    colour: var(--green); color: var(--green);
+    text-shadow: 0 2px 20px rgba(39,174,96,0.2);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .answer-big.math { font-family: 'Fira Code', monospace; font-size: clamp(2.5rem, 8vw, 5rem); }
+  .answer-note { font-size: 0.88rem; colour: var(--muted); color: var(--muted); font-weight: 600; font-style: italic; }
+
+  footer { text-align: center; padding: 12px; font-size: 12px; colour: var(--muted); color: var(--muted); font-weight: 600; background: var(--card); border-top: 1px solid var(--border); }
+  footer a { colour: var(--muted); color: var(--muted); text-decoration: none; }
+
+  @media (max-width: 700px) {
+    .app { grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: auto; }
+    .sidebar { height: auto; max-height: 40vh; }
+    .display { min-height: 60vh; padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">← All Tools</a>
+  <span class="tool-title">🃏 Flashcard Display</span>
+  <span style="font-size:12px;color:rgba(255,255,255,0.4)">handyteachertools.com</span>
+</nav>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <h3>Subject</h3>
+      <div class="subject-tabs" id="subjectTabs"></div>
+    </div>
+
+    <div class="deck-list" id="deckList"></div>
+
+    <div class="custom-section">
+      <h3>✏️ Custom Deck</h3>
+      <p>One card per line: <strong>Question | Answer</strong></p>
+      <textarea id="customInput" placeholder="What is 7 × 8? | 56&#10;Capital of Canada | Ottawa&#10;Synonym for happy | Joyful"></textarea>
+      <button class="load-custom-btn" onclick="loadCustomDeck()">Load Custom Deck →</button>
+    </div>
+
+    <div class="settings-section">
+      <div class="setting-row">
+        <label>Auto-advance</label>
+        <label class="toggle"><input type="checkbox" id="autoAdvance"/><span class="toggle-track"></span></label>
+      </div>
+      <div class="setting-row">
+        <label>Shuffle deck</label>
+        <label class="toggle"><input type="checkbox" id="autoShuffle"/><span class="toggle-track"></span></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISPLAY -->
+  <div class="display">
+
+    <div class="progress-info">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="progress-text" id="progressText">0 / 0</div>
+    </div>
+
+    <div class="flashcard-wrap" onclick="flipCard()">
+      <div class="flashcard" id="flashcard">
+        <div class="card-face front" id="cardFront" style="--card-colour:#e74c3c">
+          <div class="card-label" id="frontLabel">Question</div>
+          <div class="card-content" id="cardQuestion">Select a deck to begin</div>
+          <div class="card-hint" id="cardHint"></div>
+          <div class="flip-hint">🖱 Click card or press Space to flip</div>
+        </div>
+        <div class="card-face back" id="cardBack">
+          <div class="card-label">Answer</div>
+          <div class="answer-wrap">
+            <span class="answer-big" id="cardAnswer">—</span>
+            <div class="answer-note" id="cardNote"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-controls">
+      <button class="card-btn btn-prev"    onclick="prevCard()">← Prev</button>
+      <button class="card-btn btn-flip"    onclick="flipCard()">↻ Flip</button>
+      <button class="card-btn btn-next"    onclick="nextCard()">Next →</button>
+      <button class="card-btn btn-shuffle" onclick="shuffleDeck()">🔀 Shuffle</button>
+    </div>
+
+    <div class="keyboard-hints">
+      <span class="key-hint"><span class="key">Space</span> Flip</span>
+      <span class="key-hint"><span class="key">→</span> Next</span>
+      <span class="key-hint"><span class="key">←</span> Prev</span>
+      <span class="key-hint"><span class="key">S</span> Shuffle</span>
+    </div>
+
+  </div>
+</div>
+
+<footer><a href="index.html">← Back to all tools</a> · handyteachertools.com</footer>
+
+<script>
+const SUBJECTS = {
+  math: { label: '🔢 Mathematics', colour: '#e74c3c' },
+  language: { label: '📖 Language Arts', colour: '#2980b9' },
+  science: { label: '🔬 Science', colour: '#27ae60' },
+  custom: { label: '✏️ Custom', colour: '#8e44ad' },
+};
+
+const DECKS = {
+  // MATH
+  'times-tables-low': {
+    subject: 'math', name: 'Times Tables (1–5)', colour: '#e74c3c',
+    cards: [
+      ...Array.from({length:50}, (_,i) => { const a=Math.floor(i/10)+1, b=(i%10)+1; return { q:`${a} × ${b}`, a:`${a*b}`, type:'math' }; })
+    ].filter(c=>c)
+  },
+  'times-tables-high': {
+    subject: 'math', name: 'Times Tables (6–12)', colour: '#e74c3c',
+    cards: (() => {
+      const cards = [];
+      for (let a=6;a<=12;a++) for (let b=1;b<=12;b++) cards.push({q:`${a} × ${b}`, a:`${a*b}`, type:'math'});
+      return cards;
+    })()
+  },
+  'fractions': {
+    subject: 'math', name: 'Fraction Basics', colour: '#e74c3c',
+    cards: [
+      {q:'What is ½ as a decimal?', a:'0.5', note:'One half = 0.5', type:'math'},
+      {q:'What is ¼ as a decimal?', a:'0.25', note:'One quarter = 0.25', type:'math'},
+      {q:'What is ¾ as a decimal?', a:'0.75', note:'Three quarters = 0.75', type:'math'},
+      {q:'What is ⅓ as a decimal?', a:'0.333…', note:'Repeating decimal', type:'math'},
+      {q:'½ + ½ = ?', a:'1', type:'math'},
+      {q:'¼ + ¾ = ?', a:'1', type:'math'},
+      {q:'½ + ¼ = ?', a:'¾', type:'math'},
+      {q:'What is ⅕ as a decimal?', a:'0.2', type:'math'},
+      {q:'How many halves in a whole?', a:'2', type:'math'},
+      {q:'How many quarters in a whole?', a:'4', type:'math'},
+      {q:'How many thirds in a whole?', a:'3', type:'math'},
+      {q:'½ of 20 = ?', a:'10', type:'math'},
+      {q:'¼ of 40 = ?', a:'10', type:'math'},
+      {q:'¾ of 100 = ?', a:'75', type:'math'},
+    ]
+  },
+  'place-value': {
+    subject: 'math', name: 'Place Value', colour: '#f39c12',
+    cards: [
+      {q:'What place is the 4 in: 247?', a:'Tens', note:'The middle digit', type:'math'},
+      {q:'What is the value of 6 in 613?', a:'600', note:'6 hundreds', type:'math'},
+      {q:'How many tens in 350?', a:'35', type:'math'},
+      {q:'What digit is in the hundreds place: 7,842?', a:'8', type:'math'},
+      {q:'Write 400 + 30 + 7 as one number', a:'437', type:'math'},
+      {q:'What is 10 more than 345?', a:'355', type:'math'},
+      {q:'What is 100 less than 620?', a:'520', type:'math'},
+      {q:'Round 67 to the nearest ten', a:'70', type:'math'},
+      {q:'Round 243 to the nearest hundred', a:'200', type:'math'},
+      {q:'What is the value of 5 in 5,290?', a:'5,000', note:'5 thousands', type:'math'},
+    ]
+  },
+
+  // LANGUAGE
+  'sight-words-k': {
+    subject: 'language', name: 'Sight Words — Primary', colour: '#2980b9',
+    cards: [
+      {q:'Spell: the most common word in English', a:'the', type:'lang'},
+      {q:'What word means "to exist"?', a:'be', type:'lang'},
+      {q:'Opposite of "she"', a:'he', type:'lang'},
+      ...['and','of','to','in','is','it','you','that','for','on','are','as','at','his','they','I','was','not','but','this','had','by','from','or','an','which','we','there','can','have','do','if','her','has','would','all','my','one','their','what','said','so','about','up','out','them','were','more','into','then'].map(w => ({q:`Spell this word (say it out loud):\n"${w}"`, a:w, type:'lang'}))
+    ]
+  },
+  'parts-of-speech': {
+    subject: 'language', name: 'Parts of Speech', colour: '#2980b9',
+    cards: [
+      {q:'What is a NOUN?', a:'A person, place, thing, or idea', note:'e.g. dog, Canada, happiness', type:'lang'},
+      {q:'What is a VERB?', a:'An action or state of being', note:'e.g. run, think, is', type:'lang'},
+      {q:'What is an ADJECTIVE?', a:'A word that describes a noun', note:'e.g. big, red, happy', type:'lang'},
+      {q:'What is an ADVERB?', a:'A word that describes a verb, adjective, or other adverb', note:'e.g. quickly, very, loudly', type:'lang'},
+      {q:'What is a PRONOUN?', a:'A word that replaces a noun', note:'e.g. he, she, they, it', type:'lang'},
+      {q:'What is a CONJUNCTION?', a:'A word that joins clauses or words', note:'e.g. and, but, or, because', type:'lang'},
+      {q:'What is a PREPOSITION?', a:'A word showing relationship between a noun and other words', note:'e.g. in, on, at, by, for', type:'lang'},
+      {q:'What is an ARTICLE?', a:'A word used before a noun', note:'e.g. a, an, the', type:'lang'},
+      {q:'Is "quickly" a noun, verb, or adverb?', a:'Adverb', note:'It describes how something is done', type:'lang'},
+      {q:'Is "beautiful" a noun, verb, or adjective?', a:'Adjective', note:'It describes a noun', type:'lang'},
+      {q:'Give an example of a proper noun', a:'Names of specific people, places, or things', note:'e.g. Canada, Mrs. Smith, Amazon River', type:'lang'},
+      {q:'What tense is: "She will run"?', a:'Future tense', type:'lang'},
+      {q:'What tense is: "He ran"?', a:'Past tense', type:'lang'},
+      {q:'What tense is: "They are playing"?', a:'Present continuous tense', type:'lang'},
+    ]
+  },
+  'vocabulary-synonyms': {
+    subject: 'language', name: 'Vocabulary: Synonyms', colour: '#8e44ad',
+    cards: [
+      {q:'Synonym for HAPPY', a:'Joyful, Cheerful, Elated, Delighted', type:'lang'},
+      {q:'Synonym for SAD', a:'Unhappy, Sorrowful, Gloomy, Downcast', type:'lang'},
+      {q:'Synonym for BIG', a:'Large, Enormous, Vast, Huge, Giant', type:'lang'},
+      {q:'Synonym for SMALL', a:'Tiny, Miniature, Little, Petite', type:'lang'},
+      {q:'Synonym for FAST', a:'Quick, Swift, Rapid, Speedy', type:'lang'},
+      {q:'Synonym for SLOW', a:'Sluggish, Gradual, Unhurried, Leisurely', type:'lang'},
+      {q:'Synonym for SMART', a:'Intelligent, Clever, Brilliant, Wise', type:'lang'},
+      {q:'Synonym for BRAVE', a:'Courageous, Bold, Fearless, Valiant', type:'lang'},
+      {q:'Synonym for BEAUTIFUL', a:'Gorgeous, Stunning, Lovely, Attractive', type:'lang'},
+      {q:'Synonym for ANGRY', a:'Furious, Irate, Livid, Enraged', type:'lang'},
+      {q:'Synonym for WALK', a:'Stroll, March, Stride, Wander, Trek', type:'lang'},
+      {q:'Synonym for SAY', a:'Exclaim, Declare, Utter, State, Announce', type:'lang'},
+    ]
+  },
+
+  // SCIENCE
+  'solar-system': {
+    subject: 'science', name: 'Solar System', colour: '#27ae60',
+    cards: [
+      {q:'Which planet is closest to the Sun?', a:'Mercury', type:'sci'},
+      {q:'Which planet is largest?', a:'Jupiter', type:'sci'},
+      {q:'How many planets are in our solar system?', a:'8', note:'Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune', type:'sci'},
+      {q:'Which planet has rings?', a:'Saturn (also Uranus, Jupiter, Neptune — but Saturn\'s are most visible)', type:'sci'},
+      {q:'How long does Earth take to orbit the Sun?', a:'365.25 days (one year)', type:'sci'},
+      {q:'What is the Sun made of?', a:'Mostly hydrogen and helium', type:'sci'},
+      {q:'Which planet is called the Red Planet?', a:'Mars', type:'sci'},
+      {q:'How many moons does Earth have?', a:'1 (the Moon)', type:'sci'},
+      {q:'What is the largest moon in our solar system?', a:'Ganymede (moon of Jupiter)', type:'sci'},
+      {q:'What is a light year?', a:'The distance light travels in one year — about 9.46 trillion kilometres', type:'sci'},
+      {q:'Which planet rotates on its side?', a:'Uranus', type:'sci'},
+      {q:'What is the hottest planet?', a:'Venus (even though Mercury is closer to the Sun)', type:'sci'},
+    ]
+  },
+};
+
+let currentDeck = null;
+let currentCards = [];
+let currentIndex = 0;
+let isFlipped = false;
+let currentSubject = 'math';
+
+function init() {
+  renderSubjectTabs();
+  renderDeckList();
+  // Load first deck
+  const firstDeck = Object.keys(DECKS).find(k => DECKS[k].subject === 'math');
+  if (firstDeck) loadDeck(firstDeck);
+}
+
+function renderSubjectTabs() {
+  const wrap = document.getElementById('subjectTabs');
+  wrap.innerHTML = '';
+  Object.entries(SUBJECTS).filter(([k]) => k !== 'custom').forEach(([key, s]) => {
+    const count = Object.values(DECKS).filter(d => d.subject === key).length;
+    const btn = document.createElement('button');
+    btn.className = 'subject-tab' + (key === currentSubject ? ' active' : '');
+    btn.innerHTML = `${s.label} <span class="count">${count}</span>`;
+    btn.onclick = () => { currentSubject = key; renderSubjectTabs(); renderDeckList(); };
+    wrap.appendChild(btn);
+  });
+}
+
+function renderDeckList() {
+  const list = document.getElementById('deckList');
+  list.innerHTML = '';
+  const filtered = Object.entries(DECKS).filter(([,d]) => d.subject === currentSubject);
+  if (filtered.length === 0) {
+    list.innerHTML = '<p style="text-align:center;color:var(--muted);font-size:0.82rem;font-weight:700;padding:20px">No decks for this subject yet.</p>';
+    return;
+  }
+  filtered.forEach(([key, deck]) => {
+    const el = document.createElement('div');
+    el.className = 'deck-item' + (currentDeck === key ? ' active' : '');
+    el.innerHTML = `
+      <span class="deck-dot" style="background:${deck.colour}"></span>
+      <div class="deck-info">
+        <div class="deck-name">${deck.name}</div>
+        <div class="deck-count">${deck.cards.length} cards</div>
+      </div>
+    `;
+    el.onclick = () => loadDeck(key);
+    list.appendChild(el);
+  });
+}
+
+function loadDeck(key) {
+  currentDeck = key;
+  currentCards = [...DECKS[key].cards];
+  if (document.getElementById('autoShuffle').checked) shuffle(currentCards);
+  currentIndex = 0;
+  isFlipped = false;
+  renderDeckList();
+  renderCard();
+}
+
+function loadCustomDeck() {
+  const raw = document.getElementById('customInput').value;
+  const lines = raw.split('\n').map(l => l.trim()).filter(l => l && l.includes('|'));
+  if (lines.length === 0) { alert('Please enter cards in the format: Question | Answer'); return; }
+  const cards = lines.map(l => {
+    const [q, ...rest] = l.split('|');
+    return { q: q.trim(), a: rest.join('|').trim(), type: 'custom' };
+  });
+  DECKS['custom-user'] = { subject: 'custom', name: 'My Custom Deck', colour: '#8e44ad', cards };
+  currentSubject = 'custom';
+  renderSubjectTabs();
+  loadDeck('custom-user');
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
+function shuffleDeck() {
+  if (!currentCards.length) return;
+  shuffle(currentCards);
+  currentIndex = 0;
+  isFlipped = false;
+  renderCard();
+}
+
+function renderCard() {
+  if (!currentCards.length) return;
+  const card = currentCards[currentIndex];
+  const deck = DECKS[currentDeck] || { colour: '#e74c3c' };
+  const isMath = card.type === 'math';
+
+  // Front
+  document.getElementById('cardFront').style.setProperty('--card-colour', deck.colour);
+  document.getElementById('cardQuestion').textContent = card.q;
+  document.getElementById('cardQuestion').className = 'card-content' + (isMath ? ' math' : '');
+  document.getElementById('cardHint').textContent = card.hint || '';
+  document.getElementById('frontLabel').textContent = card.frontLabel || 'Question';
+
+  // Back
+  document.getElementById('cardAnswer').textContent = card.a;
+  document.getElementById('cardAnswer').className = 'answer-big' + (isMath ? ' math' : '');
+  document.getElementById('cardNote').textContent = card.note || '';
+
+  // Progress
+  const pct = currentCards.length > 0 ? ((currentIndex + 1) / currentCards.length) * 100 : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `${currentIndex + 1} / ${currentCards.length}`;
+
+  // Reset flip
+  isFlipped = false;
+  document.getElementById('flashcard').classList.remove('flipped');
+}
+
+function flipCard() {
+  isFlipped = !isFlipped;
+  document.getElementById('flashcard').classList.toggle('flipped', isFlipped);
+
+  // Auto-advance after seeing answer
+  if (isFlipped && document.getElementById('autoAdvance').checked) {
+    setTimeout(() => nextCard(), 2500);
+  }
+}
+
+function nextCard() {
+  if (!currentCards.length) return;
+  currentIndex = (currentIndex + 1) % currentCards.length;
+  isFlipped = false;
+  document.getElementById('flashcard').classList.remove('flipped');
+  setTimeout(() => renderCard(), 50);
+}
+
+function prevCard() {
+  if (!currentCards.length) return;
+  currentIndex = (currentIndex - 1 + currentCards.length) % currentCards.length;
+  isFlipped = false;
+  document.getElementById('flashcard').classList.remove('flipped');
+  setTimeout(() => renderCard(), 50);
+}
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+  if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flipCard(); }
+  if (e.key === 'ArrowRight') nextCard();
+  if (e.key === 'ArrowLeft') prevCard();
+  if (e.key === 's' || e.key === 'S') shuffleDeck();
+});
+
+init();
+</script>
+</body>
+</html>

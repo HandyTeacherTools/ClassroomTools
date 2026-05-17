@@ -19,28 +19,28 @@
     --radius: 16px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; }
+  body { background: var(--bg); colour: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; }
 
   nav {
     background: var(--board);
     padding: 12px 24px;
     display: flex;
-    align-items: center;
+    align-items: centre;
     justify-content: space-between;
   }
-  nav a { color: rgba(255,255,255,0.7); text-decoration: none; font-weight: 700; font-size: 14px; transition: color 0.2s; }
-  nav a:hover { color: white; }
-  nav .tool-title { font-family: 'Righteous', sans-serif; font-size: 1.3rem; letter-spacing: 1px; color: white; }
+  nav a { colour: rgba(255,255,255,0.7); text-decoration: none; font-weight: 700; font-size: 14px; transition: colour 0.2s; }
+  nav a:hover { colour: white; }
+  nav .tool-title { font-family: 'Righteous', sans-serif; font-size: 1.3rem; letter-spacing: 1px; colour: white; }
 
   main { max-width: 1100px; margin: 0 auto; padding: 32px 20px 60px; }
 
   h1 {
     font-family: 'Righteous', sans-serif;
     font-size: clamp(1.8rem, 4vw, 2.6rem);
-    color: var(--board);
+    colour: var(--board);
     margin-bottom: 6px;
   }
-  .subtitle { color: var(--muted); font-size: 1rem; font-weight: 600; margin-bottom: 32px; }
+  .subtitle { colour: var(--muted); font-size: 1rem; font-weight: 600; margin-bottom: 32px; }
 
   /* LAYOUT */
   .app-layout {
@@ -61,7 +61,7 @@
     flex-direction: column;
     gap: 20px;
   }
-  .sidebar h2 { font-size: 1rem; font-weight: 800; color: var(--board); margin-bottom: 4px; }
+  .sidebar h2 { font-size: 1rem; font-weight: 800; colour: var(--board); margin-bottom: 4px; }
 
   textarea {
     width: 100%;
@@ -72,19 +72,19 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.9rem;
     resize: vertical;
-    color: var(--text);
+    colour: var(--text);
     background: var(--bg);
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-colour 0.2s;
   }
-  textarea:focus { border-color: var(--accent); }
+  textarea:focus { border-colour: var(--accent); }
 
   .setting-row {
     display: flex;
     flex-direction: column;
     gap: 8px;
   }
-  .setting-row label { font-size: 0.85rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .setting-row label { font-size: 0.85rem; font-weight: 700; colour: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
 
   .mode-toggle {
     display: grid;
@@ -99,16 +99,16 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.85rem;
     font-weight: 800;
-    color: var(--muted);
+    colour: var(--muted);
     cursor: pointer;
-    text-align: center;
+    text-align: centre;
     transition: all 0.2s;
   }
-  .mode-btn.active { border-color: var(--accent); background: #fff3ef; color: var(--accent); }
+  .mode-btn.active { border-colour: var(--accent); background: #fff3ef; colour: var(--accent); }
 
   .number-input {
     display: flex;
-    align-items: center;
+    align-items: centre;
     gap: 0;
     border: 2px solid var(--border);
     border-radius: 10px;
@@ -121,11 +121,11 @@
     font-size: 1.2rem;
     cursor: pointer;
     font-weight: 800;
-    color: var(--board);
+    colour: var(--board);
     transition: background 0.2s;
   }
   .number-input button:hover { background: #ece8e0; }
-  .number-input span { flex: 1; text-align: center; font-weight: 900; font-size: 1.1rem; color: var(--board); }
+  .number-input span { flex: 1; text-align: centre; font-weight: 900; font-size: 1.1rem; colour: var(--board); }
 
   .options-row {
     display: flex;
@@ -134,7 +134,7 @@
   }
   .checkbox-row {
     display: flex;
-    align-items: center;
+    align-items: centre;
     gap: 10px;
     cursor: pointer;
     padding: 8px 10px;
@@ -142,14 +142,14 @@
     transition: background 0.15s;
   }
   .checkbox-row:hover { background: #f0ede8; }
-  .checkbox-row input { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
-  .checkbox-row span { font-size: 0.88rem; font-weight: 700; color: var(--text); }
+  .checkbox-row input { width: 18px; height: 18px; accent-colour: var(--accent); cursor: pointer; }
+  .checkbox-row span { font-size: 0.88rem; font-weight: 700; colour: var(--text); }
 
   .btn-make {
     width: 100%;
     padding: 16px;
     background: var(--accent);
-    color: white;
+    colour: white;
     border: none;
     border-radius: 12px;
     font-family: 'Nunito', sans-serif;
@@ -159,21 +159,21 @@
     transition: all 0.2s;
     box-shadow: 0 4px 16px rgba(255,107,53,0.3);
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: centre;
+    justify-content: centre;
     gap: 8px;
   }
   .btn-make:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,107,53,0.4); }
   .btn-make:active { transform: translateY(0); }
 
-  .student-count { font-size: 0.82rem; color: var(--muted); font-weight: 700; text-align: right; margin-top: -12px; }
+  .student-count { font-size: 0.82rem; colour: var(--muted); font-weight: 700; text-align: right; margin-top: -12px; }
 
   /* RESULTS */
   .results-area { min-height: 300px; }
-  .results-area h2 { font-size: 1rem; font-weight: 800; color: var(--board); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .results-area h2 { font-size: 1rem; font-weight: 800; colour: var(--board); margin-bottom: 16px; display: flex; align-items: centre; gap: 10px; }
   .results-area h2 .count-badge {
     background: var(--board);
-    color: white;
+    colour: white;
     border-radius: 100px;
     padding: 2px 12px;
     font-size: 0.8rem;
@@ -184,8 +184,8 @@
     border: 2px dashed var(--border);
     border-radius: var(--radius);
     padding: 60px 20px;
-    text-align: center;
-    color: var(--muted);
+    text-align: centre;
+    colour: var(--muted);
   }
   .empty-state .empty-icon { font-size: 3rem; margin-bottom: 12px; }
   .empty-state p { font-size: 0.95rem; font-weight: 700; }
@@ -213,9 +213,9 @@
     padding: 12px 16px;
     font-family: 'Righteous', sans-serif;
     font-size: 1.05rem;
-    color: white;
+    colour: white;
     display: flex;
-    align-items: center;
+    align-items: centre;
     justify-content: space-between;
   }
   .group-header .group-size {
@@ -234,25 +234,25 @@
     padding: 7px 12px;
     font-size: 0.88rem;
     font-weight: 700;
-    color: var(--text);
+    colour: var(--text);
     display: flex;
-    align-items: center;
+    align-items: centre;
     gap: 8px;
     cursor: grab;
     transition: all 0.15s;
     user-select: none;
   }
-  .member-chip:hover { border-color: var(--accent2); transform: translateX(2px); }
+  .member-chip:hover { border-colour: var(--accent2); transform: translateX(2px); }
   .member-chip.dragging { opacity: 0.4; }
   .member-avatar {
     width: 26px; height: 26px;
     border-radius: 50%;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: centre;
+    justify-content: centre;
     font-size: 0.75rem;
     font-weight: 900;
-    color: white;
+    colour: white;
     flex-shrink: 0;
   }
 
@@ -271,14 +271,14 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.88rem;
     font-weight: 800;
-    color: var(--text);
+    colour: var(--text);
     cursor: pointer;
     transition: all 0.2s;
     display: flex;
-    align-items: center;
+    align-items: centre;
     gap: 6px;
   }
-  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); background: #fff3ef; }
+  .btn-secondary:hover { border-colour: var(--accent); colour: var(--accent); background: #fff3ef; }
 
   /* Print */
   @media print {
@@ -291,14 +291,14 @@
     .app-layout { grid-template-columns: 1fr; }
   }
 
-  footer { text-align: center; padding: 20px; font-size: 12px; color: var(--muted); font-weight: 600; }
-  footer a { color: var(--muted); text-decoration: none; }
+  footer { text-align: centre; padding: 20px; font-size: 12px; colour: var(--muted); font-weight: 600; }
+  footer a { colour: var(--muted); text-decoration: none; }
 
-  /* Group colors */
+  /* Group colours */
   .gc0  { background: #ff6b35; }
   .gc1  { background: #4ecdc4; }
   .gc2  { background: #9b5de5; }
-  .gc3  { background: #f9c74f; color: #1a2e25 !important; }
+  .gc3  { background: #f9c74f; colour: #1a2e25 !important; }
   .gc4  { background: #43aa8b; }
   .gc5  { background: #f72585; }
   .gc6  { background: #4361ee; }
@@ -322,7 +322,7 @@
 <nav>
   <a href="index.html">← All Tools</a>
   <span class="tool-title">👥 Group Maker</span>
-  <span style="font-size:12px;color:rgba(255,255,255,0.5)">handyteachertools.com</span>
+  <span style="font-size:12px;colour:rgba(255,255,255,0.5)">handyteachertools.com</span>
 </nav>
 
 <main>
@@ -335,7 +335,7 @@
     <div class="sidebar">
       <div>
         <h2>📋 Class List</h2>
-        <p style="font-size:0.8rem;color:var(--muted);margin-bottom:8px;font-weight:600">One student per line</p>
+        <p style="font-size:0.8rem;colour:var(--muted);margin-bottom:8px;font-weight:600">One student per line</p>
         <textarea id="classList" placeholder="Alice Johnson&#10;Bob Smith&#10;Carlos Rivera&#10;Diana Lee&#10;Ethan Brown&#10;Fiona Davis&#10;George Wilson&#10;Hannah Martinez&#10;Isaac Taylor&#10;Julia Anderson&#10;Kevin Thomas&#10;Laura Jackson"></textarea>
         <div class="student-count" id="studentCount">12 students</div>
       </div>
@@ -358,7 +358,7 @@
       </div>
 
       <div class="options-row">
-        <label style="font-size:0.85rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px">Options</label>
+        <label style="font-size:0.85rem;font-weight:700;colour:var(--muted);text-transform:uppercase;letter-spacing:0.5px">Options</label>
         <label class="checkbox-row">
           <input type="checkbox" id="showNames" checked/>
           <span>Show group names (Group 1, 2…)</span>
@@ -473,8 +473,8 @@
 
     // Badge
     const header = document.createElement('div');
-    header.innerHTML = `<h2 style="font-size:1rem;font-weight:800;color:var(--board);margin-bottom:16px;display:flex;align-items:center;gap:10px">
-      Groups <span style="background:var(--board);color:white;border-radius:100px;padding:2px 12px;font-size:0.8rem">${groups.length}</span>
+    header.innerHTML = `<h2 style="font-size:1rem;font-weight:800;colour:var(--board);margin-bottom:16px;display:flex;align-items:centre;gap:10px">
+      Groups <span style="background:var(--board);colour:white;border-radius:100px;padding:2px 12px;font-size:0.8rem">${groups.length}</span>
     </h2>`;
     container.appendChild(header);
 
