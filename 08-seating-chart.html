@@ -568,5 +568,44 @@ Nina Patel</textarea>
   randomFill();
 </script>
 <footer style="text-align:center;padding:12px;font-size:12px;color:var(--muted);font-weight:600;background:var(--card);border-top:1px solid var(--border)"><a href="index.html" style="color:var(--muted);text-decoration:none">← Back to all tools</a> · handyteachertools.com</footer>
+
+<!-- HOW TO USE -->
+<div style="max-width:860px;margin:0 auto;padding:32px 20px 48px">
+  <div style="background:#ffffff;border-radius:16px;border:1px solid #e5e0d8;box-shadow:0 4px 20px rgba(0,0,0,0.06);overflow:hidden">
+    <div style="background:#2d4a3e;padding:16px 24px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:1.2rem">📖</span>
+      <h2 style="font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;color:white;margin:0">How to Use the Seating Chart Builder</h2>
+    </div>
+    <div style="padding:20px 24px">
+      <p style="font-family:'Nunito',sans-serif;font-size:0.92rem;font-weight:600;color:#3a4a42;line-height:1.85">The Seating Chart Builder lets you create and display a visual classroom layout with student names assigned to desks. Start by pasting your class list into the text area on the left — one student per line — then click <strong>Load Students</strong>. Choose a layout from the preset buttons: <strong>4×4 Grid</strong>, <strong>5×5 Grid</strong>, <strong>6×4</strong>, <strong>U-Shape</strong>, or <strong>3 Rows</strong>. Click <strong>Auto Fill</strong> to randomly assign students to desks, or drag names from the unassigned pool on the left onto individual desks manually. Swap students between desks by dragging one name onto another — they will switch places automatically. Drag a student back to the unassigned pool to remove them from a desk. Click <strong>Print</strong> to send the seating chart directly to your printer for a physical copy, or leave it on the projector so students can find their seats at the start of class.</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- COOKIE CONSENT BANNER -->
+<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a2e25;color:#f0f0e8;padding:16px 24px;z-index:9999;font-family:'Nunito',sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,0.2);border-top:3px solid #4caf50;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+    <div style="flex:1;min-width:240px">
+      <p style="font-size:0.88rem;font-weight:700;line-height:1.6;color:rgba(255,255,255,0.85)">
+        🍪 We use advertising cookies (via Google AdSense) to keep this site free for teachers.
+        Our tools themselves collect no data. See our
+        <a href="cookies.html" style="color:#ffc107;font-weight:800;text-decoration:none">Cookie Policy</a>
+        and
+        <a href="privacy.html" style="color:#ffc107;font-weight:800;text-decoration:none">Privacy Policy</a>.
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap">
+      <button onclick="acceptCookies()" style="padding:10px 22px;background:#4caf50;color:white;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;cursor:pointer;">✅ Accept All</button>
+      <button onclick="declineCookies()" style="padding:10px 22px;background:transparent;color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.3);border-radius:8px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;cursor:pointer;">Decline</button>
+      <a href="cookies.html" style="padding:10px 16px;color:rgba(255,255,255,0.5);font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:700;text-decoration:none;display:flex;align-items:center;">More info</a>
+    </div>
+  </div>
+</div>
+<script>
+(function(){var c=localStorage.getItem('htt_cookie_consent');if(!c){document.getElementById('cookieBanner').style.display='block';}})();
+function acceptCookies(){localStorage.setItem('htt_cookie_consent','accepted');document.getElementById('cookieBanner').style.display='none';}
+function declineCookies(){localStorage.setItem('htt_cookie_consent','declined');document.getElementById('cookieBanner').style.display='none';}
+</script>
 </body>
 </html>

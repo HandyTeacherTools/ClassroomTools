@@ -777,5 +777,44 @@ function beepDone() {
 // Load default preset
 loadPreset('standard');
 </script>
+
+<!-- HOW TO USE -->
+<div style="max-width:860px;margin:0 auto;padding:32px 20px 48px">
+  <div style="background:#ffffff;border-radius:16px;border:1px solid #e5e0d8;box-shadow:0 4px 20px rgba(0,0,0,0.06);overflow:hidden">
+    <div style="background:#2d4a3e;padding:16px 24px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:1.2rem">📖</span>
+      <h2 style="font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;color:white;margin:0">How to Use the Lesson Timer Pro</h2>
+    </div>
+    <div style="padding:20px 24px">
+      <p style="font-family:'Nunito',sans-serif;font-size:0.92rem;font-weight:600;color:#3a4a42;line-height:1.85">Lesson Timer Pro lets you plan your entire lesson as a sequence of timed segments, then run through them automatically on the projector. Start by loading a template — choose from <strong>Standard 60min</strong>, <strong>Double Period</strong>, <strong>Short 30min</strong>, or <strong>Exam Class</strong> — or build your own by typing a segment name, setting its duration in minutes, and clicking <strong>Add</strong>. Segments appear in the sidebar where you can edit their names and times. Click <strong>Start</strong> on the main display to begin. The large countdown shows the time remaining in the current segment, and a progress rail across the top shows how far through the lesson you are. When a segment ends, a sound plays and a full-screen transition card shows the name of the next segment — click anywhere to continue. Use <strong>Skip</strong> to jump ahead if a segment runs short, and <strong>Reset</strong> to start the lesson again from the beginning. Keyboard shortcut: press <strong>Space</strong> to start and pause.</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- COOKIE CONSENT BANNER -->
+<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a2e25;color:#f0f0e8;padding:16px 24px;z-index:9999;font-family:'Nunito',sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,0.2);border-top:3px solid #4caf50;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+    <div style="flex:1;min-width:240px">
+      <p style="font-size:0.88rem;font-weight:700;line-height:1.6;color:rgba(255,255,255,0.85)">
+        🍪 We use advertising cookies (via Google AdSense) to keep this site free for teachers.
+        Our tools themselves collect no data. See our
+        <a href="cookies.html" style="color:#ffc107;font-weight:800;text-decoration:none">Cookie Policy</a>
+        and
+        <a href="privacy.html" style="color:#ffc107;font-weight:800;text-decoration:none">Privacy Policy</a>.
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap">
+      <button onclick="acceptCookies()" style="padding:10px 22px;background:#4caf50;color:white;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;cursor:pointer;">✅ Accept All</button>
+      <button onclick="declineCookies()" style="padding:10px 22px;background:transparent;color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.3);border-radius:8px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;cursor:pointer;">Decline</button>
+      <a href="cookies.html" style="padding:10px 16px;color:rgba(255,255,255,0.5);font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:700;text-decoration:none;display:flex;align-items:center;">More info</a>
+    </div>
+  </div>
+</div>
+<script>
+(function(){var c=localStorage.getItem('htt_cookie_consent');if(!c){document.getElementById('cookieBanner').style.display='block';}})();
+function acceptCookies(){localStorage.setItem('htt_cookie_consent','accepted');document.getElementById('cookieBanner').style.display='none';}
+function declineCookies(){localStorage.setItem('htt_cookie_consent','declined');document.getElementById('cookieBanner').style.display='none';}
+</script>
 </body>
 </html>

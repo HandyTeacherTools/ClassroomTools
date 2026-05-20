@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dice Roller — Handy Teacher Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M5DCBRK7DE"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-M5DCBRK7DE');</script>
+<style>
+  :root{--bg:#faf5ff;--card:#fff;--board:#3b1f6e;--accent:#7c3aed;--gold:#f59e0b;--green:#10b981;--red:#ef4444;--text:#1e1135;--muted:#7c6fa0;--border:#e5d9f9;--shadow:0 8px 32px rgba(124,58,237,0.1);--radius:20px;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-height:100vh;display:flex;flex-direction:column;}
+  nav{background:var(--board);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;}
+  nav a{color:rgba(255,255,255,0.6);text-decoration:none;font-weight:700;font-size:14px;}
+  nav a:hover{color:white;}
+  nav .tool-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;color:#c4b5fd;}
+  main{flex:1;max-width:900px;margin:0 auto;padding:36px 20px 60px;width:100%;display:flex;flex-direction:column;align-items:center;gap:28px;}
+
+  /* MODE TABS */
+  .mode-tabs{display:flex;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);}
+  .mode-tab{flex:1;padding:13px 20px;border:none;background:transparent;font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:800;color:var(--muted);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:7px;}
+  .mode-tab.active{background:var(--board);color:white;}
+
+  /* DICE SECTION */
+  .dice-panel{width:100%;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border);padding:28px;display:flex;flex-direction:column;align-items:center;gap:24px;}
+
+  /* CONTROLS */
+  .controls-row{display:flex;gap:16px;align-items:center;flex-wrap:wrap;justify-content:center;}
+  .ctrl-group{display:flex;flex-direction:column;align-items:center;gap:6px;}
+  .ctrl-label{font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);}
+  .num-ctrl{display:flex;align-items:center;gap:0;border:2px solid var(--border);border-radius:10px;overflow:hidden;background:white;}
+  .num-ctrl button{width:36px;height:36px;border:none;background:transparent;font-size:1.1rem;font-weight:900;color:var(--board);cursor:pointer;transition:background 0.15s;}
+  .num-ctrl button:hover{background:#f3eeff;}
+  .num-ctrl span{min-width:36px;text-align:center;font-weight:900;font-size:1.05rem;color:var(--board);}
+
+  /* DICE TYPE SELECTOR */
+  .dice-types{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+  .dice-type-btn{padding:8px 16px;border-radius:100px;border:2px solid var(--border);background:white;font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:800;color:var(--muted);cursor:pointer;transition:all 0.15s;}
+  .dice-type-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .dice-type-btn.active{background:var(--accent);border-color:var(--accent);color:white;}
+
+  /* DICE DISPLAY */
+  .dice-display{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;min-height:100px;align-items:center;}
+  .die{width:90px;height:90px;background:var(--board);border-radius:16px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:1px;color:white;box-shadow:0 6px 20px rgba(59,31,110,0.3),inset 0 1px 0 rgba(255,255,255,0.1);transition:all 0.2s;position:relative;overflow:hidden;}
+  .die.rolling{animation:dieRoll 0.6s ease;}
+  @keyframes dieRoll{0%{transform:rotate(-15deg) scale(0.85);opacity:0.5;}30%{transform:rotate(10deg) scale(1.1);}60%{transform:rotate(-5deg) scale(0.95);}100%{transform:rotate(0) scale(1);opacity:1;}}
+  .die::after{content:'';position:absolute;top:0;left:0;right:0;height:40%;background:linear-gradient(to bottom,rgba(255,255,255,0.12),transparent);border-radius:16px 16px 0 0;}
+
+  /* TOTAL */
+  .total-display{text-align:center;}
+  .total-label{font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:var(--muted);}
+  .total-num{font-family:'Bebas Neue',sans-serif;font-size:3.5rem;letter-spacing:3px;color:var(--accent);line-height:1;}
+
+  /* ROLL BUTTON */
+  .roll-btn{padding:18px 56px;background:linear-gradient(135deg,var(--accent),#6d28d9);color:white;border:none;border-radius:100px;font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 20px rgba(124,58,237,0.35);}
+  .roll-btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 8px 32px rgba(124,58,237,0.5);}
+  .roll-btn:active{transform:scale(0.96);}
+  .roll-btn:disabled{opacity:0.5;pointer-events:none;}
+
+  /* HISTORY */
+  .history-row{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;max-width:600px;}
+  .hist-chip{padding:4px 12px;border-radius:100px;background:rgba(124,58,237,0.08);border:1px solid var(--border);font-size:0.78rem;font-weight:800;color:var(--muted);}
+  .hist-chip:first-child{background:rgba(124,58,237,0.15);color:var(--accent);border-color:var(--accent);}
+
+  /* COIN SECTION */
+  .coin-panel{width:100%;display:flex;flex-direction:column;align-items:center;gap:28px;}
+  .coin-wrap{position:relative;width:180px;height:180px;perspective:600px;cursor:pointer;}
+  .coin{width:100%;height:100%;border-radius:50%;transform-style:preserve-3d;transition:transform 0.05s;position:relative;}
+  .coin.flipping{animation:coinFlip 0.8s ease;}
+  @keyframes coinFlip{0%{transform:rotateX(0);}100%{transform:rotateX(1440deg);}}
+  .coin-face{position:absolute;inset:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:4rem;backface-visibility:hidden;-webkit-backface-visibility:hidden;font-family:'Bebas Neue',sans-serif;}
+  .coin-heads{background:linear-gradient(135deg,#f59e0b,#d97706);box-shadow:0 8px 32px rgba(245,158,11,0.4),inset 0 2px 0 rgba(255,255,255,0.3);}
+  .coin-tails{background:linear-gradient(135deg,#9ca3af,#6b7280);box-shadow:0 8px 32px rgba(107,114,128,0.3),inset 0 2px 0 rgba(255,255,255,0.2);transform:rotateX(180deg);}
+  .coin-result{font-family:'Bebas Neue',sans-serif;font-size:3rem;letter-spacing:3px;min-height:60px;display:flex;align-items:center;justify-content:center;transition:all 0.3s;}
+  .result-heads{color:var(--gold);}
+  .result-tails{color:var(--muted);}
+  .flip-btn{padding:16px 48px;background:linear-gradient(135deg,var(--gold),#d97706);color:#1e1135;border:none;border-radius:100px;font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 20px rgba(245,158,11,0.35);}
+  .flip-btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 8px 32px rgba(245,158,11,0.5);}
+  .flip-btn:disabled{opacity:0.5;pointer-events:none;}
+  .coin-stats{display:flex;gap:24px;text-align:center;}
+  .cs-item .cs-val{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:2px;}
+  .cs-item .cs-label{font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);}
+  .cs-heads .cs-val{color:var(--gold);}
+  .cs-tails .cs-val{color:var(--muted);}
+
+  footer{text-align:center;padding:20px;font-size:12px;color:var(--muted);font-weight:600;}
+  footer a{color:var(--muted);text-decoration:none;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html">← All Tools</a>
+  <span class="tool-title">🎲 Dice Roller</span>
+  <span style="font-size:12px;color:rgba(255,255,255,0.4)">handyteachertools.com</span>
+</nav>
+
+<main>
+  <div class="mode-tabs" style="width:100%;max-width:420px">
+    <button class="mode-tab active" id="tabDice" onclick="setMode('dice')">🎲 Dice Roller</button>
+    <button class="mode-tab" id="tabCoin" onclick="setMode('coin')">🪙 Coin Flip</button>
+  </div>
+
+  <!-- DICE -->
+  <div class="dice-panel" id="dicePanel">
+    <div class="controls-row">
+      <div class="ctrl-group">
+        <span class="ctrl-label">Number of Dice</span>
+        <div class="num-ctrl">
+          <button onclick="adjustDice(-1)">−</button>
+          <span id="diceCount">2</span>
+          <button onclick="adjustDice(1)">+</button>
+        </div>
+      </div>
+      <div class="ctrl-group">
+        <span class="ctrl-label">Sides</span>
+        <div class="dice-types" id="diceTypes"></div>
+      </div>
+    </div>
+
+    <div class="dice-display" id="diceDisplay"></div>
+
+    <div class="total-display" id="totalDisplay" style="display:none">
+      <div class="total-label">Total</div>
+      <div class="total-num" id="totalNum">0</div>
+    </div>
+
+    <button class="roll-btn" id="rollBtn" onclick="rollDice()">🎲 ROLL!</button>
+
+    <div>
+      <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);text-align:center;margin-bottom:8px">Recent Rolls</div>
+      <div class="history-row" id="historyRow">
+        <span style="font-size:0.8rem;color:var(--muted);font-weight:600">No rolls yet</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- COIN -->
+  <div class="coin-panel" id="coinPanel" style="display:none">
+    <div class="coin-wrap" onclick="flipCoin()">
+      <div class="coin" id="coin">
+        <div class="coin-face coin-heads">🪙</div>
+        <div class="coin-face coin-tails">🌑</div>
+      </div>
+    </div>
+    <div class="coin-result" id="coinResult" style="color:var(--muted)">Click to flip!</div>
+    <button class="flip-btn" id="flipBtn" onclick="flipCoin()">🪙 FLIP!</button>
+    <div class="coin-stats">
+      <div class="cs-item cs-heads">
+        <div class="cs-val" id="headsCount">0</div>
+        <div class="cs-label">Heads</div>
+      </div>
+      <div class="cs-item" style="color:var(--muted)">
+        <div class="cs-val" id="totalFlips">0</div>
+        <div class="cs-label">Total</div>
+      </div>
+      <div class="cs-item cs-tails">
+        <div class="cs-val" id="tailsCount">0</div>
+        <div class="cs-label">Tails</div>
+      </div>
+    </div>
+    <button onclick="resetCoin()" style="padding:8px 20px;border-radius:8px;border:1px solid var(--border);background:transparent;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.82rem;color:var(--muted);cursor:pointer">↺ Reset Stats</button>
+  </div>
+</main>
+
+<!-- HOW TO USE -->
+<div style="max-width:860px;margin:0 auto;padding:32px 20px 48px">
+  <div style="background:#ffffff;border-radius:16px;border:1px solid #e5e0d8;box-shadow:0 4px 20px rgba(0,0,0,0.06);overflow:hidden">
+    <div style="background:#2d4a3e;padding:16px 24px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:1.2rem">📖</span>
+      <h2 style="font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;color:white;margin:0">How to Use the Dice Roller & Coin Flip</h2>
+    </div>
+    <div style="padding:20px 24px">
+      <p style="font-family:'Nunito',sans-serif;font-size:0.92rem;font-weight:600;color:#3a4a42;line-height:1.85">The Dice Roller lets you roll any number of dice with any number of sides — perfect for math games, probability lessons, or adding chance to any classroom activity. Select the number of dice using the <strong>+ and −</strong> buttons, then choose the die type: <strong>D4, D6, D8, D10, D12, D20</strong>, or a custom number. Click <strong>Roll!</strong> (or press Space) to throw the dice with a satisfying animation. The total of all dice is displayed below, and recent results are tracked in the history row. Switch to <strong>Coin Flip</strong> mode using the tab at the top to flip a virtual coin — click the coin or the Flip button to toss it. The results tracker keeps a running count of heads and tails, making it ideal for probability experiments or deciding between two options in class.</p>
+    </div>
+  </div>
+</div>
+
+<footer><a href="index.html">← Back to all tools</a> · handyteachertools.com</footer>
+
+<script>
+const SIDES=[4,6,8,10,12,20];
+let numDice=2,numSides=6,rolling=false,rolling2=false;
+let headsCount=0,tailsCount=0;
+let history=[];
+
+function setMode(m){
+  document.getElementById('tabDice').classList.toggle('active',m==='dice');
+  document.getElementById('tabCoin').classList.toggle('active',m==='coin');
+  document.getElementById('dicePanel').style.display=m==='dice'?'flex':'none';
+  document.getElementById('coinPanel').style.display=m==='coin'?'flex':'none';
+}
+
+function renderDiceTypes(){
+  const wrap=document.getElementById('diceTypes');
+  wrap.innerHTML='';
+  SIDES.forEach(s=>{
+    const btn=document.createElement('button');
+    btn.className='dice-type-btn'+(s===numSides?' active':'');
+    btn.textContent='D'+s;
+    btn.onclick=()=>{numSides=s;renderDiceTypes();};
+    wrap.appendChild(btn);
+  });
+}
+
+function adjustDice(d){numDice=Math.max(1,Math.min(8,numDice+d));document.getElementById('diceCount').textContent=numDice;}
+
+function rollDice(){
+  if(rolling)return;
+  rolling=true;
+  document.getElementById('rollBtn').disabled=true;
+  const display=document.getElementById('diceDisplay');
+  display.innerHTML='';
+  const results=[];
+
+  for(let i=0;i<numDice;i++){
+    const die=document.createElement('div');
+    die.className='die rolling';
+    die.style.animationDelay=(i*0.08)+'s';
+    die.textContent='?';
+    display.appendChild(die);
+    results.push(Math.floor(Math.random()*numSides)+1);
+  }
+
+  setTimeout(()=>{
+    const dice=[...display.querySelectorAll('.die')];
+    dice.forEach((d,i)=>{d.textContent=results[i];d.classList.remove('rolling');});
+    const total=results.reduce((a,b)=>a+b,0);
+    const td=document.getElementById('totalDisplay');
+    td.style.display=numDice>1?'block':'none';
+    document.getElementById('totalNum').textContent=total;
+
+    // History
+    const label=numDice>1?`[${results.join('+')}]=${total}`:`${total}`;
+    history.unshift(label);
+    if(history.length>10)history.pop();
+    const hr=document.getElementById('historyRow');
+    hr.innerHTML='';
+    history.forEach(h=>{const c=document.createElement('span');c.className='hist-chip';c.textContent=h;hr.appendChild(c);});
+
+    rolling=false;
+    document.getElementById('rollBtn').disabled=false;
+  },700);
+}
+
+function flipCoin(){
+  if(rolling2)return;
+  rolling2=true;
+  document.getElementById('flipBtn').disabled=true;
+  const coin=document.getElementById('coin');
+  const result=Math.random()<0.5?'heads':'tails';
+  coin.classList.remove('flipping');
+  void coin.offsetWidth;
+  coin.classList.add('flipping');
+
+  setTimeout(()=>{
+    const res=document.getElementById('coinResult');
+    if(result==='heads'){
+      headsCount++;
+      res.textContent='HEADS!';
+      res.className='coin-result result-heads';
+    }else{
+      tailsCount++;
+      res.textContent='TAILS!';
+      res.className='coin-result result-tails';
+    }
+    document.getElementById('headsCount').textContent=headsCount;
+    document.getElementById('tailsCount').textContent=tailsCount;
+    document.getElementById('totalFlips').textContent=headsCount+tailsCount;
+    rolling2=false;
+    document.getElementById('flipBtn').disabled=false;
+  },850);
+}
+
+function resetCoin(){headsCount=0;tailsCount=0;document.getElementById('headsCount').textContent=0;document.getElementById('tailsCount').textContent=0;document.getElementById('totalFlips').textContent=0;document.getElementById('coinResult').textContent='Click to flip!';document.getElementById('coinResult').className='coin-result';}
+
+document.addEventListener('keydown',e=>{if(e.key===' '){e.preventDefault();const m=document.getElementById('tabDice').classList.contains('active');m?rollDice():flipCoin();}});
+
+renderDiceTypes();
+</script>
+
+<!-- COOKIE CONSENT BANNER -->
+<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a2e25;color:#f0f0e8;padding:16px 24px;z-index:9999;font-family:'Nunito',sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,0.2);border-top:3px solid #4caf50;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+    <div style="flex:1;min-width:240px">
+      <p style="font-size:0.88rem;font-weight:700;line-height:1.6;color:rgba(255,255,255,0.85)">
+        🍪 We use advertising cookies (via Google AdSense) to keep this site free for teachers.
+        Our tools themselves collect no data. See our
+        <a href="cookies.html" style="color:#ffc107;font-weight:800;text-decoration:none">Cookie Policy</a>
+        and
+        <a href="privacy.html" style="color:#ffc107;font-weight:800;text-decoration:none">Privacy Policy</a>.
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap">
+      <button onclick="acceptCookies()" style="padding:10px 22px;background:#4caf50;color:white;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;cursor:pointer;">✅ Accept All</button>
+      <button onclick="declineCookies()" style="padding:10px 22px;background:transparent;color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.3);border-radius:8px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;cursor:pointer;">Decline</button>
+      <a href="cookies.html" style="padding:10px 16px;color:rgba(255,255,255,0.5);font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:700;text-decoration:none;display:flex;align-items:center;">More info</a>
+    </div>
+  </div>
+</div>
+<script>
+(function(){var c=localStorage.getItem('htt_cookie_consent');if(!c){document.getElementById('cookieBanner').style.display='block';}})();
+function acceptCookies(){localStorage.setItem('htt_cookie_consent','accepted');document.getElementById('cookieBanner').style.display='none';}
+function declineCookies(){localStorage.setItem('htt_cookie_consent','declined');document.getElementById('cookieBanner').style.display='none';}
+</script>
+</body>
+</html>

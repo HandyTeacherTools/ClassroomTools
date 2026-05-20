@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Math Anchor Charts — Handy Teacher Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Kalam:wght@400;700&display=swap" rel="stylesheet"/>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M5DCBRK7DE"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-M5DCBRK7DE');</script>
+<style>
+  :root{--bg:#f0f4ff;--card:#fff;--board:#1e3a5f;--accent:#2563eb;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--shadow:0 4px 24px rgba(0,0,0,0.08);--radius:18px;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-height:100vh;display:flex;flex-direction:column;}
+  nav{background:var(--board);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;}
+  nav a{color:rgba(255,255,255,0.6);text-decoration:none;font-weight:700;font-size:14px;}
+  nav a:hover{color:white;}
+  nav .tool-title{font-family:'Kalam',cursive;font-size:1.3rem;color:#93c5fd;}
+
+  .app{flex:1;display:grid;grid-template-columns:260px 1fr;height:calc(100vh - 49px);}
+
+  /* SIDEBAR */
+  .sidebar{background:var(--card);border-right:1px solid var(--border);overflow-y:auto;padding:12px;}
+  .sidebar h2{font-size:0.72rem;font-weight:900;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);padding:8px 4px 10px;border-bottom:1px solid var(--border);margin-bottom:10px;}
+  .chart-btn{width:100%;padding:11px 14px;border-radius:10px;border:2px solid transparent;background:transparent;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;color:var(--muted);cursor:pointer;transition:all 0.15s;text-align:left;display:flex;align-items:center;gap:10px;margin-bottom:4px;}
+  .chart-btn:hover{background:var(--bg);color:var(--text);}
+  .chart-btn.active{background:#eff6ff;border-color:var(--accent);color:var(--board);}
+  .chart-btn .icon{font-size:1.2rem;flex-shrink:0;}
+
+  /* DISPLAY */
+  .display{overflow-y:auto;padding:28px;background:var(--bg);display:flex;flex-direction:column;align-items:center;gap:16px;}
+
+  /* ANCHOR CHART CARD */
+  .chart-card{width:100%;max-width:720px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:3px solid var(--border);overflow:hidden;position:relative;}
+  .chart-card.fullscreen{position:fixed;inset:0;z-index:200;max-width:none;border-radius:0;border:none;overflow-y:auto;}
+
+  .chart-header{padding:20px 24px 16px;text-align:center;position:relative;}
+  .chart-title{font-family:'Kalam',cursive;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:700;line-height:1.2;margin-bottom:6px;}
+  .chart-subtitle{font-size:0.85rem;font-weight:700;color:var(--muted);}
+
+  .chart-body{padding:0 24px 24px;}
+
+  /* GENERIC CONTENT STYLES */
+  .anchor-section{margin-bottom:20px;}
+  .anchor-section h3{font-family:'Kalam',cursive;font-size:1.15rem;font-weight:700;margin-bottom:10px;padding:6px 14px;border-radius:8px;display:inline-block;}
+  .anchor-section p,.anchor-section li{font-size:0.92rem;font-weight:600;line-height:1.75;color:var(--text);}
+  .anchor-section ul{padding-left:20px;display:flex;flex-direction:column;gap:5px;}
+
+  .formula-box{background:var(--bg);border:2px solid var(--border);border-radius:12px;padding:14px 18px;margin:10px 0;font-family:'Kalam',cursive;font-size:1.1rem;text-align:center;line-height:1.7;}
+  .formula-box.highlight{border-color:currentColor;background:rgba(255,255,255,0.8);}
+
+  .example-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin:10px 0;}
+  .example-card{background:var(--bg);border:2px solid var(--border);border-radius:10px;padding:12px;text-align:center;}
+  .example-card .ex-label{font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:5px;}
+  .example-card .ex-val{font-family:'Kalam',cursive;font-size:1.2rem;font-weight:700;}
+
+  .step-list{counter-reset:steps;display:flex;flex-direction:column;gap:10px;}
+  .step-item{display:flex;gap:12px;align-items:flex-start;}
+  .step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Kalam',cursive;font-size:0.95rem;font-weight:700;color:white;flex-shrink:0;margin-top:2px;}
+  .step-text{font-size:0.9rem;font-weight:600;line-height:1.6;padding-top:4px;}
+
+  /* DISPLAY TOOLBAR */
+  .display-toolbar{width:100%;max-width:720px;display:flex;gap:10px;flex-wrap:wrap;}
+  .tb-btn{padding:9px 16px;border-radius:10px;border:1px solid var(--border);background:var(--card);font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:800;color:var(--text);cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:6px;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+  .tb-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+  @media print{nav,.sidebar,.display-toolbar{display:none!important;}.app{grid-template-columns:1fr;}.chart-card{box-shadow:none;border:2px solid #ccc;}}
+  @media(max-width:700px){.app{grid-template-columns:1fr;}.sidebar{max-height:200px;display:flex;flex-wrap:wrap;padding:8px;gap:4px;}.sidebar h2{display:none;}.chart-btn{width:auto;padding:7px 12px;font-size:0.78rem;}}
+
+  footer{text-align:center;padding:16px;font-size:12px;color:var(--muted);font-weight:600;}
+  footer a{color:var(--muted);text-decoration:none;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html">← All Tools</a>
+  <span class="tool-title">📐 Math Anchor Charts</span>
+  <span style="font-size:12px;color:rgba(255,255,255,0.4)">handyteachertools.com</span>
+</nav>
+
+<div class="app">
+  <div class="sidebar">
+    <h2>Math Charts</h2>
+    <div id="chartNav"></div>
+  </div>
+  <div class="display" id="display">
+    <div class="display-toolbar" id="toolbar">
+      <button class="tb-btn" onclick="window.print()">🖨️ Print</button>
+      <button class="tb-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+    </div>
+    <div class="chart-card" id="chartCard"></div>
+  </div>
+</div>
+
+<div style="max-width:860px;margin:0 auto;padding:32px 20px 48px">
+  <div style="background:#ffffff;border-radius:16px;border:1px solid #e5e0d8;box-shadow:0 4px 20px rgba(0,0,0,0.06);overflow:hidden">
+    <div style="background:#1e3a5f;padding:16px 24px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:1.2rem">📖</span>
+      <h2 style="font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;color:white;margin:0">How to Use Math Anchor Charts</h2>
+    </div>
+    <div style="padding:20px 24px">
+      <p style="font-family:'Nunito',sans-serif;font-size:0.92rem;font-weight:600;color:#3a4a42;line-height:1.85">Math Anchor Charts provides 10 ready-made reference charts covering core math concepts. Click any chart title in the sidebar to display it on the right. Each chart is designed to be clear and readable from the back of the classroom when projected. Click <strong>Fullscreen</strong> to expand the chart to fill the entire screen, or <strong>Print</strong> to produce a clean printed version for students. Charts cover key formulas, vocabulary, visual examples, and step-by-step processes. More charts will be added regularly.</p>
+    </div>
+  </div>
+</div>
+
+<footer><a href="index.html">← Back to all tools</a> · handyteachertools.com</footer>
+
+<script>
+const CHARTS = [
+  {
+    id:0, icon:'➕', title:'Order of Operations', color:'#2563eb', bg:'#eff6ff',
+    render: () => `
+      <div class="chart-header" style="background:#eff6ff;border-bottom:3px solid #2563eb">
+        <div class="chart-title" style="color:#1e3a5f">Order of Operations</div>
+        <div class="chart-subtitle">BEDMAS — Always follow this order!</div>
+      </div>
+      <div class="chart-body" style="padding-top:20px">
+        ${[
+          ['B','Brackets','Solve anything inside brackets first','#ef4444'],
+          ['E','Exponents','Powers and roots next','#f59e0b'],
+          ['D','Division','Left to right','#10b981'],
+          ['M','Multiplication','Left to right (same step as division)','#10b981'],
+          ['A','Addition','Left to right','#2563eb'],
+          ['S','Subtraction','Left to right (same step as addition)','#2563eb'],
+        ].map(([l,n,d,c])=>`
+          <div style="display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid #e2e8f0">
+            <div style="width:44px;height:44px;border-radius:12px;background:${c};color:white;font-family:'Kalam',cursive;font-size:1.6rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">${l}</div>
+            <div>
+              <div style="font-family:'Kalam',cursive;font-size:1.1rem;font-weight:700;color:#1e293b">${n}</div>
+              <div style="font-size:0.82rem;font-weight:600;color:#64748b">${d}</div>
+            </div>
+          </div>`).join('')}
+        <div class="formula-box highlight" style="margin-top:16px;color:#2563eb">
+          Example: 3 + 4 × (2² − 1)<br/>
+          = 3 + 4 × (4 − 1) &nbsp;← Brackets<br/>
+          = 3 + 4 × 3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;← Exponents<br/>
+          = 3 + 12 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;← Multiply<br/>
+          = <strong>15</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;← Add
+        </div>
+      </div>`
+  },
+  {
+    id:1, icon:'📐', title:'Fractions', color:'#7c3aed', bg:'#f5f3ff',
+    render: () => `
+      <div class="chart-header" style="background:#f5f3ff;border-bottom:3px solid #7c3aed">
+        <div class="chart-title" style="color:#4c1d95">Working with Fractions</div>
+        <div class="chart-subtitle">Adding, subtracting, multiplying & dividing</div>
+      </div>
+      <div class="chart-body" style="padding-top:20px;display:flex;flex-direction:column;gap:16px">
+        ${[
+          ['Adding & Subtracting','Find a common denominator, then add/subtract numerators','1/4 + 2/4 = 3/4 &nbsp;|&nbsp; 3/8 − 1/8 = 2/8 = 1/4','#7c3aed'],
+          ['Adding Unlike Fractions','Find LCD, convert fractions, then add','1/2 + 1/3 → 3/6 + 2/6 = 5/6','#2563eb'],
+          ['Multiplying','Multiply numerators together, then denominators','2/3 × 3/4 = 6/12 = 1/2','#10b981'],
+          ['Dividing','Keep the first fraction, flip the second, then multiply','2/3 ÷ 4/5 = 2/3 × 5/4 = 10/12 = 5/6','#ef4444'],
+        ].map(([t,d,ex,c])=>`
+          <div style="border:2px solid ${c}20;border-radius:12px;overflow:hidden">
+            <div style="background:${c};padding:8px 14px;font-family:'Kalam',cursive;font-size:1rem;font-weight:700;color:white">${t}</div>
+            <div style="padding:12px 14px">
+              <div style="font-size:0.85rem;font-weight:600;color:#64748b;margin-bottom:8px">${d}</div>
+              <div style="font-family:'Kalam',cursive;font-size:1rem;color:#1e293b;background:#f8fafc;border-radius:8px;padding:8px 12px">${ex}</div>
+            </div>
+          </div>`).join('')}
+      </div>`
+  },
+  {
+    id:2, icon:'📏', title:'Area & Perimeter', color:'#059669', bg:'#ecfdf5',
+    render: () => `
+      <div class="chart-header" style="background:#ecfdf5;border-bottom:3px solid #059669">
+        <div class="chart-title" style="color:#064e3b">Area & Perimeter</div>
+        <div class="chart-subtitle">Key formulas for common shapes</div>
+      </div>
+      <div class="chart-body" style="padding-top:20px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          ${[
+            ['Square','Area = s²','Perimeter = 4s','#059669'],
+            ['Rectangle','Area = l × w','Perimeter = 2(l + w)','#2563eb'],
+            ['Triangle','Area = ½ × b × h','Perimeter = a + b + c','#7c3aed'],
+            ['Circle','Area = πr²','Circumference = 2πr','#ef4444'],
+            ['Parallelogram','Area = b × h','Perimeter = 2(a + b)','#f59e0b'],
+            ['Trapezoid','Area = ½(a + b) × h','Perimeter = a + b + c + d','#0891b2'],
+          ].map(([shape,area,perim,c])=>`
+            <div style="background:${c}10;border:2px solid ${c}30;border-radius:12px;padding:14px">
+              <div style="font-family:'Kalam',cursive;font-size:1.05rem;font-weight:700;color:${c};margin-bottom:8px">${shape}</div>
+              <div style="font-family:'Kalam',cursive;font-size:0.9rem;color:#1e293b;line-height:1.8">${area}<br/>${perim}</div>
+            </div>`).join('')}
+        </div>
+      </div>`
+  },
+  {
+    id:3, icon:'📊', title:'Types of Numbers', color:'#f59e0b', bg:'#fffbeb',
+    render: () => `
+      <div class="chart-header" style="background:#fffbeb;border-bottom:3px solid #f59e0b">
+        <div class="chart-title" style="color:#78350f">Types of Numbers</div>
+        <div class="chart-subtitle">Understanding the number system</div>
+      </div>
+      <div class="chart-body" style="padding-top:20px;display:flex;flex-direction:column;gap:12px">
+        ${[
+          ['Natural Numbers (ℕ)','Counting numbers starting from 1','1, 2, 3, 4, 5, …','#f59e0b'],
+          ['Whole Numbers','Natural numbers plus zero','0, 1, 2, 3, 4, …','#10b981'],
+          ['Integers (ℤ)','All positive and negative whole numbers','…, -3, -2, -1, 0, 1, 2, 3, …','#2563eb'],
+          ['Rational Numbers (ℚ)','Numbers that can be written as a fraction p/q','1/2, 0.75, -3, 4, 0.333…','#7c3aed'],
+          ['Irrational Numbers','Cannot be written as a fraction — decimals never end or repeat','π, √2, e, √3','#ef4444'],
+          ['Real Numbers (ℝ)','All rational and irrational numbers combined','Every point on the number line','#0891b2'],
+          ['Prime Numbers','Only divisible by 1 and themselves','2, 3, 5, 7, 11, 13, 17, 19, …','#f97316'],
+          ['Composite Numbers','Have more than two factors','4, 6, 8, 9, 10, 12, …','#8b5cf6'],
+        ].map(([t,d,ex,c])=>`
+          <div style="display:flex;gap:12px;align-items:flex-start;padding:10px 12px;background:${c}08;border-left:4px solid ${c};border-radius:0 10px 10px 0">
+            <div style="flex:1">
+              <div style="font-family:'Kalam',cursive;font-size:1rem;font-weight:700;color:${c}">${t}</div>
+              <div style="font-size:0.82rem;font-weight:600;color:#64748b">${d}</div>
+              <div style="font-family:'Kalam',cursive;font-size:0.88rem;color:#1e293b;margin-top:3px">${ex}</div>
+            </div>
+          </div>`).join('')}
+      </div>`
+  },
+  {
+    id:4, icon:'📉', title:'Graphs & Coordinates', color:'#0891b2', bg:'#ecfeff',
+    render: () => `
+      <div class="chart-header" style="background:#ecfeff;border-bottom:3px solid #0891b2">
+        <div class="chart-title" style="color:#164e63">Graphs & Coordinates</div>
+        <div class="chart-subtitle">Reading and plotting on the Cartesian plane</div>
+      </div>
+      <div class="chart-body" style="padding-top:20px;display:flex;flex-direction:column;gap:14px">
+        <div class="formula-box" style="border-color:#0891b2;color:#0891b2;font-size:1rem">A point is written as <strong>(x, y)</strong> — x comes first (horizontal), y second (vertical)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          ${[
+            ['Quadrant I','(+, +)','Right and Up','#10b981'],
+            ['Quadrant II','(−, +)','Left and Up','#2563eb'],
+            ['Quadrant III','(−, −)','Left and Down','#7c3aed'],
+            ['Quadrant IV','(+, −)','Right and Down','#ef4444'],
+          ].map(([q,signs,dir,c])=>`
+            <div style="background:${c}10;border:2px solid ${c}30;border-radius:10px;padding:12px;text-align:center">
+              <div style="font-family:'Kalam',cursive;font-size:1rem;font-weight:700;color:${c}">${q}</div>
+              <div style="font-family:'Kalam',cursive;font-size:1.3rem;color:#1e293b">${signs}</div>
+              <div style="font-size:0.78rem;color:#64748b;font-weight:600">${dir}</div>
+            </div>`).join('')}
+        </div>
+        ${[
+          ['Slope (Gradient)','m = rise ÷ run = (y₂ − y₁) ÷ (x₂ − x₁)'],
+          ['y-intercept','Where the line crosses the y-axis (x = 0)'],
+          ['Slope-Intercept Form','y = mx + b (m = slope, b = y-intercept)'],
+          ['Distance Formula','d = √[(x₂−x₁)² + (y₂−y₁)²]'],
+        ].map(([t,f])=>`
+          <div style="display:flex;gap:12px;align-items:center;padding:10px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0">
+            <div style="font-size:0.82rem;font-weight:800;color:#64748b;min-width:130px">${t}</div>
+            <div style="font-family:'Kalam',cursive;font-size:0.95rem;color:#1e293b">${f}</div>
+          </div>`).join('')}
+      </div>`
+  },
+  {
+    id:5, icon:'🔢', title:'Multiplication Strategies', color:'#7c3aed', bg:'#f5f3ff',
+    render: () => `
+      <div class="chart-header" style="background:#f5f3ff;border-bottom:3px solid #7c3aed">
+        <div class="chart-title" style="color:#4c1d95">Multiplication Strategies</div>
+        <div class="chart-subtitle">Different ways to multiply</div>
+      </div>
+      <div class="chart-body" style="padding-top:20px;display:flex;flex-direction:column;gap:16px">
+        ${[
+          ['Skip Counting','Count up by the number you are multiplying by','3 × 5: count in 3s → 3, 6, 9, 12, 15','#7c3aed'],
+          ['Array Method','Arrange objects in rows and columns','4 × 3 = 4 rows of 3 = 12 objects total','#2563eb'],
+          ['Repeated Addition','Add the number to itself the required times','4 × 3 = 3 + 3 + 3 + 3 = 12','#10b981'],
+          ['Doubling','Double a known fact to find a harder one','6 × 8: know 3 × 8 = 24, so double it → 48','#ef4444'],
+          ['Break Apart (Distributive)','Break one number into parts, multiply each, then add','7 × 6 = (5 × 6) + (2 × 6) = 30 + 12 = 42','#f59e0b'],
+          ['Standard Algorithm','Multiply digit by digit, carrying where needed','46 × 7: (6 × 7) + (40 × 7) = 42 + 280 = 322','#0891b2'],
+        ].map(([t,d,ex,c])=>`
+          <div style="border:2px solid ${c}25;border-radius:12px;overflow:hidden">
+            <div style="background:${c};padding:7px 14px;font-family:'Kalam',cursive;font-size:0.98rem;font-weight:700;color:white">${t}</div>
+            <div style="padding:10px 14px">
+              <div style="font-size:0.82rem;font-weight:600;color:#64748b;margin-bottom:6px">${d}</div>
+              <div style="font-family:'Kalam',cursive;font-size:0.92rem;color:#1e293b;background:#f8fafc;border-radius:6px;padding:7px 10px">${ex}</div>
+            </div>
+          </div>`).join('')}
+      </div>`
+  },
+  {
+    id:6, icon:'🔍', title:'Place Value', color:'#059669', bg:'#ecfdf5',
+    render: () => `
+      <div class="chart-header" style="background:#ecfdf5;border-bottom:3px solid #059669">
+        <div class="chart-title" style="color:#064e3b">Place Value</div>
+        <div class="chart-subtitle">The value of each digit depends on its position</div>
+      </div>
+      <div class="chart-body" style="padding-top:20px;display:flex;flex-direction:column;gap:14px">
+        <div style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;text-align:center;min-width:500px">
+            <tr>${['Millions','Hundred Thousands','Ten Thousands','Thousands','Hundreds','Tens','Ones'].map(h=>`<th style="background:#059669;color:white;padding:10px 8px;font-family:'Kalam',cursive;font-size:0.85rem">${h}</th>`).join('')}</tr>
+            <tr>${['1,000,000','100,000','10,000','1,000','100','10','1'].map(v=>`<td style="border:1px solid #e2e8f0;padding:10px 8px;font-family:'Kalam',cursive;font-size:0.9rem;background:#f8fafc">${v}</td>`).join('')}</tr>
+            <tr><td colspan="7" style="padding:10px;font-family:'Kalam',cursive;font-size:1rem;color:#059669;background:#ecfdf5">Example: 3,402,715</td></tr>
+            <tr>${['3','4','0','2','7','1','5'].map(d=>`<td style="border:1px solid #e2e8f0;padding:10px 8px;font-family:'Kalam',cursive;font-size:1.3rem;font-weight:700;color:#1e3a5f;background:white">${d}</td>`).join('')}</tr>
+          </table>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          ${[
+            ['Expanded Form','Write out the value of each digit','3,402,715 = 3,000,000 + 400,000 + 2,000 + 700 + 10 + 5'],
+            ['Standard Form','The normal way to write a number','3,402,715'],
+            ['Word Form','Written out in words','Three million, four hundred two thousand, seven hundred fifteen'],
+            ['Rounding','Look at the next digit: 5 or more → round up; 4 or less → round down','3,402,715 rounded to nearest thousand = 3,403,000'],
+          ].map(([t,d,ex])=>`
+            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px">
+              <div style="font-family:'Kalam',cursive;font-size:1rem;font-weight:700;color:#059669;margin-bottom:4px">${t}</div>
+              <div style="font-size:0.78rem;font-weight:600;color:#64748b;margin-bottom:5px">${d}</div>
+              <div style="font-family:'Kalam',cursive;font-size:0.82rem;color:#1e293b">${ex}</div>
+            </div>`).join('')}
+        </div>
+      </div>`
+  },
+  {
+    id:7, icon:'📐', title:'Angles', color:'#f97316', bg:'#fff7ed',
+    render: () => `
+      <div class="chart-header" style="background:#fff7ed;border-bottom:3px solid #f97316">
+        <div class="chart-title" style="color:#7c2d12">Types of Angles</div>
+        <div class="chart-subtitle">Measuring and classifying angles</div>
+      </div>
+      <div class="chart-body" style="padding-top:20px;display:flex;flex-direction:column;gap:10px">
+        ${[
+          ['Acute Angle','Less than 90°','< 90°','#10b981'],
+          ['Right Angle','Exactly 90° — shown with a square corner','= 90°','#2563eb'],
+          ['Obtuse Angle','Between 90° and 180°','90° – 180°','#f59e0b'],
+          ['Straight Angle','Exactly 180° — a straight line','= 180°','#ef4444'],
+          ['Reflex Angle','Between 180° and 360°','180° – 360°','#7c3aed'],
+          ['Full Rotation','Exactly 360°','= 360°','#f97316'],
+          ['Complementary Angles','Two angles that add up to 90°','∠A + ∠B = 90°','#0891b2'],
+          ['Supplementary Angles','Two angles that add up to 180°','∠A + ∠B = 180°','#8b5cf6'],
+        ].map(([t,d,v,c])=>`
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:${c}08;border-left:4px solid ${c};border-radius:0 10px 10px 0">
+            <div style="font-family:'Kalam',cursive;font-size:1.1rem;color:${c};min-width:80px;font-weight:700">${v}</div>
+            <div>
+              <div style="font-family:'Kalam',cursive;font-size:0.98rem;font-weight:700;color:#1e293b">${t}</div>
+              <div style="font-size:0.8rem;font-weight:600;color:#64748b">${d}</div>
+            </div>
+          </div>`).join('')}
+      </div>`
+  },
+  {
+    id:8, icon:'📈', title:'Data & Averages', color:'#2563eb', bg:'#eff6ff',
+    render: () => `
+      <div class="chart-header" style="background:#eff6ff;border-bottom:3px solid #2563eb">
+        <div class="chart-title" style="color:#1e3a5f">Data & Averages</div>
+        <div class="chart-subtitle">Mean, median, mode and range</div>
+      </div>
+      <div class="chart-body" style="padding-top:20px;display:flex;flex-direction:column;gap:16px">
+        <div style="font-family:'Kalam',cursive;font-size:1rem;color:#1e3a5f;background:#eff6ff;border-radius:10px;padding:12px;text-align:center">
+          Example dataset: <strong>4, 7, 2, 9, 4, 6, 4, 8</strong><br/>
+          Sorted: <strong>2, 4, 4, 4, 6, 7, 8, 9</strong>
+        </div>
+        ${[
+          ['Mean (Average)','Add all values, divide by how many there are','(4+7+2+9+4+6+4+8) ÷ 8 = 44 ÷ 8 = 5.5','#2563eb','Add all → Divide by count'],
+          ['Median','The middle value when sorted (average the two middle if even)','Middle of sorted set: (4+6)÷2 = 5','#10b981','Sort → Find middle'],
+          ['Mode','The value that appears most often','4 appears 3 times → Mode = 4','#7c3aed','Most frequent value'],
+          ['Range','The difference between the largest and smallest values','9 − 2 = 7','#ef4444','Max − Min'],
+        ].map(([t,d,ex,c,tag])=>`
+          <div style="border:2px solid ${c}30;border-radius:12px;overflow:hidden">
+            <div style="background:${c};padding:8px 16px;display:flex;align-items:center;justify-content:space-between">
+              <span style="font-family:'Kalam',cursive;font-size:1.1rem;color:white;font-weight:700">${t}</span>
+              <span style="background:rgba(255,255,255,0.2);color:white;padding:2px 10px;border-radius:100px;font-size:0.72rem;font-weight:800">${tag}</span>
+            </div>
+            <div style="padding:12px 16px">
+              <div style="font-size:0.82rem;font-weight:600;color:#64748b;margin-bottom:7px">${d}</div>
+              <div style="font-family:'Kalam',cursive;font-size:0.92rem;color:#1e293b;background:#f8fafc;border-radius:8px;padding:8px 12px">${ex}</div>
+            </div>
+          </div>`).join('')}
+      </div>`
+  },
+  {
+    id:9, icon:'⚡', title:'Positive & Negative Numbers', color:'#dc2626', bg:'#fef2f2',
+    render: () => `
+      <div class="chart-header" style="background:#fef2f2;border-bottom:3px solid #dc2626">
+        <div class="chart-title" style="color:#7f1d1d">Positive & Negative Numbers</div>
+        <div class="chart-subtitle">Integers — working with directed numbers</div>
+      </div>
+      <div class="chart-body" style="padding-top:20px;display:flex;flex-direction:column;gap:14px">
+        <div style="text-align:center;font-family:'Kalam',cursive;font-size:0.95rem;padding:12px;background:#fef2f2;border-radius:10px;color:#1e293b">
+          ← Negative &nbsp;&nbsp; −5 &nbsp; −4 &nbsp; −3 &nbsp; −2 &nbsp; −1 &nbsp; 0 &nbsp; +1 &nbsp; +2 &nbsp; +3 &nbsp; +4 &nbsp; +5 &nbsp;&nbsp; Positive →
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          ${[
+            ['Adding a Positive','Move right on the number line','−3 + 5 = 2','#10b981'],
+            ['Adding a Negative','Move left on the number line','3 + (−5) = −2','#ef4444'],
+            ['Subtracting a Positive','Move left on the number line','3 − 5 = −2','#f59e0b'],
+            ['Subtracting a Negative','Change to adding a positive','3 − (−2) = 3 + 2 = 5','#7c3aed'],
+          ].map(([t,d,ex,c])=>`
+            <div style="background:${c}10;border:2px solid ${c}25;border-radius:10px;padding:12px">
+              <div style="font-family:'Kalam',cursive;font-size:0.95rem;font-weight:700;color:${c};margin-bottom:5px">${t}</div>
+              <div style="font-size:0.78rem;color:#64748b;font-weight:600;margin-bottom:6px">${d}</div>
+              <div style="font-family:'Kalam',cursive;font-size:0.9rem;color:#1e293b">${ex}</div>
+            </div>`).join('')}
+        </div>
+        <div style="background:#1e293b;border-radius:12px;padding:16px">
+          <div style="font-family:'Kalam',cursive;font-size:1rem;font-weight:700;color:#f59e0b;margin-bottom:10px;text-align:center">Multiplication & Division Rules</div>
+          ${[
+            ['Positive × Positive','= Positive','(+) × (+) = +','#10b981'],
+            ['Negative × Negative','= Positive','(−) × (−) = +','#10b981'],
+            ['Positive × Negative','= Negative','(+) × (−) = −','#ef4444'],
+            ['Same signs ÷','= Positive','(+)÷(+) or (−)÷(−) = +','#10b981'],
+            ['Different signs ÷','= Negative','(+)÷(−) or (−)÷(+) = −','#ef4444'],
+          ].map(([t,r,ex,c])=>`
+            <div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.08)">
+              <span style="flex:1;font-size:0.82rem;font-weight:600;color:#94a3b8">${t}</span>
+              <span style="font-family:'Kalam',cursive;font-size:0.9rem;color:${c}">${ex}</span>
+            </div>`).join('')}
+        </div>
+      </div>`
+  },
+];
+
+let currentChart = 0;
+
+function buildNav() {
+  const nav = document.getElementById('chartNav');
+  CHARTS.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'chart-btn' + (c.id === currentChart ? ' active' : '');
+    btn.innerHTML = `<span class="icon">${c.icon}</span>${c.title}`;
+    btn.onclick = () => showChart(c.id);
+    nav.appendChild(btn);
+  });
+}
+
+function showChart(id) {
+  currentChart = id;
+  document.querySelectorAll('.chart-btn').forEach((b,i) => b.classList.toggle('active', i === id));
+  document.getElementById('chartCard').innerHTML = CHARTS[id].render();
+}
+
+function toggleFullscreen() {
+  const card = document.getElementById('chartCard');
+  card.classList.toggle('fullscreen');
+  if (card.classList.contains('fullscreen')) {
+    card.addEventListener('click', exitFullscreen);
+  }
+}
+function exitFullscreen(e) {
+  if (e.target.closest('.chart-card')) return;
+  document.getElementById('chartCard').classList.remove('fullscreen');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('chartCard').classList.remove('fullscreen'); });
+
+buildNav();
+showChart(0);
+</script>
+
+<!-- COOKIE CONSENT BANNER -->
+<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a2e25;color:#f0f0e8;padding:16px 24px;z-index:9999;font-family:'Nunito',sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,0.2);border-top:3px solid #4caf50;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+    <div style="flex:1;min-width:240px">
+      <p style="font-size:0.88rem;font-weight:700;line-height:1.6;color:rgba(255,255,255,0.85)">
+        🍪 We use advertising cookies (via Google AdSense) to keep this site free for teachers.
+        Our tools themselves collect no data. See our
+        <a href="cookies.html" style="color:#ffc107;font-weight:800;text-decoration:none">Cookie Policy</a>
+        and
+        <a href="privacy.html" style="color:#ffc107;font-weight:800;text-decoration:none">Privacy Policy</a>.
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap">
+      <button onclick="acceptCookies()" style="padding:10px 22px;background:#4caf50;color:white;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;cursor:pointer;">✅ Accept All</button>
+      <button onclick="declineCookies()" style="padding:10px 22px;background:transparent;color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.3);border-radius:8px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;cursor:pointer;">Decline</button>
+      <a href="cookies.html" style="padding:10px 16px;color:rgba(255,255,255,0.5);font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:700;text-decoration:none;display:flex;align-items:center;">More info</a>
+    </div>
+  </div>
+</div>
+<script>
+(function(){var c=localStorage.getItem('htt_cookie_consent');if(!c){document.getElementById('cookieBanner').style.display='block';}})();
+function acceptCookies(){localStorage.setItem('htt_cookie_consent','accepted');document.getElementById('cookieBanner').style.display='none';}
+function declineCookies(){localStorage.setItem('htt_cookie_consent','declined');document.getElementById('cookieBanner').style.display='none';}
+</script>
+</body>
+</html>

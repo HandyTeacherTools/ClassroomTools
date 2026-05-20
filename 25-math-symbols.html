@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Math Symbols — Handy Teacher Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet"/>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M5DCBRK7DE"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-M5DCBRK7DE');</script>
+<style>
+  :root{--bg:#f0f4ff;--card:#fff;--board:#1e3a5f;--accent:#2563eb;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--shadow:0 4px 20px rgba(0,0,0,0.07);--radius:14px;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-height:100vh;display:flex;flex-direction:column;}
+  nav{background:var(--board);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;}
+  nav a{color:rgba(255,255,255,0.6);text-decoration:none;font-weight:700;font-size:14px;}
+  nav a:hover{color:white;}
+  nav .tool-title{font-family:'Fira Code',monospace;font-size:1.1rem;color:#93c5fd;letter-spacing:1px;}
+
+  .page{max-width:1100px;margin:0 auto;padding:32px 20px 60px;width:100%;}
+
+  /* SEARCH + COPY BAR */
+  .top-bar{display:flex;gap:12px;align-items:center;margin-bottom:28px;flex-wrap:wrap;}
+  .search-input{flex:1;min-width:200px;background:var(--card);border:2px solid var(--border);border-radius:12px;padding:11px 16px;font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:600;color:var(--text);outline:none;transition:border-color 0.2s;box-shadow:var(--shadow);}
+  .search-input:focus{border-color:var(--accent);}
+  .copy-bar{display:flex;align-items:center;gap:8px;background:var(--card);border:2px solid var(--border);border-radius:12px;padding:8px 12px;box-shadow:var(--shadow);flex:1;min-width:200px;}
+  .copy-bar label{font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);white-space:nowrap;}
+  .copy-display{flex:1;font-family:'Fira Code',monospace;font-size:1rem;font-weight:500;color:var(--board);min-width:40px;letter-spacing:2px;}
+  .clear-btn,.copy-all-btn{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);font-family:'Nunito',sans-serif;font-size:0.78rem;font-weight:800;color:var(--muted);cursor:pointer;transition:all 0.15s;white-space:nowrap;}
+  .clear-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .copy-all-btn{background:var(--accent);color:white;border-color:var(--accent);}
+  .copy-all-btn:hover{opacity:0.85;}
+
+  /* CATEGORY SECTIONS */
+  .cat-section{margin-bottom:32px;}
+  .cat-title{font-size:0.75rem;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+  .cat-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+  /* SYMBOL GRID */
+  .symbol-grid{display:flex;flex-wrap:wrap;gap:8px;}
+  .sym-btn{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    width:80px;min-height:72px;
+    background:var(--card);border:2px solid var(--border);border-radius:var(--radius);
+    cursor:pointer;transition:all 0.15s;padding:8px 4px;gap:4px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.05);
+  }
+  .sym-btn:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 16px rgba(37,99,235,0.15);}
+  .sym-btn.selected{border-color:var(--accent);background:#eff6ff;}
+  .sym-btn.hidden{display:none;}
+  .sym-symbol{font-family:'Fira Code',monospace;font-size:1.5rem;font-weight:500;color:var(--board);line-height:1;}
+  .sym-name{font-size:0.62rem;font-weight:700;color:var(--muted);text-align:center;line-height:1.3;}
+
+  /* TOAST */
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:#1e293b;color:white;padding:10px 20px;border-radius:100px;font-size:0.85rem;font-weight:700;transition:transform 0.3s ease;z-index:100;pointer-events:none;}
+  .toast.show{transform:translateX(-50%) translateY(0);}
+
+  footer{text-align:center;padding:16px;font-size:12px;color:var(--muted);font-weight:600;}
+  footer a{color:var(--muted);text-decoration:none;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html">← All Tools</a>
+  <span class="tool-title">∑ Math Symbols</span>
+  <span style="font-size:12px;color:rgba(255,255,255,0.4)">handyteachertools.com</span>
+</nav>
+
+<div class="page">
+
+  <div class="top-bar">
+    <input class="search-input" id="searchInput" placeholder="Search symbols… e.g. plus, angle, infinity" oninput="filterSymbols()"/>
+    <div class="copy-bar">
+      <label>Selected:</label>
+      <span class="copy-display" id="copyDisplay">—</span>
+      <button class="clear-btn" onclick="clearSelected()">Clear</button>
+      <button class="copy-all-btn" onclick="copySelected()">📋 Copy</button>
+    </div>
+  </div>
+
+  <div id="symbolsContainer"></div>
+
+</div>
+
+<!-- HOW TO USE -->
+<div style="max-width:860px;margin:0 auto;padding:0 20px 48px">
+  <div style="background:#ffffff;border-radius:16px;border:1px solid #e5e0d8;box-shadow:0 4px 20px rgba(0,0,0,0.06);overflow:hidden">
+    <div style="background:#1e3a5f;padding:16px 24px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:1.2rem">📖</span>
+      <h2 style="font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;color:white;margin:0">How to Use the Math Symbols Tool</h2>
+    </div>
+    <div style="padding:20px 24px">
+      <p style="font-family:'Nunito',sans-serif;font-size:0.92rem;font-weight:600;color:#3a4a42;line-height:1.85">The Math Symbols tool gives you instant access to every common math symbol, organised by category. Click any symbol to add it to your collection bar at the top. Keep clicking to build up a sequence of symbols, then click <strong>Copy</strong> to copy everything to your clipboard in one go — ready to paste into a document, email, or presentation. Use the search bar to find symbols by name (try searching "angle", "infinity", "fraction", or "greater"). Single-click any symbol to select it individually and copy just that one. This tool is ideal for teachers writing assessments, worksheets, or board notes who need quick access to symbols that are hard to find on a standard keyboard.</p>
+    </div>
+  </div>
+</div>
+
+<footer><a href="index.html">← Back to all tools</a> · handyteachertools.com</footer>
+<div class="toast" id="toast">Copied!</div>
+
+<script>
+const CATEGORIES = [
+  {
+    title: 'Basic Operations',
+    symbols: [
+      {sym:'+'  ,name:'Plus'},
+      {sym:'−'  ,name:'Minus'},
+      {sym:'×'  ,name:'Multiply'},
+      {sym:'÷'  ,name:'Divide'},
+      {sym:'='  ,name:'Equals'},
+      {sym:'≠'  ,name:'Not Equal'},
+      {sym:'±'  ,name:'Plus/Minus'},
+      {sym:'∓'  ,name:'Minus/Plus'},
+      {sym:'·'  ,name:'Dot Product'},
+      {sym:'√'  ,name:'Square Root'},
+      {sym:'∛'  ,name:'Cube Root'},
+      {sym:'∜'  ,name:'4th Root'},
+    ]
+  },
+  {
+    title: 'Comparison',
+    symbols: [
+      {sym:'<'  ,name:'Less Than'},
+      {sym:'>'  ,name:'Greater Than'},
+      {sym:'≤'  ,name:'Less or Equal'},
+      {sym:'≥'  ,name:'Greater or Equal'},
+      {sym:'≈'  ,name:'Approx Equal'},
+      {sym:'≡'  ,name:'Identical To'},
+      {sym:'≅'  ,name:'Congruent'},
+      {sym:'∝'  ,name:'Proportional'},
+    ]
+  },
+  {
+    title: 'Algebra & Calculus',
+    symbols: [
+      {sym:'x'  ,name:'Variable x'},
+      {sym:'y'  ,name:'Variable y'},
+      {sym:'n'  ,name:'Variable n'},
+      {sym:'²'  ,name:'Squared'},
+      {sym:'³'  ,name:'Cubed'},
+      {sym:'ⁿ'  ,name:'Power n'},
+      {sym:'∑'  ,name:'Summation'},
+      {sym:'∏'  ,name:'Product'},
+      {sym:'∫'  ,name:'Integral'},
+      {sym:'∂'  ,name:'Partial Deriv.'},
+      {sym:'Δ'  ,name:'Delta'},
+      {sym:'∞'  ,name:'Infinity'},
+      {sym:'!'  ,name:'Factorial'},
+      {sym:'%'  ,name:'Percent'},
+      {sym:'‰'  ,name:'Per Mille'},
+      {sym:'f(x)',name:'Function'},
+    ]
+  },
+  {
+    title: 'Fractions & Numbers',
+    symbols: [
+      {sym:'½'  ,name:'One Half'},
+      {sym:'⅓'  ,name:'One Third'},
+      {sym:'⅔'  ,name:'Two Thirds'},
+      {sym:'¼'  ,name:'One Quarter'},
+      {sym:'¾'  ,name:'Three Quarters'},
+      {sym:'⅛'  ,name:'One Eighth'},
+      {sym:'⅜'  ,name:'Three Eighths'},
+      {sym:'⅝'  ,name:'Five Eighths'},
+      {sym:'⅞'  ,name:'Seven Eighths'},
+      {sym:'π'  ,name:'Pi'},
+      {sym:'e'  ,name:"Euler's e"},
+      {sym:'φ'  ,name:'Phi (Golden)'},
+      {sym:'ℝ'  ,name:'Real Numbers'},
+      {sym:'ℤ'  ,name:'Integers'},
+      {sym:'ℕ'  ,name:'Natural Nos.'},
+      {sym:'ℚ'  ,name:'Rationals'},
+    ]
+  },
+  {
+    title: 'Geometry',
+    symbols: [
+      {sym:'∠'  ,name:'Angle'},
+      {sym:'∡'  ,name:'Measured Angle'},
+      {sym:'∟'  ,name:'Right Angle'},
+      {sym:'°'  ,name:'Degree'},
+      {sym:'⊥'  ,name:'Perpendicular'},
+      {sym:'∥'  ,name:'Parallel'},
+      {sym:'≅'  ,name:'Congruent'},
+      {sym:'∼'  ,name:'Similar'},
+      {sym:'△'  ,name:'Triangle'},
+      {sym:'□'  ,name:'Square'},
+      {sym:'○'  ,name:'Circle'},
+      {sym:'⌒'  ,name:'Arc'},
+      {sym:'↔'  ,name:'Line'},
+      {sym:'→'  ,name:'Ray'},
+      {sym:'‾'  ,name:'Line Segment'},
+      {sym:'⊙'  ,name:'Circle (centre)'},
+    ]
+  },
+  {
+    title: 'Set Theory & Logic',
+    symbols: [
+      {sym:'∈'  ,name:'Element Of'},
+      {sym:'∉'  ,name:'Not Element Of'},
+      {sym:'⊂'  ,name:'Subset'},
+      {sym:'⊃'  ,name:'Superset'},
+      {sym:'⊆'  ,name:'Subset or Equal'},
+      {sym:'⊇'  ,name:'Superset/Equal'},
+      {sym:'∪'  ,name:'Union'},
+      {sym:'∩'  ,name:'Intersection'},
+      {sym:'∅'  ,name:'Empty Set'},
+      {sym:'∀'  ,name:'For All'},
+      {sym:'∃'  ,name:'There Exists'},
+      {sym:'∄'  ,name:'Not Exists'},
+      {sym:'∧'  ,name:'And (Logic)'},
+      {sym:'∨'  ,name:'Or (Logic)'},
+      {sym:'¬'  ,name:'Not (Logic)'},
+      {sym:'⇒'  ,name:'Implies'},
+    ]
+  },
+  {
+    title: 'Statistics & Probability',
+    symbols: [
+      {sym:'μ'  ,name:'Mean (mu)'},
+      {sym:'σ'  ,name:'Std Dev (sigma)'},
+      {sym:'σ²' ,name:'Variance'},
+      {sym:'x̄'  ,name:'Sample Mean'},
+      {sym:'P(A)',name:'Probability'},
+      {sym:'∩'  ,name:'And (A∩B)'},
+      {sym:'∪'  ,name:'Or (A∪B)'},
+      {sym:'n!' ,name:'Factorial'},
+      {sym:'Σ'  ,name:'Sigma (sum)'},
+      {sym:'r'  ,name:'Correlation'},
+      {sym:'ρ'  ,name:'Rho'},
+      {sym:'χ²' ,name:'Chi Squared'},
+    ]
+  },
+  {
+    title: 'Arrows & Misc',
+    symbols: [
+      {sym:'→'  ,name:'Right Arrow'},
+      {sym:'←'  ,name:'Left Arrow'},
+      {sym:'↑'  ,name:'Up Arrow'},
+      {sym:'↓'  ,name:'Down Arrow'},
+      {sym:'↕'  ,name:'Up-Down'},
+      {sym:'⇔'  ,name:'If and Only If'},
+      {sym:'⇒'  ,name:'Implies'},
+      {sym:'∴'  ,name:'Therefore'},
+      {sym:'∵'  ,name:'Because'},
+      {sym:'⋯'  ,name:'Horizontal Dots'},
+      {sym:'⋮'  ,name:'Vertical Dots'},
+      {sym:'⋱'  ,name:'Diagonal Dots'},
+      {sym:'|'  ,name:'Absolute Value'},
+      {sym:'‖'  ,name:'Norm'},
+      {sym:'⌊⌋' ,name:'Floor'},
+      {sym:'⌈⌉' ,name:'Ceiling'},
+    ]
+  },
+];
+
+let selected = [];
+
+function render() {
+  const container = document.getElementById('symbolsContainer');
+  container.innerHTML = '';
+  CATEGORIES.forEach(cat => {
+    const section = document.createElement('div');
+    section.className = 'cat-section';
+    section.innerHTML = `<div class="cat-title">${cat.title}</div>`;
+    const grid = document.createElement('div');
+    grid.className = 'symbol-grid';
+    cat.symbols.forEach(s => {
+      const btn = document.createElement('button');
+      btn.className = 'sym-btn';
+      btn.dataset.sym = s.sym;
+      btn.dataset.name = s.name.toLowerCase();
+      btn.innerHTML = `<span class="sym-symbol">${s.sym}</span><span class="sym-name">${s.name}</span>`;
+      btn.onclick = () => selectSym(s.sym, btn);
+      grid.appendChild(btn);
+    });
+    section.appendChild(grid);
+    container.appendChild(section);
+  });
+}
+
+function selectSym(sym, btn) {
+  selected.push(sym);
+  document.getElementById('copyDisplay').textContent = selected.join(' ');
+  // Flash
+  btn.style.background = '#eff6ff';
+  setTimeout(() => btn.style.background = '', 200);
+  // Quick single copy feedback
+  navigator.clipboard.writeText(sym).then(() => showToast(`Copied: ${sym}`));
+}
+
+function clearSelected() {
+  selected = [];
+  document.getElementById('copyDisplay').textContent = '—';
+}
+
+function copySelected() {
+  if (!selected.length) return;
+  const text = selected.join(' ');
+  navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard!'));
+}
+
+function filterSymbols() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  document.querySelectorAll('.sym-btn').forEach(btn => {
+    const match = !q || btn.dataset.sym.toLowerCase().includes(q) || btn.dataset.name.includes(q);
+    btn.classList.toggle('hidden', !match);
+  });
+  // Hide empty sections
+  document.querySelectorAll('.cat-section').forEach(sec => {
+    const visible = [...sec.querySelectorAll('.sym-btn')].some(b => !b.classList.contains('hidden'));
+    sec.style.display = visible ? '' : 'none';
+  });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1600);
+}
+
+render();
+</script>
+
+<!-- COOKIE CONSENT BANNER -->
+<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a2e25;color:#f0f0e8;padding:16px 24px;z-index:9999;font-family:'Nunito',sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,0.2);border-top:3px solid #4caf50;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+    <div style="flex:1;min-width:240px">
+      <p style="font-size:0.88rem;font-weight:700;line-height:1.6;color:rgba(255,255,255,0.85)">
+        🍪 We use advertising cookies (via Google AdSense) to keep this site free for teachers.
+        Our tools themselves collect no data. See our
+        <a href="cookies.html" style="color:#ffc107;font-weight:800;text-decoration:none">Cookie Policy</a>
+        and
+        <a href="privacy.html" style="color:#ffc107;font-weight:800;text-decoration:none">Privacy Policy</a>.
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap">
+      <button onclick="acceptCookies()" style="padding:10px 22px;background:#4caf50;color:white;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;cursor:pointer;">✅ Accept All</button>
+      <button onclick="declineCookies()" style="padding:10px 22px;background:transparent;color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.3);border-radius:8px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;cursor:pointer;">Decline</button>
+      <a href="cookies.html" style="padding:10px 16px;color:rgba(255,255,255,0.5);font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:700;text-decoration:none;display:flex;align-items:center;">More info</a>
+    </div>
+  </div>
+</div>
+<script>
+(function(){var c=localStorage.getItem('htt_cookie_consent');if(!c){document.getElementById('cookieBanner').style.display='block';}})();
+function acceptCookies(){localStorage.setItem('htt_cookie_consent','accepted');document.getElementById('cookieBanner').style.display='none';}
+function declineCookies(){localStorage.setItem('htt_cookie_consent','declined');document.getElementById('cookieBanner').style.display='none';}
+</script>
+</body>
+</html>

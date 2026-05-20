@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Language Anchor Charts — Handy Teacher Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Kalam:wght@400;700&display=swap" rel="stylesheet"/>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M5DCBRK7DE"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-M5DCBRK7DE');</script>
+<style>
+  :root{--bg:#fff9f0;--card:#fff;--board:#2d4a3e;--accent:#16a34a;--text:#1a2e25;--muted:#6b7f76;--border:#e5e0d8;--shadow:0 4px 24px rgba(0,0,0,0.08);--radius:18px;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-height:100vh;display:flex;flex-direction:column;}
+  nav{background:var(--board);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;}
+  nav a{color:rgba(255,255,255,0.6);text-decoration:none;font-weight:700;font-size:14px;}
+  nav a:hover{color:white;}
+  nav .tool-title{font-family:'Kalam',cursive;font-size:1.3rem;color:#86efac;}
+  .app{flex:1;display:grid;grid-template-columns:260px 1fr;height:calc(100vh - 49px);}
+  .sidebar{background:var(--card);border-right:1px solid var(--border);overflow-y:auto;padding:12px;}
+  .sidebar h2{font-size:0.72rem;font-weight:900;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);padding:8px 4px 10px;border-bottom:1px solid var(--border);margin-bottom:10px;}
+  .chart-btn{width:100%;padding:11px 14px;border-radius:10px;border:2px solid transparent;background:transparent;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;color:var(--muted);cursor:pointer;transition:all 0.15s;text-align:left;display:flex;align-items:center;gap:10px;margin-bottom:4px;}
+  .chart-btn:hover{background:var(--bg);color:var(--text);}
+  .chart-btn.active{background:#f0fdf4;border-color:var(--accent);color:var(--board);}
+  .chart-btn .icon{font-size:1.2rem;flex-shrink:0;}
+  .display{overflow-y:auto;padding:28px;background:var(--bg);display:flex;flex-direction:column;align-items:center;gap:16px;}
+  .display-toolbar{width:100%;max-width:720px;display:flex;gap:10px;flex-wrap:wrap;}
+  .tb-btn{padding:9px 16px;border-radius:10px;border:1px solid var(--border);background:var(--card);font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:800;color:var(--text);cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:6px;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+  .tb-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .chart-card{width:100%;max-width:720px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:3px solid var(--border);overflow:hidden;}
+  .chart-card.fullscreen{position:fixed;inset:0;z-index:200;max-width:none;border-radius:0;border:none;overflow-y:auto;}
+  .chart-header{padding:20px 24px 16px;text-align:center;}
+  .chart-title{font-family:'Kalam',cursive;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:700;line-height:1.2;margin-bottom:6px;}
+  .chart-subtitle{font-size:0.85rem;font-weight:700;color:var(--muted);}
+  .chart-body{padding:0 24px 28px;}
+  @media print{nav,.sidebar,.display-toolbar{display:none!important;}.app{grid-template-columns:1fr;}.chart-card{box-shadow:none;border:2px solid #ccc;}}
+  @media(max-width:700px){.app{grid-template-columns:1fr;}.sidebar{max-height:200px;display:flex;flex-wrap:wrap;padding:8px;gap:4px;}.sidebar h2{display:none;}.chart-btn{width:auto;padding:7px 12px;font-size:0.78rem;}}
+  footer{text-align:center;padding:16px;font-size:12px;color:var(--muted);font-weight:600;}
+  footer a{color:var(--muted);text-decoration:none;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html">← All Tools</a>
+  <span class="tool-title">📚 Language Anchor Charts</span>
+  <span style="font-size:12px;color:rgba(255,255,255,0.4)">handyteachertools.com</span>
+</nav>
+<div class="app">
+  <div class="sidebar">
+    <h2>Language Charts</h2>
+    <div id="chartNav"></div>
+  </div>
+  <div class="display" id="display">
+    <div class="display-toolbar">
+      <button class="tb-btn" onclick="window.print()">🖨️ Print</button>
+      <button class="tb-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+    </div>
+    <div class="chart-card" id="chartCard"></div>
+  </div>
+</div>
+
+<div style="max-width:860px;margin:0 auto;padding:32px 20px 48px">
+  <div style="background:#ffffff;border-radius:16px;border:1px solid #e5e0d8;box-shadow:0 4px 20px rgba(0,0,0,0.06);overflow:hidden">
+    <div style="background:#2d4a3e;padding:16px 24px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:1.2rem">📖</span>
+      <h2 style="font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;color:white;margin:0">How to Use Language Anchor Charts</h2>
+    </div>
+    <div style="padding:20px 24px">
+      <p style="font-family:'Nunito',sans-serif;font-size:0.92rem;font-weight:600;color:#3a4a42;line-height:1.85">Language Anchor Charts provides 10 ready-made reference charts covering core language arts concepts. Click any chart title in the sidebar to display it on the right. Each chart is designed to be projected clearly for the whole class to see. Click <strong>Fullscreen</strong> to expand the chart to fill the entire screen for maximum readability, or <strong>Print</strong> to produce a clean printed version. Charts cover grammar, writing, reading comprehension, punctuation, and vocabulary. More charts will be added regularly.</p>
+    </div>
+  </div>
+</div>
+
+<footer><a href="index.html">← Back to all tools</a> · handyteachertools.com</footer>
+
+<script>
+const CHARTS = [
+  {
+    id:0, icon:'📝', title:'Parts of Speech', color:'#16a34a', bg:'#f0fdf4',
+    render: () => `
+      <div class="chart-header" style="background:#f0fdf4;border-bottom:3px solid #16a34a">
+        <div class="chart-title" style="color:#14532d">Parts of Speech</div>
+        <div class="chart-subtitle">The eight building blocks of every sentence</div>
+      </div>
+      <div class="chart-body" style="padding-top:20px;display:flex;flex-direction:column;gap:10px">
+        ${[
+          ['Noun','Names a person, place, thing, or idea','dog, Canada, happiness, love','#16a34a'],
+          ['Pronoun','Replaces a noun to avoid repetition','he, she, they, it, we, you, I','#2563eb'],
+          ['Verb','Shows an action or state of being','run, think, is, was, jump, feel','#ef4444'],
+          ['Adjective','Describes or modifies a noun','tall, red, happy, three, loud','#f59e0b'],
+          ['Adverb','Describes a verb, adjective, or another adverb','quickly, very, well, loudly, never','#7c3aed'],
+          ['Preposition','Shows relationship between a noun and other words','in, on, at, under, beside, through','#0891b2'],
+          ['Conjunction','Joins words, phrases, or clauses','and, but, or, because, although, so','#f97316'],
+          ['Interjection','Expresses strong emotion','Wow! Ouch! Hey! Oh no!','#ec4899'],
+        ].map(([t,d,ex,c])=>`
+          <div style="display:flex;gap:12px;align-items:flex-start;padding:10px 12px;background:${c}08;border-left:4px solid ${c};border-radius:0 10px 10px 0">
+            <div style="min-width:110px;font-family:'Kalam',cursive;font-size:1rem;font-weight:700;color:${c};padding-top:2px">${t}</div>
+            <div style="flex:1">
+              <div style="font-size:0.8rem;font-weight:600;color:#64748b;margin-bottom:3px">${d}</div>
+              <div style="font-family:'Kalam',cursive;font-size:0.88rem;color:#1e293b;font-style:italic">${ex}</div>
+            </div>
+          </div>`).join('')}
+      </div>`
+  },
+  {
+    id:1, icon:'🔤', title:'Punctuation Guide', color:'#dc2626', bg:'#fef2f2',
+    render: () => `
+      <div class="chart-header" style="background:#fef2f2;border-bottom:3px solid #dc2626">
+        <div class="chart-title" style="color:#7f1d1d">Punctuation Guide</div>
+        <div class="chart-subtitle">Using punctuation correctly in writing</div>
+      </div>
+      <div class="chart-body" style="padding-top:20px;display:flex;flex-direction:column;gap:10px">
+        ${[
+          ['.','Period','Ends a declarative or imperative sentence.','She went to the store.','#dc2626'],
+          ['?','Question Mark','Ends a direct question.','Where are you going?','#f59e0b'],
+          ['!','Exclamation Mark','Shows strong emotion or emphasis.','Watch out!','#ef4444'],
+          [',','Comma','Separates items, clauses, or introduces a quote.','I like cats, dogs, and fish.','#7c3aed'],
+          [';','Semicolon','Joins two related independent clauses.','I love reading; she prefers writing.','#0891b2'],
+          [':','Colon','Introduces a list, explanation, or quote.','Bring three things: a pen, paper, and ruler.','#2563eb'],
+          ['"…"','Quotation Marks','Encloses direct speech or a title.','She said, "Hello!"','#16a34a'],
+          ["'",'Apostrophe','Shows possession or marks a contraction.','it\'s, don\'t, Sarah\'s book','#f97316'],
+          ['—','Em Dash','Adds emphasis or an interruption in a sentence.','She was tired — exhausted, really.','#8b5cf6'],
+          ['( )','Parentheses','Adds extra information in a sentence.','She left early (before noon).','#ec4899'],
+        ].map(([sym,name,rule,ex,c])=>`
+          <div style="display:flex;gap:12px;align-items:flex-start;padding:9px 12px;border:1px solid ${c}20;border-radius:10px;background:${c}05">
+            <div style="width:32px;height:32px;background:${c};border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Kalam',cursive;font-size:1.1rem;color:white;flex-shrink:0">${sym}</div>
+            <div style="flex:1">
+              <div style="font-family:'Kalam',cursive;font-size:0.98rem;font-weight:700;color:${c}">${name}</div>
+              <div style="font-size:0.78rem;font-weight:600;color:#64748b;margin:2px 0">${rule}</div>
+              <div style="font-family:'Kalam',cursive;font-size:0.85rem;color:#1e293b;font-style:italic">${ex}</div>
+            </div>
+          </div>`).join('')}
+      </div>`
+  },
+  {
+    id:2, icon:'✍️', title:'Types of Sentences', color:'#7c3aed', bg:'#f5f3ff',
+    render: () => `
+      <div class="chart-header" style="background:#f5f3ff;border-bottom:3px solid #7c3aed">
+        <div class="chart-title" style="color:#4c1d95">Types of Sentences</div>
+        <div class="chart-subtitle">By purpose and by structure</div>
+      </div>
+      <div class="chart-body" style="padding-top:20px;display:flex;flex-direction:column;gap:16px">
+        <div style="font-family:'Kalam',cursive;font-size:1rem;font-weight:700;color:#7c3aed;margin-bottom:4px">By Purpose</div>
+        ${[
+          ['Declarative','Makes a statement. Ends with a period.','The sky is blue.','#2563eb'],
+          ['Interrogative','Asks a question. Ends with a question mark.','What time is it?','#16a34a'],
+          ['Imperative','Gives a command or request. Ends with a period or !','Close the door, please.','#f59e0b'],
+          ['Exclamatory','Expresses strong emotion. Ends with an exclamation mark.','That was amazing!','#ef4444'],
+        ].map(([t,d,ex,c])=>`
+          <div style="border:2px solid ${c}25;border-radius:10px;overflow:hidden">
+            <div style="background:${c};padding:7px 14px;font-family:'Kalam',cursive;font-size:0.95rem;font-weight:700;color:white">${t}</div>
+            <div style="padding:9px 14px">
+              <div style="font-size:0.8rem;font-weight:600;color:#64748b;margin-bottom:5px">${d}</div>
+              <div style="font-family:'Kalam',cursive;font-size:0.9rem;color:#1e293b;font-style:italic">"${ex}"</div>
+            </div>
+          </div>`).join('')}
+        <div style="font-family:'Kalam',cursive;font-size:1rem;font-weight:700;color:#7c3aed;margin-top:4px">By Structure</div>
+        ${[
+          ['Simple','One independent clause','The dog barked.'],
+          ['Compound','Two independent clauses joined by a conjunction','The dog barked, and the cat ran.'],
+          ['Complex','One independent + one dependent clause','Although it was raining, she went outside.'],
+          ['Compound-Complex','Two independent + one or more dependent clauses','She studied hard because she wanted to pass, and she did.'],
+        ].map(([t,d,ex])=>`
+          <div style="display:flex;gap:12px;align-items:flex-start;padding:9px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0">
+            <div style="min-width:130px;font-family:'Kalam',cursive;font-size:0.9rem;font-weight:700;color:#7c3aed">${t}</div>
+            <div>
+              <div style="font-size:0.78rem;font-weight:600;color:#64748b">${d}</div>
+              <div style="font-family:'Kalam',cursive;font-size:0.85rem;color:#1e293b;font-style:italic;margin-top:3px">"${ex}"</div>
+            </div>
+          </div>`).join('')}
+      </div>`
+  },
+  {
+    id:3, icon:'📖', title:'Story Elements', color:'#f59e0b', bg:'#fffbeb',
+    render: () => `
+      <div class="chart-header" style="background:#fffbeb;border-bottom:3px solid #f59e0b">
+        <div class="chart-title" style="color:#78350f">Story Elements</div>
+        <div class="chart-subtitle">The building blocks of every narrative</div>
+      </div>
+      <div class="chart-body" style="padding-top:20px;display:flex;flex-direction:column;gap:12px">
+        ${[
+          ['Characters','The people, animals, or creatures the story is about. Ask: Who is the story about?','#ef4444','👤'],
+          ['Setting','Where and when the story takes place. Ask: Where and when does this happen?','#2563eb','🌍'],
+          ['Plot','The sequence of events — what happens in the story. Ask: What happens?','#16a34a','📋'],
+          ['Conflict','The main problem or challenge the characters must face. Ask: What is the problem?','#f97316','⚡'],
+          ['Climax','The turning point — the most exciting or important moment. Ask: What is the big moment?','#7c3aed','🔝'],
+          ['Resolution','How the conflict is solved. Ask: How is the problem fixed?','#0891b2','✅'],
+          ['Theme','The central message or lesson the story teaches. Ask: What does this story teach us?','#ec4899','💡'],
+          ['Point of View','Who is telling the story (1st, 2nd, or 3rd person). Ask: Who is narrating?','#f59e0b','👁️'],
+        ].map(([t,d,c,icon])=>`
+          <div style="display:flex;gap:12px;align-items:flex-start;padding:11px 14px;background:${c}08;border-left:4px solid ${c};border-radius:0 10px 10px 0">
+            <span style="font-size:1.4rem;flex-shrink:0">${icon}</span>
+            <div>
+              <div style="font-family:'Kalam',cursive;font-size:1.02rem;font-weight:700;color:${c};margin-bottom:3px">${t}</div>
+              <div style="font-size:0.82rem;font-weight:600;color:#64748b;line-height:1.5">${d}</div>
+            </div>
+          </div>`).join('')}
+      </div>`
+  },
+  {
+    id:4, icon:'🔎', title:'Reading Comprehension Strategies', color:'#0891b2', bg:'#ecfeff',
+    render: () => `
+      <div class="chart-header" style="background:#ecfeff;border-bottom:3px solid #0891b2">
+        <div class="chart-title" style="color:#164e63">Reading Comprehension Strategies</div>
+        <div class="chart-subtitle">What good readers do before, during, and after reading</div>
+      </div>
+      <div class="chart-body" style="padding-top:20px;display:flex;flex-direction:column;gap:14px">
+        ${[
+          ['Before Reading','Preview & Predict','Look at the title, headings, and images. What do you think this will be about? Make predictions before you begin.',['Preview the text','Activate prior knowledge','Set a reading purpose','Make predictions'],'#f59e0b'],
+          ['During Reading','Monitor & Question','Check your understanding as you read. Pause and ask yourself questions.',['Stop and summarise each paragraph','Ask: Does this make sense?','Identify unknown words and use context clues','Visualise what is happening'],'#2563eb'],
+          ['After Reading','Reflect & Respond','Think about what you read and what it means.',['Summarise the main idea in your own words','Identify the author\'s purpose','Connect to your own experience','Evaluate: Did you agree? Why or why not?'],'#16a34a'],
+        ].map(([when,title,desc,steps,c])=>`
+          <div style="border:2px solid ${c}30;border-radius:12px;overflow:hidden">
+            <div style="background:${c};padding:10px 16px">
+              <div style="font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.75)">${when}</div>
+              <div style="font-family:'Kalam',cursive;font-size:1.1rem;font-weight:700;color:white">${title}</div>
+            </div>
+            <div style="padding:12px 16px">
+              <div style="font-size:0.82rem;font-weight:600;color:#64748b;margin-bottom:8px">${desc}</div>
+              <ul style="padding-left:16px;display:flex;flex-direction:column;gap:4px">
+                ${steps.map(s=>`<li style="font-size:0.85rem;font-weight:600;color:#1e293b;line-height:1.5">${s}</li>`).join('')}
+              </ul>
+            </div>
+          </div>`).join('')}
+      </div>`
+  },
+  {
+    id:5, icon:'✒️', title:'Writing Process', color:'#16a34a', bg:'#f0fdf4',
+    render: () => `
+      <div class="chart-header" style="background:#f0fdf4;border-bottom:3px solid #16a34a">
+        <div class="chart-title" style="color:#14532d">The Writing Process</div>
+        <div class="chart-subtitle">Five steps every writer follows</div>
+      </div>
+      <div class="chart-body" style="padding-top:20px;display:flex;flex-direction:column;gap:12px">
+        ${[
+          ['1','Pre-writing','Plan your writing before you begin','Brainstorm ideas, create a mind map, make an outline, or draw a diagram. Answer: Who am I writing for? What is my purpose? What do I want to say?','#2563eb'],
+          ['2','Drafting','Write your first attempt — get ideas on paper','Do not worry about being perfect. Write quickly and keep your ideas flowing. Skip lines so you have room to edit later.','#16a34a'],
+          ['3','Revising','Improve the content, structure, and clarity','Read your draft aloud. Check: Does it make sense? Is the order logical? Have I included enough detail? Could any sentences be stronger?','#f59e0b'],
+          ['4','Editing','Fix grammar, spelling, and punctuation errors','Check every sentence. Look for: spelling mistakes, punctuation errors, capital letters, verb tense consistency, and sentence fragments.','#ef4444'],
+          ['5','Publishing','Share your final, polished piece','Write or type your final version. Add a title, your name, and any illustrations if appropriate. Present or submit your work.','#7c3aed'],
+        ].map(([num,title,subtitle,desc,c])=>`
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div style="width:40px;height:40px;border-radius:50%;background:${c};color:white;font-family:'Kalam',cursive;font-size:1.3rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">${num}</div>
+            <div style="flex:1;border:2px solid ${c}25;border-radius:10px;padding:12px;background:${c}05">
+              <div style="font-family:'Kalam',cursive;font-size:1rem;font-weight:700;color:${c}">${title}</div>
+              <div style="font-size:0.78rem;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:${c}80;margin:2px 0 6px">${subtitle}</div>
+              <div style="font-size:0.82rem;font-weight:600;color:#64748b;line-height:1.6">${desc}</div>
+            </div>
+          </div>`).join('')}
+      </div>`
+  },
+  {
+    id:6, icon:'💬', title:'Figurative Language', color:'#ec4899', bg:'#fdf2f8',
+    render: () => `
+      <div class="chart-header" style="background:#fdf2f8;border-bottom:3px solid #ec4899">
+        <div class="chart-title" style="color:#831843">Figurative Language</div>
+        <div class="chart-subtitle">Writing tools that go beyond the literal meaning</div>
+      </div>
+      <div class="chart-body" style="padding-top:20px;display:flex;flex-direction:column;gap:10px">
+        ${[
+          ['Simile','A comparison using "like" or "as"','She was as quiet as a mouse.','#ec4899'],
+          ['Metaphor','A direct comparison — saying one thing IS another','Life is a rollercoaster.','#7c3aed'],
+          ['Personification','Giving human qualities to non-human things','The wind whispered through the trees.','#2563eb'],
+          ['Hyperbole','An extreme exaggeration for effect','I have told you a million times!','#ef4444'],
+          ['Alliteration','Repetition of the same beginning sound','Peter Piper picked a peck of pickled peppers.','#f59e0b'],
+          ['Onomatopoeia','Words that sound like what they describe','The bees buzzed. The door creaked. Splash!','#16a34a'],
+          ['Idiom','A phrase that means something different from its literal words','It is raining cats and dogs.','#f97316'],
+          ['Oxymoron','Two contradictory words placed together','Deafening silence. Bittersweet. Living death.','#0891b2'],
+          ['Symbolism','Using an object to represent an idea or concept','A dove represents peace.','#8b5cf6'],
+          ['Foreshadowing','Hints at what is to come later in the story','Dark clouds gathered as she entered the house.','#64748b'],
+        ].map(([t,d,ex,c])=>`
+          <div style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border-radius:10px;border:1px solid ${c}20;background:${c}06">
+            <div style="min-width:120px;font-family:'Kalam',cursive;font-size:0.95rem;font-weight:700;color:${c}">${t}</div>
+            <div style="flex:1">
+              <div style="font-size:0.78rem;font-weight:600;color:#64748b">${d}</div>
+              <div style="font-family:'Kalam',cursive;font-size:0.85rem;color:#1e293b;font-style:italic;margin-top:3px">"${ex}"</div>
+            </div>
+          </div>`).join('')}
+      </div>`
+  },
+  {
+    id:7, icon:'📣', title:'Persuasive Writing', color:'#f97316', bg:'#fff7ed',
+    render: () => `
+      <div class="chart-header" style="background:#fff7ed;border-bottom:3px solid #f97316">
+        <div class="chart-title" style="color:#7c2d12">Persuasive Writing</div>
+        <div class="chart-subtitle">How to write to persuade your audience</div>
+      </div>
+      <div class="chart-body" style="padding-top:20px;display:flex;flex-direction:column;gap:14px">
+        <div style="background:#fff7ed;border:2px solid #f97316;border-radius:12px;padding:14px;font-family:'Kalam',cursive;font-size:1rem;text-align:center;color:#7c2d12">
+          A persuasive piece states an opinion and uses evidence to convince the reader.
+        </div>
+        <div style="font-family:'Kalam',cursive;font-size:1rem;font-weight:700;color:#f97316">Structure</div>
+        ${[
+          ['Introduction','Hook the reader and state your position clearly','Begin with a question, statistic, or bold statement. End with your thesis.','#ef4444'],
+          ['Body Paragraph 1','Your strongest argument with evidence','State your point → provide evidence → explain how it supports your position.','#f59e0b'],
+          ['Body Paragraph 2','Second argument with evidence','Same structure: point → evidence → explanation.','#f97316'],
+          ['Body Paragraph 3','Counter-argument + rebuttal','Acknowledge the other side, then explain why your position is still stronger.','#7c3aed'],
+          ['Conclusion','Restate your position and call to action','Summarise your key points. End with a powerful closing statement or call to action.','#2563eb'],
+        ].map(([t,d,tip,c])=>`
+          <div style="border:2px solid ${c}25;border-radius:10px;overflow:hidden">
+            <div style="background:${c};padding:8px 14px;font-family:'Kalam',cursive;font-size:0.95rem;font-weight:700;color:white">${t} — ${d}</div>
+            <div style="padding:9px 14px;font-size:0.82rem;font-weight:600;color:#64748b">${tip}</div>
+          </div>`).join('')}
+        <div style="background:#1e293b;border-radius:12px;padding:14px">
+          <div style="font-family:'Kalam',cursive;font-size:1rem;font-weight:700;color:#f97316;margin-bottom:10px">Persuasive Techniques</div>
+          ${[['Ethos','Appeal to credibility — use experts or evidence'],['Pathos','Appeal to emotion — connect with the reader\'s feelings'],['Logos','Appeal to logic — use facts, data, and reasoning'],['Repetition','Repeat key words or phrases for emphasis'],['Rhetorical Question','Ask a question you do not expect the reader to answer']].map(([t,d])=>`<div style="display:flex;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.07)"><span style="font-family:'Kalam',cursive;font-size:0.9rem;color:white;min-width:120px">${t}</span><span style="font-size:0.8rem;font-weight:600;color:#94a3b8">${d}</span></div>`).join('')}
+        </div>
+      </div>`
+  },
+  {
+    id:8, icon:'🔡', title:'Prefixes & Suffixes', color:'#2563eb', bg:'#eff6ff',
+    render: () => `
+      <div class="chart-header" style="background:#eff6ff;border-bottom:3px solid #2563eb">
+        <div class="chart-title" style="color:#1e3a5f">Prefixes & Suffixes</div>
+        <div class="chart-subtitle">Word parts that change a word's meaning</div>
+      </div>
+      <div class="chart-body" style="padding-top:20px;display:flex;flex-direction:column;gap:16px">
+        <div style="font-family:'Kalam',cursive;font-size:1rem;font-weight:700;color:#2563eb">Common Prefixes (added to the beginning of a word)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          ${[
+            ['un-','not, opposite','unhappy, unclear'],
+            ['re-','again','rewrite, redo'],
+            ['pre-','before','preview, predict'],
+            ['dis-','not, opposite','disagree, dislike'],
+            ['mis-','wrongly','misread, mistake'],
+            ['over-','too much','overdue, overeat'],
+            ['sub-','under, below','subway, submarine'],
+            ['inter-','between','international'],
+            ['super-','above, beyond','superhero'],
+            ['anti-','against','antibiotic'],
+          ].map(([p,m,ex])=>`
+            <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:9px;padding:9px 12px">
+              <div style="font-family:'Kalam',cursive;font-size:1rem;font-weight:700;color:#2563eb">${p}</div>
+              <div style="font-size:0.75rem;font-weight:700;color:#64748b">${m}</div>
+              <div style="font-family:'Kalam',cursive;font-size:0.82rem;color:#1e293b;font-style:italic">${ex}</div>
+            </div>`).join('')}
+        </div>
+        <div style="font-family:'Kalam',cursive;font-size:1rem;font-weight:700;color:#7c3aed">Common Suffixes (added to the end of a word)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          ${[
+            ['-ful','full of','cheerful, helpful'],
+            ['-less','without','hopeless, careless'],
+            ['-ness','state of being','kindness, sadness'],
+            ['-tion','-sion action/process','creation, decision'],
+            ['-able/-ible','able to be','readable, possible'],
+            ['-er/-or','person who does','teacher, actor'],
+            ['-ly','in a certain way','quickly, slowly'],
+            ['-ment','result, action','government, movement'],
+            ['-ist','one who','scientist, artist'],
+            ['-ous','having the quality','famous, dangerous'],
+          ].map(([s,m,ex])=>`
+            <div style="background:#f5f3ff;border:1px solid #ddd6fe;border-radius:9px;padding:9px 12px">
+              <div style="font-family:'Kalam',cursive;font-size:1rem;font-weight:700;color:#7c3aed">${s}</div>
+              <div style="font-size:0.75rem;font-weight:700;color:#64748b">${m}</div>
+              <div style="font-family:'Kalam',cursive;font-size:0.82rem;color:#1e293b;font-style:italic">${ex}</div>
+            </div>`).join('')}
+        </div>
+      </div>`
+  },
+  {
+    id:9, icon:'🌟', title:'Vocabulary Strategies', color:'#8b5cf6', bg:'#f5f3ff',
+    render: () => `
+      <div class="chart-header" style="background:#f5f3ff;border-bottom:3px solid #8b5cf6">
+        <div class="chart-title" style="color:#4c1d95">Vocabulary Strategies</div>
+        <div class="chart-subtitle">How to figure out and remember new words</div>
+      </div>
+      <div class="chart-body" style="padding-top:20px;display:flex;flex-direction:column;gap:14px">
+        <div style="background:#4c1d95;border-radius:12px;padding:16px">
+          <div style="font-family:'Kalam',cursive;font-size:1.1rem;color:white;font-weight:700;margin-bottom:8px;text-align:center">When you find an unknown word…</div>
+          ${['Look at the context — what do nearby sentences tell you?','Check for prefixes or suffixes you recognise','Break the word into smaller word parts or root words','Use a dictionary or glossary','Ask yourself: does my guess make sense in the sentence?'].map((s,i)=>`<div style="display:flex;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.1)"><span style="width:22px;height:22px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Kalam',cursive;color:white;font-size:0.85rem;flex-shrink:0">${i+1}</span><span style="font-size:0.85rem;font-weight:600;color:rgba(255,255,255,0.9)">${s}</span></div>`).join('')}
+        </div>
+        <div style="font-family:'Kalam',cursive;font-size:1rem;font-weight:700;color:#8b5cf6">Context Clues — Types to Look For</div>
+        ${[
+          ['Definition Clue','The word is defined within the sentence using "is," "means," or commas.','The geologist, a scientist who studies rocks, found a rare fossil.','#2563eb'],
+          ['Synonym Clue','A word with a similar meaning appears nearby.','She was jubilant — joyful and full of excitement — at the news.','#16a34a'],
+          ['Antonym Clue','A word with an opposite meaning gives a hint.','Unlike his gregarious brother, Tom was shy and quiet.','#ef4444'],
+          ['Example Clue','Examples nearby hint at the word\'s meaning.','Citrus fruits — such as oranges, lemons, and limes — are rich in vitamin C.','#f59e0b'],
+        ].map(([t,d,ex,c])=>`
+          <div style="border:2px solid ${c}25;border-radius:10px;overflow:hidden">
+            <div style="background:${c};padding:7px 14px;font-family:'Kalam',cursive;font-size:0.95rem;font-weight:700;color:white">${t}</div>
+            <div style="padding:9px 14px">
+              <div style="font-size:0.78rem;font-weight:600;color:#64748b;margin-bottom:5px">${d}</div>
+              <div style="font-family:'Kalam',cursive;font-size:0.85rem;color:#1e293b;font-style:italic">"${ex}"</div>
+            </div>
+          </div>`).join('')}
+      </div>`
+  },
+];
+
+let currentChart = 0;
+
+function buildNav() {
+  const nav = document.getElementById('chartNav');
+  CHARTS.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'chart-btn' + (c.id === currentChart ? ' active' : '');
+    btn.innerHTML = `<span class="icon">${c.icon}</span>${c.title}`;
+    btn.onclick = () => showChart(c.id);
+    nav.appendChild(btn);
+  });
+}
+
+function showChart(id) {
+  currentChart = id;
+  document.querySelectorAll('.chart-btn').forEach((b,i) => b.classList.toggle('active', i === id));
+  document.getElementById('chartCard').innerHTML = CHARTS[id].render();
+}
+
+function toggleFullscreen() {
+  const card = document.getElementById('chartCard');
+  card.classList.toggle('fullscreen');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('chartCard').classList.remove('fullscreen'); });
+
+buildNav();
+showChart(0);
+</script>
+
+<!-- COOKIE CONSENT BANNER -->
+<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a2e25;color:#f0f0e8;padding:16px 24px;z-index:9999;font-family:'Nunito',sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,0.2);border-top:3px solid #4caf50;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+    <div style="flex:1;min-width:240px">
+      <p style="font-size:0.88rem;font-weight:700;line-height:1.6;color:rgba(255,255,255,0.85)">
+        🍪 We use advertising cookies (via Google AdSense) to keep this site free for teachers.
+        Our tools themselves collect no data. See our
+        <a href="cookies.html" style="color:#ffc107;font-weight:800;text-decoration:none">Cookie Policy</a>
+        and
+        <a href="privacy.html" style="color:#ffc107;font-weight:800;text-decoration:none">Privacy Policy</a>.
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap">
+      <button onclick="acceptCookies()" style="padding:10px 22px;background:#4caf50;color:white;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;cursor:pointer;">✅ Accept All</button>
+      <button onclick="declineCookies()" style="padding:10px 22px;background:transparent;color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.3);border-radius:8px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;cursor:pointer;">Decline</button>
+      <a href="cookies.html" style="padding:10px 16px;color:rgba(255,255,255,0.5);font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:700;text-decoration:none;display:flex;align-items:center;">More info</a>
+    </div>
+  </div>
+</div>
+<script>
+(function(){var c=localStorage.getItem('htt_cookie_consent');if(!c){document.getElementById('cookieBanner').style.display='block';}})();
+function acceptCookies(){localStorage.setItem('htt_cookie_consent','accepted');document.getElementById('cookieBanner').style.display='none';}
+function declineCookies(){localStorage.setItem('htt_cookie_consent','declined');document.getElementById('cookieBanner').style.display='none';}
+</script>
+</body>
+</html>
