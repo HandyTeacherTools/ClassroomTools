@@ -21,12 +21,12 @@
     --radius: 18px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); colour: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; }
+  body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; }
 
-  nav { background: var(--navy); padding: 12px 24px; display: flex; align-items: centre; justify-content: space-between; }
-  nav a { colour: rgba(255,255,255,0.6); text-decoration: none; font-weight: 700; font-size: 14px; }
-  nav a:hover { colour: white; }
-  nav .tool-title { font-family: 'Fraunces', serif; font-size: 1.3rem; colour: white; }
+  nav { background: var(--navy); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+  nav a { color: rgba(255,255,255,0.6); text-decoration: none; font-weight: 700; font-size: 14px; }
+  nav a:hover { color: white; }
+  nav .tool-title { font-family: 'Fraunces', serif; font-size: 1.3rem; color: white; }
 
   main { max-width: 900px; margin: 0 auto; padding: 40px 20px 60px; }
 
@@ -43,7 +43,7 @@
     padding: 32px;
     margin-bottom: 24px;
   }
-  .builder-card h2 { font-family: 'Fraunces', serif; font-size: 1.5rem; colour: var(--navy); margin-bottom: 20px; display: flex; align-items: centre; gap: 10px; }
+  .builder-card h2 { font-family: 'Fraunces', serif; font-size: 1.5rem; color: var(--navy); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
 
   .question-input {
     width: 100%;
@@ -53,13 +53,13 @@
     font-family: 'Nunito', sans-serif;
     font-size: 1.1rem;
     font-weight: 700;
-    colour: var(--text);
+    color: var(--text);
     outline: none;
-    transition: border-colour 0.2s;
+    transition: border-color 0.2s;
     margin-bottom: 20px;
     background: var(--bg);
   }
-  .question-input:focus { border-colour: var(--accent); }
+  .question-input:focus { border-color: var(--accent); }
 
   .poll-type-tabs {
     display: flex;
@@ -75,29 +75,29 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.88rem;
     font-weight: 800;
-    colour: var(--muted);
+    color: var(--muted);
     cursor: pointer;
     transition: all 0.2s;
   }
-  .type-tab:hover { border-colour: var(--accent); colour: var(--accent); }
-  .type-tab.active { background: var(--accent); border-colour: var(--accent); colour: white; }
+  .type-tab:hover { border-color: var(--accent); color: var(--accent); }
+  .type-tab.active { background: var(--accent); border-color: var(--accent); color: white; }
 
   /* OPTIONS */
   .options-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
   .option-row {
     display: flex;
-    align-items: centre;
+    align-items: center;
     gap: 10px;
   }
   .option-letter {
     width: 36px; height: 36px;
     border-radius: 50%;
     display: flex;
-    align-items: centre;
-    justify-content: centre;
+    align-items: center;
+    justify-content: center;
     font-weight: 900;
     font-size: 0.9rem;
-    colour: white;
+    color: white;
     flex-shrink: 0;
   }
   .option-input {
@@ -108,21 +108,21 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.95rem;
     font-weight: 700;
-    colour: var(--text);
+    color: var(--text);
     outline: none;
-    transition: border-colour 0.2s;
+    transition: border-color 0.2s;
     background: var(--bg);
   }
-  .option-input:focus { border-colour: var(--accent); }
+  .option-input:focus { border-color: var(--accent); }
   .del-btn {
     width: 32px; height: 32px;
     border-radius: 50%;
     border: none;
     background: rgba(239,35,60,0.1);
-    colour: var(--red);
+    color: var(--red);
     font-size: 1rem;
     cursor: pointer;
-    display: flex; align-items: centre; justify-content: centre;
+    display: flex; align-items: center; justify-content: center;
     transition: background 0.15s;
     flex-shrink: 0;
   }
@@ -136,11 +136,11 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.9rem;
     font-weight: 800;
-    colour: var(--muted);
+    color: var(--muted);
     cursor: pointer;
     transition: all 0.2s;
   }
-  .add-option-btn:hover { border-colour: var(--accent); colour: var(--accent); }
+  .add-option-btn:hover { border-color: var(--accent); color: var(--accent); }
 
   /* SETTINGS ROW */
   .settings-row {
@@ -151,8 +151,8 @@
     padding-top: 20px;
     border-top: 1px solid var(--border);
   }
-  .setting-group { display: flex; align-items: centre; gap: 8px; }
-  .setting-group label { font-size: 0.85rem; font-weight: 700; colour: var(--muted); }
+  .setting-group { display: flex; align-items: center; gap: 8px; }
+  .setting-group label { font-size: 0.85rem; font-weight: 700; color: var(--muted); }
   .toggle {
     position: relative;
     width: 44px; height: 24px;
@@ -183,7 +183,7 @@
     width: 100%;
     padding: 18px;
     background: var(--accent);
-    colour: white;
+    color: white;
     border: none;
     border-radius: 14px;
     font-family: 'Nunito', sans-serif;
@@ -193,8 +193,8 @@
     transition: all 0.2s;
     box-shadow: 0 4px 20px rgba(108,99,255,0.3);
     display: flex;
-    align-items: centre;
-    justify-content: centre;
+    align-items: center;
+    justify-content: center;
     gap: 10px;
     margin-top: 8px;
   }
@@ -213,8 +213,8 @@
     font-family: 'Fraunces', serif;
     font-size: clamp(1.4rem, 4vw, 2.2rem);
     font-weight: 900;
-    colour: var(--navy);
-    text-align: centre;
+    color: var(--navy);
+    text-align: center;
     margin-bottom: 36px;
     line-height: 1.3;
   }
@@ -226,7 +226,7 @@
   }
   .vote-btn {
     display: flex;
-    align-items: centre;
+    align-items: center;
     gap: 16px;
     padding: 18px 24px;
     border-radius: 14px;
@@ -235,22 +235,22 @@
     font-family: 'Nunito', sans-serif;
     font-size: 1.05rem;
     font-weight: 800;
-    colour: var(--text);
+    color: var(--text);
     cursor: pointer;
     transition: all 0.2s;
     text-align: left;
   }
-  .vote-btn:hover { border-colour: var(--accent); transform: translateX(4px); background: #f8f6ff; }
-  .vote-btn.voted { border-colour: currentColor; transform: translateX(6px); }
+  .vote-btn:hover { border-color: var(--accent); transform: translateX(4px); background: #f8f6ff; }
+  .vote-btn.voted { border-color: currentColor; transform: translateX(6px); }
   .vote-letter {
     width: 38px; height: 38px;
     border-radius: 50%;
     display: flex;
-    align-items: centre;
-    justify-content: centre;
+    align-items: center;
+    justify-content: center;
     font-weight: 900;
     font-size: 0.95rem;
-    colour: white;
+    color: white;
     flex-shrink: 0;
   }
   .vote-count {
@@ -281,14 +281,14 @@
   /* POLL STATUS */
   .poll-status {
     display: flex;
-    align-items: centre;
+    align-items: center;
     justify-content: space-between;
     gap: 16px;
     flex-wrap: wrap;
     margin-top: 8px;
   }
-  .total-votes { font-size: 1rem; font-weight: 800; colour: var(--muted); }
-  .total-votes span { colour: var(--accent); font-size: 1.3rem; }
+  .total-votes { font-size: 1rem; font-weight: 800; color: var(--muted); }
+  .total-votes span { color: var(--accent); font-size: 1.3rem; }
 
   .poll-actions { display: flex; gap: 10px; flex-wrap: wrap; }
   .btn-sm {
@@ -299,14 +299,14 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.88rem;
     font-weight: 800;
-    colour: var(--text);
+    color: var(--text);
     cursor: pointer;
     transition: all 0.2s;
-    display: flex; align-items: centre; gap: 6px;
+    display: flex; align-items: center; gap: 6px;
   }
-  .btn-sm:hover { border-colour: var(--accent); colour: var(--accent); }
-  .btn-sm.danger:hover { border-colour: var(--red); colour: var(--red); }
-  .btn-sm.primary { background: var(--accent); border-colour: var(--accent); colour: white; }
+  .btn-sm:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-sm.danger:hover { border-color: var(--red); color: var(--red); }
+  .btn-sm.primary { background: var(--accent); border-color: var(--accent); color: white; }
   .btn-sm.primary:hover { background: #5a52e8; }
 
   /* REVEAL OVERLAY */
@@ -341,14 +341,14 @@
     background: white;
     font-size: 0.8rem;
     font-weight: 800;
-    colour: var(--muted);
+    color: var(--muted);
     cursor: pointer;
     transition: all 0.2s;
   }
-  .preset-btn:hover { border-colour: var(--accent); colour: var(--accent); background: #f8f6ff; }
+  .preset-btn:hover { border-color: var(--accent); color: var(--accent); background: #f8f6ff; }
 
-  footer { text-align: centre; padding: 20px; font-size: 12px; colour: var(--muted); font-weight: 600; }
-  footer a { colour: var(--muted); text-decoration: none; }
+  footer { text-align: center; padding: 20px; font-size: 12px; color: var(--muted); font-weight: 600; }
+  footer a { color: var(--muted); text-decoration: none; }
 
   @media (max-width: 500px) {
     .builder-card { padding: 20px; }
@@ -369,7 +369,7 @@
 <nav>
   <a href="index.html">← All Tools</a>
   <span class="tool-title">📊 Quick Poll</span>
-  <span style="font-size:12px;colour:rgba(255,255,255,0.4)">handyteachertools.com</span>
+  <span style="font-size:12px;color:rgba(255,255,255,0.4)">handyteachertools.com</span>
 </nav>
 
 <main>
@@ -382,7 +382,7 @@
 
       <!-- PRESETS -->
       <div>
-        <p style="font-size:0.82rem;colour:var(--muted);font-weight:700;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">Quick Presets</p>
+        <p style="font-size:0.82rem;color:var(--muted);font-weight:700;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">Quick Presets</p>
         <div class="presets">
           <button class="preset-btn" onclick="loadPreset('yesno')">👍 Yes / No</button>
           <button class="preset-btn" onclick="loadPreset('agree')">🤔 Agree / Disagree</button>
@@ -530,7 +530,7 @@
       btn.style.colour = COLORS[i % COLORS.length];
       btn.innerHTML = `
         <span class="vote-letter" style="background:${COLORS[i % COLORS.length]}">${LETTERS[i]}</span>
-        <span style="flex:1;colour:var(--text)">${opt}</span>
+        <span style="flex:1;color:var(--text)">${opt}</span>
         <span class="vote-count ${(showLive || revealed) ? 'visible' : ''}">
           ${showPercent && total > 0 ? pct + '%' : votes[i]}
         </span>
@@ -589,20 +589,20 @@
   loadPreset('yesno');
 </script>
 
+
+
 <!-- HOW TO USE -->
-<div style="max-width:860px;margin:0 auto;padding:32px 20px 48px">
-  <div style="background:#ffffff;border-radius:16px;border:1px solid #e5e0d8;box-shadow:0 4px 20px rgba(0,0,0,0.06);overflow:hidden">
-    <div style="background:#2d4a3e;padding:16px 24px;display:flex;align-items:center;gap:10px">
-      <span style="font-size:1.2rem">📖</span>
-      <h2 style="font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;color:white;margin:0">How to Use the Quick Poll</h2>
+<div style="max-width:860px;margin:0 auto;padding:24px 20px 40px">
+  <div style="background:#ffffff;border-radius:14px;border:1px solid #e5e0d8;box-shadow:0 4px 16px rgba(0,0,0,0.06);overflow:hidden">
+    <div style="background:#2d4a3e;padding:14px 20px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:1.1rem">📖</span>
+      <h2 style="font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:800;color:white;margin:0">About This Tool</h2>
     </div>
-    <div style="padding:20px 24px">
-      <p style="font-family:'Nunito',sans-serif;font-size:0.92rem;font-weight:600;color:#3a4a42;line-height:1.85">Quick Poll lets you run a live class vote in seconds — no student devices needed. Choose from the built-in presets at the top: <strong>Yes / No</strong>, <strong>Agree / Disagree</strong>, <strong>A / B / C / D</strong>, <strong>Rate 1–5</strong>, <strong>True / False</strong>, or <strong>Feeling Check</strong>. Or type your own question and options from scratch. Click <strong>Launch Poll</strong> to display the voting screen on the projector. As students call out or raise their hands for each option, click the corresponding button to add their vote. Results update instantly with animated bar fills. Toggle <strong>Show live results</strong> on or off — some teachers prefer to hide results until everyone has voted to avoid influencing responses. Click <strong>Reveal Results</strong> for a confetti celebration, <strong>Reset Votes</strong> to run the same poll again, or <strong>New Poll</strong> to start fresh.</p>
+    <div style="padding:16px 20px">
+      <p style="font-family:'Nunito',sans-serif;font-size:0.9rem;font-weight:600;color:#3a4a42;line-height:1.75">Quick Poll lets you run a live class vote without any student devices. Choose a preset (Yes/No, A/B/C/D, True/False) or build your own, click <strong>Launch Poll</strong>, then click each option as students vote. Hit <strong>Reveal Results</strong> to show the outcome with a confetti celebration.</p>
     </div>
   </div>
 </div>
-
-
 <!-- COOKIE CONSENT BANNER -->
 <div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a2e25;color:#f0f0e8;padding:16px 24px;z-index:9999;font-family:'Nunito',sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,0.2);border-top:3px solid #4caf50;">
   <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap">

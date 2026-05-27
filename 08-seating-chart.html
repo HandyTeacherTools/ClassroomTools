@@ -21,12 +21,12 @@
     --radius: 14px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); colour: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; }
+  body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; }
 
-  nav { background: var(--board); padding: 12px 24px; display: flex; align-items: centre; justify-content: space-between; }
-  nav a { colour: rgba(255,255,255,0.6); text-decoration: none; font-weight: 700; font-size: 14px; }
-  nav a:hover { colour: white; }
-  nav .tool-title { font-family: 'DM Serif Display', serif; font-size: 1.3rem; colour: white; }
+  nav { background: var(--board); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+  nav a { color: rgba(255,255,255,0.6); text-decoration: none; font-weight: 700; font-size: 14px; }
+  nav a:hover { color: white; }
+  nav .tool-title { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: white; }
 
   .app { display: grid; grid-template-columns: 280px 1fr; height: calc(100vh - 49px); }
 
@@ -42,7 +42,7 @@
     padding: 16px 16px 12px;
     border-bottom: 1px solid var(--border);
     background: var(--board);
-    colour: white;
+    color: white;
   }
   .sidebar-header h2 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; margin-bottom: 8px; }
 
@@ -52,14 +52,14 @@
     border: 1px solid rgba(255,255,255,0.2);
     border-radius: 8px;
     background: rgba(255,255,255,0.1);
-    colour: white;
+    color: white;
     font-family: 'Nunito', sans-serif;
     font-size: 0.82rem;
     resize: none;
     outline: none;
     height: 100px;
   }
-  .class-textarea::placeholder { colour: rgba(255,255,255,0.4); }
+  .class-textarea::placeholder { color: rgba(255,255,255,0.4); }
   .sidebar-header button {
     margin-top: 8px;
     width: 100%;
@@ -67,7 +67,7 @@
     border-radius: 8px;
     border: none;
     background: var(--accent2);
-    colour: white;
+    color: white;
     font-family: 'Nunito', sans-serif;
     font-weight: 800;
     font-size: 0.85rem;
@@ -78,7 +78,7 @@
 
   /* UNASSIGNED POOL */
   .pool-section { flex: 1; overflow-y: auto; padding: 12px; }
-  .pool-section h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.8px; colour: var(--muted); font-weight: 800; margin-bottom: 8px; }
+  .pool-section h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); font-weight: 800; margin-bottom: 8px; }
   .pool {
     min-height: 60px;
     background: #f8fafc;
@@ -89,9 +89,9 @@
     flex-wrap: wrap;
     gap: 6px;
     align-content: flex-start;
-    transition: border-colour 0.2s, background 0.2s;
+    transition: border-color 0.2s, background 0.2s;
   }
-  .pool.drag-over { border-colour: var(--accent); background: #e8f4fd; }
+  .pool.drag-over { border-color: var(--accent); background: #e8f4fd; }
 
   .student-chip {
     padding: 6px 12px;
@@ -103,7 +103,7 @@
     border: 2px solid transparent;
     transition: all 0.15s;
     white-space: nowrap;
-    colour: white;
+    color: white;
     box-shadow: 0 1px 4px rgba(0,0,0,0.15);
   }
   .student-chip:hover { transform: scale(1.05); box-shadow: 0 3px 8px rgba(0,0,0,0.2); }
@@ -117,7 +117,7 @@
     flex-direction: column;
     gap: 8px;
   }
-  .tools-bar h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.8px; colour: var(--muted); font-weight: 800; }
+  .tools-bar h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); font-weight: 800; }
   .layout-btns { display: flex; gap: 6px; flex-wrap: wrap; }
   .layout-btn {
     padding: 6px 12px;
@@ -127,11 +127,11 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.78rem;
     font-weight: 800;
-    colour: var(--text);
+    color: var(--text);
     cursor: pointer;
     transition: all 0.15s;
   }
-  .layout-btn:hover { border-colour: var(--accent); colour: var(--accent); }
+  .layout-btn:hover { border-color: var(--accent); color: var(--accent); }
   .action-btns { display: flex; gap: 6px; }
   .action-btn {
     flex: 1;
@@ -142,12 +142,12 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.8rem;
     font-weight: 800;
-    colour: var(--text);
+    color: var(--text);
     cursor: pointer;
     transition: all 0.15s;
-    text-align: centre;
+    text-align: center;
   }
-  .action-btn:hover { border-colour: var(--accent); colour: var(--accent); }
+  .action-btn:hover { border-color: var(--accent); color: var(--accent); }
 
   /* CLASSROOM */
   .classroom {
@@ -157,7 +157,7 @@
       radial-gradient(circle at 20px 20px, rgba(100,140,180,0.03) 1px, transparent 1px),
       radial-gradient(circle at 60px 60px, rgba(100,140,180,0.03) 1px, transparent 1px);
     background-size: 80px 80px;
-    background-colour: #e8eef4;
+    background-color: #e8eef4;
   }
 
   .classroom-inner {
@@ -169,13 +169,13 @@
 
   /* TEACHER DESK */
   .teacher-area {
-    text-align: centre;
+    text-align: center;
     margin-bottom: 32px;
   }
   .teacher-desk {
     display: inline-block;
     background: var(--board);
-    colour: white;
+    color: white;
     padding: 10px 48px;
     border-radius: 8px;
     font-weight: 800;
@@ -183,20 +183,20 @@
     letter-spacing: 1px;
     box-shadow: 0 3px 12px rgba(44,62,80,0.3);
   }
-  .teacher-label { font-size: 0.75rem; colour: var(--muted); margin-top: 6px; }
+  .teacher-label { font-size: 0.75rem; color: var(--muted); margin-top: 6px; }
 
   /* DESK GRID */
   .desk-grid {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    align-items: centre;
+    align-items: center;
   }
   .desk-row {
     display: flex;
     gap: 16px;
     flex-wrap: wrap;
-    justify-content: centre;
+    justify-content: center;
   }
 
   /* INDIVIDUAL DESK */
@@ -208,43 +208,43 @@
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    align-items: centre;
-    justify-content: centre;
-    text-align: centre;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     padding: 6px;
     position: relative;
     transition: all 0.2s;
     box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     cursor: default;
   }
-  .desk.occupied { border-colour: currentColor; }
-  .desk.drag-over { border-colour: var(--accent); background: #e8f4fd; transform: scale(1.06); box-shadow: 0 4px 16px rgba(52,152,219,0.3); }
+  .desk.occupied { border-color: currentColor; }
+  .desk.drag-over { border-color: var(--accent); background: #e8f4fd; transform: scale(1.06); box-shadow: 0 4px 16px rgba(52,152,219,0.3); }
   .desk.empty-desk {
     border-style: dashed;
-    border-colour: #c0cdd8;
+    border-color: #c0cdd8;
     background: rgba(255,255,255,0.5);
     cursor: pointer;
     opacity: 0.6;
     transition: opacity 0.2s;
   }
-  .desk.empty-desk:hover { opacity: 1; border-colour: var(--accent); }
+  .desk.empty-desk:hover { opacity: 1; border-color: var(--accent); }
 
   .desk-student {
     font-size: 0.75rem;
     font-weight: 800;
     line-height: 1.2;
     word-break: break-word;
-    colour: var(--text);
+    color: var(--text);
   }
   .desk-avatar {
     width: 32px; height: 32px;
     border-radius: 50%;
     display: flex;
-    align-items: centre;
-    justify-content: centre;
+    align-items: center;
+    justify-content: center;
     font-size: 0.65rem;
     font-weight: 900;
-    colour: white;
+    color: white;
     margin-bottom: 4px;
   }
   .desk-remove {
@@ -254,17 +254,17 @@
     border-radius: 50%;
     border: none;
     background: #e74c3c;
-    colour: white;
+    color: white;
     font-size: 10px;
     cursor: pointer;
     display: none;
-    align-items: centre;
-    justify-content: centre;
+    align-items: center;
+    justify-content: center;
     line-height: 1;
     box-shadow: 0 1px 4px rgba(0,0,0,0.2);
   }
   .desk:hover .desk-remove { display: flex; }
-  .desk-plus { font-size: 1.2rem; colour: #a0b0c0; }
+  .desk-plus { font-size: 1.2rem; color: #a0b0c0; }
 
   /* ZOOM CONTROLS */
   .zoom-controls {
@@ -286,12 +286,12 @@
     background: white;
     font-size: 1rem;
     cursor: pointer;
-    display: flex; align-items: centre; justify-content: centre;
+    display: flex; align-items: center; justify-content: center;
     transition: background 0.15s;
     font-weight: 800;
   }
   .zoom-btn:hover { background: var(--bg); }
-  .zoom-label { display: flex; align-items: centre; padding: 0 6px; font-size: 0.8rem; font-weight: 800; colour: var(--muted); }
+  .zoom-label { display: flex; align-items: center; padding: 0 6px; font-size: 0.8rem; font-weight: 800; color: var(--muted); }
 
   /* PRINT */
   @media print {
@@ -314,7 +314,7 @@
 <nav>
   <a href="index.html">← All Tools</a>
   <span class="tool-title">🪑 Seating Chart Builder</span>
-  <span style="font-size:12px;colour:rgba(255,255,255,0.4)">handyteachertools.com</span>
+  <span style="font-size:12px;color:rgba(255,255,255,0.4)">handyteachertools.com</span>
 </nav>
 
 <div class="app">
@@ -459,7 +459,7 @@ Nina Patel</textarea>
   function renderDesks() {
     grid.innerHTML = '';
     if (desks.length === 0) {
-      grid.innerHTML = '<p style="colour:var(--muted);font-size:0.9rem;text-align:centre;padding:40px">Choose a layout →</p>';
+      grid.innerHTML = '<p style="color:var(--muted);font-size:0.9rem;text-align:centre;padding:40px">Choose a layout →</p>';
       return;
     }
     const maxRow = Math.max(...desks.map(d => d.row));
@@ -569,20 +569,20 @@ Nina Patel</textarea>
 </script>
 <footer style="text-align:center;padding:12px;font-size:12px;color:var(--muted);font-weight:600;background:var(--card);border-top:1px solid var(--border)"><a href="index.html" style="color:var(--muted);text-decoration:none">← Back to all tools</a> · handyteachertools.com</footer>
 
+
+
 <!-- HOW TO USE -->
-<div style="max-width:860px;margin:0 auto;padding:32px 20px 48px">
-  <div style="background:#ffffff;border-radius:16px;border:1px solid #e5e0d8;box-shadow:0 4px 20px rgba(0,0,0,0.06);overflow:hidden">
-    <div style="background:#2d4a3e;padding:16px 24px;display:flex;align-items:center;gap:10px">
-      <span style="font-size:1.2rem">📖</span>
-      <h2 style="font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;color:white;margin:0">How to Use the Seating Chart Builder</h2>
+<div style="max-width:860px;margin:0 auto;padding:24px 20px 40px">
+  <div style="background:#ffffff;border-radius:14px;border:1px solid #e5e0d8;box-shadow:0 4px 16px rgba(0,0,0,0.06);overflow:hidden">
+    <div style="background:#2d4a3e;padding:14px 20px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:1.1rem">📖</span>
+      <h2 style="font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:800;color:white;margin:0">About This Tool</h2>
     </div>
-    <div style="padding:20px 24px">
-      <p style="font-family:'Nunito',sans-serif;font-size:0.92rem;font-weight:600;color:#3a4a42;line-height:1.85">The Seating Chart Builder lets you create and display a visual classroom layout with student names assigned to desks. Start by pasting your class list into the text area on the left — one student per line — then click <strong>Load Students</strong>. Choose a layout from the preset buttons: <strong>4×4 Grid</strong>, <strong>5×5 Grid</strong>, <strong>6×4</strong>, <strong>U-Shape</strong>, or <strong>3 Rows</strong>. Click <strong>Auto Fill</strong> to randomly assign students to desks, or drag names from the unassigned pool on the left onto individual desks manually. Swap students between desks by dragging one name onto another — they will switch places automatically. Drag a student back to the unassigned pool to remove them from a desk. Click <strong>Print</strong> to send the seating chart directly to your printer for a physical copy, or leave it on the projector so students can find their seats at the start of class.</p>
+    <div style="padding:16px 20px">
+      <p style="font-family:'Nunito',sans-serif;font-size:0.9rem;font-weight:600;color:#3a4a42;line-height:1.75">The Seating Chart Builder creates a visual classroom layout with student names on desks. Paste your class list, choose a layout preset, then click <strong>Auto Fill</strong> to assign students randomly, or drag names onto desks manually. Click <strong>Print</strong> to produce a copy for the classroom door.</p>
     </div>
   </div>
 </div>
-
-
 <!-- COOKIE CONSENT BANNER -->
 <div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a2e25;color:#f0f0e8;padding:16px 24px;z-index:9999;font-family:'Nunito',sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,0.2);border-top:3px solid #4caf50;">
   <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap">

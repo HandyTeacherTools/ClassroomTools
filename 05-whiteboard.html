@@ -17,7 +17,7 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; overflow: hidden; }
-  body { background: var(--bg); colour: var(--text); font-family: 'Nunito', sans-serif; display: flex; flex-direction: column; }
+  body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; display: flex; flex-direction: column; }
 
   /* TOOLBAR */
   .toolbar {
@@ -25,16 +25,16 @@
     border-bottom: 1px solid var(--border);
     padding: 8px 16px;
     display: flex;
-    align-items: centre;
+    align-items: center;
     gap: 12px;
     flex-wrap: wrap;
     z-index: 10;
     user-select: none;
   }
 
-  .toolbar-brand { font-family: 'Kalam', cursive; font-size: 1.1rem; colour: var(--white); font-weight: 700; margin-right: 8px; white-space: nowrap; }
-  .toolbar-brand a { colour: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.75rem; font-family: 'Nunito'; margin-right: 8px; }
-  .toolbar-brand a:hover { colour: white; }
+  .toolbar-brand { font-family: 'Kalam', cursive; font-size: 1.1rem; color: var(--white); font-weight: 700; margin-right: 8px; white-space: nowrap; }
+  .toolbar-brand a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.75rem; font-family: 'Nunito'; margin-right: 8px; }
+  .toolbar-brand a:hover { color: white; }
 
   .divider { width: 1px; height: 32px; background: var(--border); flex-shrink: 0; }
 
@@ -43,18 +43,18 @@
     border: 2px solid transparent;
     border-radius: 10px;
     background: rgba(255,255,255,0.06);
-    colour: var(--text);
+    color: var(--text);
     font-size: 1.1rem;
     cursor: pointer;
     display: flex;
-    align-items: centre;
-    justify-content: centre;
+    align-items: center;
+    justify-content: center;
     transition: all 0.15s;
     flex-shrink: 0;
     position: relative;
   }
-  .tool-btn:hover { background: rgba(255,255,255,0.12); border-colour: rgba(255,255,255,0.2); }
-  .tool-btn.active { background: rgba(233,69,96,0.2); border-colour: var(--accent); }
+  .tool-btn:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2); }
+  .tool-btn.active { background: rgba(233,69,96,0.2); border-color: var(--accent); }
   .tool-btn[title]:hover::after {
     content: attr(title);
     position: absolute;
@@ -62,7 +62,7 @@
     left: 50%;
     transform: translateX(-50%);
     background: rgba(0,0,0,0.8);
-    colour: white;
+    color: white;
     padding: 3px 8px;
     border-radius: 4px;
     font-size: 11px;
@@ -72,7 +72,7 @@
   }
 
   /* COLOR PALETTE */
-  .colour-palette { display: flex; gap: 5px; align-items: centre; }
+  .colour-palette { display: flex; gap: 5px; align-items: center; }
   .colour-swatch {
     width: 26px; height: 26px;
     border-radius: 50%;
@@ -82,12 +82,12 @@
     flex-shrink: 0;
   }
   .colour-swatch:hover { transform: scale(1.2); }
-  .colour-swatch.active { border-colour: white; box-shadow: 0 0 0 2px rgba(255,255,255,0.4); }
+  .colour-swatch.active { border-color: white; box-shadow: 0 0 0 2px rgba(255,255,255,0.4); }
   input[type=colour] { width: 26px; height: 26px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; cursor: pointer; padding: 0; background: none; }
 
   /* SIZE SLIDER */
-  .size-wrap { display: flex; align-items: centre; gap: 8px; }
-  .size-wrap span { font-size: 0.75rem; colour: var(--muted); font-weight: 700; }
+  .size-wrap { display: flex; align-items: center; gap: 8px; }
+  .size-wrap span { font-size: 0.75rem; color: var(--muted); font-weight: 700; }
   input[type=range].size-slider {
     -webkit-appearance: none;
     width: 80px; height: 4px;
@@ -109,8 +109,8 @@
   }
 
   /* OPACITY */
-  .opacity-wrap { display: flex; align-items: centre; gap: 6px; }
-  .opacity-wrap span { font-size: 0.75rem; colour: var(--muted); font-weight: 700; min-width: 28px; text-align: right; }
+  .opacity-wrap { display: flex; align-items: center; gap: 6px; }
+  .opacity-wrap span { font-size: 0.75rem; color: var(--muted); font-weight: 700; min-width: 28px; text-align: right; }
   input[type=range].opacity-slider {
     -webkit-appearance: none;
     width: 60px; height: 4px;
@@ -126,13 +126,13 @@
   }
 
   /* TEXT CONTROLS (shown when text tool active) */
-  .text-controls { display: none; align-items: centre; gap: 8px; }
+  .text-controls { display: none; align-items: center; gap: 8px; }
   .text-controls.visible { display: flex; }
   .font-size-select {
     background: rgba(255,255,255,0.1);
     border: 1px solid var(--border);
     border-radius: 8px;
-    colour: white;
+    color: white;
     padding: 4px 8px;
     font-family: 'Nunito', sans-serif;
     font-size: 0.85rem;
@@ -162,7 +162,7 @@
     background: transparent;
     border: 2px dashed rgba(255,255,255,0.5);
     border-radius: 4px;
-    colour: white;
+    color: white;
     font-family: 'Kalam', cursive;
     padding: 4px 8px;
     outline: none;
@@ -186,7 +186,7 @@
     padding: 5px 12px;
     font-size: 12px;
     font-weight: 700;
-    colour: var(--muted);
+    color: var(--muted);
     pointer-events: none;
   }
 
@@ -199,17 +199,17 @@
     cursor: pointer;
     transition: all 0.15s;
     font-size: 14px;
-    display: flex; align-items: centre; justify-content: centre;
+    display: flex; align-items: center; justify-content: center;
   }
   .bg-btn:hover { transform: scale(1.1); }
-  .bg-btn.active { border-colour: white; }
-  .bg-dark  { background: #1a1a2e; colour: white; }
-  .bg-white { background: #f5f5f5; colour: #333; }
-  .bg-green { background: #1b4332; colour: #90ee90; }
-  .bg-grid  { background: #0a0a1a; colour: var(--muted); }
+  .bg-btn.active { border-color: white; }
+  .bg-dark  { background: #1a1a2e; color: white; }
+  .bg-white { background: #f5f5f5; color: #333; }
+  .bg-green { background: #1b4332; color: #90ee90; }
+  .bg-grid  { background: #0a0a1a; color: var(--muted); }
 
   /* UNDO/REDO counter */
-  .history-info { font-size: 11px; colour: var(--muted); font-weight: 700; }
+  .history-info { font-size: 11px; color: var(--muted); font-weight: 700; }
 </style>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-M5DCBRK7DE"></script>
@@ -273,7 +273,7 @@
 
   <!-- TEXT CONTROLS -->
   <div class="text-controls" id="textControls">
-    <span style="font-size:0.75rem;colour:var(--muted);font-weight:700">SIZE</span>
+    <span style="font-size:0.75rem;color:var(--muted);font-weight:700">SIZE</span>
     <select class="font-size-select" id="fontSizeSelect" onchange="updateFontSize(this.value)">
       <option value="20">Small</option>
       <option value="32" selected>Medium</option>
@@ -588,20 +588,20 @@
 </script>
 <footer style="text-align:center;padding:10px;font-size:12px;color:#607080;font-weight:600;background:#0f1923;border-top:1px solid #253040"><a href="index.html" style="color:#607080;text-decoration:none">← Back to all tools</a> · handyteachertools.com</footer>
 
+
+
 <!-- HOW TO USE -->
-<div style="max-width:860px;margin:0 auto;padding:32px 20px 48px">
-  <div style="background:#ffffff;border-radius:16px;border:1px solid #e5e0d8;box-shadow:0 4px 20px rgba(0,0,0,0.06);overflow:hidden">
-    <div style="background:#2d4a3e;padding:16px 24px;display:flex;align-items:center;gap:10px">
-      <span style="font-size:1.2rem">📖</span>
-      <h2 style="font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;color:white;margin:0">How to Use the Whiteboard</h2>
+<div style="max-width:860px;margin:0 auto;padding:24px 20px 40px">
+  <div style="background:#ffffff;border-radius:14px;border:1px solid #e5e0d8;box-shadow:0 4px 16px rgba(0,0,0,0.06);overflow:hidden">
+    <div style="background:#2d4a3e;padding:14px 20px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:1.1rem">📖</span>
+      <h2 style="font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:800;color:white;margin:0">About This Tool</h2>
     </div>
-    <div style="padding:20px 24px">
-      <p style="font-family:'Nunito',sans-serif;font-size:0.92rem;font-weight:600;color:#3a4a42;line-height:1.85">The Whiteboard gives you a full digital drawing surface, perfect for demonstrating concepts on the projector without needing a physical board. Select your tool from the toolbar at the top — <strong>Pen</strong> for freehand drawing, <strong>Marker</strong> for broad strokes, <strong>Line</strong>, <strong>Rectangle</strong>, <strong>Circle</strong>, or <strong>Arrow</strong> for shapes, and <strong>Text</strong> to type directly onto the canvas. Pick a colour from the palette or use the custom colour picker, and adjust the brush size with the slider. Switch between four background styles — dark, white, chalkboard green, or grid — to suit your lesson. Use <strong>Undo</strong> (Ctrl+Z) and <strong>Redo</strong> (Ctrl+Y) freely, and save your work as a PNG image at any time. Keyboard shortcuts are available for every tool — press P for pen, E for eraser, T for text, and so on.</p>
+    <div style="padding:16px 20px">
+      <p style="font-family:'Nunito',sans-serif;font-size:0.9rem;font-weight:600;color:#3a4a42;line-height:1.75">The Whiteboard gives you a full digital drawing surface to annotate and explain on the projector. Select a tool from the top bar — pen, marker, shapes, text, or eraser — pick a colour, and draw. Press <strong>Ctrl+Z</strong> to undo and <strong>Save</strong> to download your work as a PNG.</p>
     </div>
   </div>
 </div>
-
-
 <!-- COOKIE CONSENT BANNER -->
 <div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a2e25;color:#f0f0e8;padding:16px 24px;z-index:9999;font-family:'Nunito',sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,0.2);border-top:3px solid #4caf50;">
   <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap">

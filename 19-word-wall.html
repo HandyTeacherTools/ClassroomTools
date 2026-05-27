@@ -160,7 +160,7 @@ function addWord(){
   const term=document.getElementById('wordInput').value.trim();
   if(!term)return;
   const def=document.getElementById('defInput').value.trim();
-  words.push({term,def,colour:selectedColour,id:Date.now()});
+  words.push({term,def,color:selectedColour,id:Date.now()});
   document.getElementById('wordInput').value='';
   document.getElementById('defInput').value='';
   document.getElementById('wordInput').focus();
@@ -172,7 +172,7 @@ function bulkImport(){
   const lines=raw.split('\n').map(l=>l.trim()).filter(l=>l);
   lines.forEach(l=>{
     const[term,...rest]=l.split('|');
-    if(term.trim()) words.push({term:term.trim(),def:(rest.join('|')||'').trim(),colour:CARD_COLOURS[words.length%CARD_COLOURS.length],id:Date.now()+Math.random()});
+    if(term.trim()) words.push({term:term.trim(),def:(rest.join('|')||'').trim(),color:CARD_COLOURS[words.length%CARD_COLOURS.length],id:Date.now()+Math.random()});
   });
   document.getElementById('bulkInput').value='';
   renderWall();
@@ -231,32 +231,32 @@ document.addEventListener('keydown',e=>{
 
 // Init with some examples
 const EXAMPLES=[
-  {term:'Ecosystem',def:'A community of living organisms interacting with their environment',colour:'#7c3aed'},
-  {term:'Habitat',def:'The natural environment where an organism lives',colour:'#0891b2'},
-  {term:'Predator',def:'An animal that hunts and eats other animals',colour:'#dc2626'},
-  {term:'Prey',def:'An animal that is hunted and eaten by a predator',colour:'#2563eb'},
-  {term:'Adaptation',def:'A feature that helps an organism survive in its environment',colour:'#059669'},
-  {term:'Food Chain',def:'A series showing how energy passes from one organism to another',colour:'#ca8a04'},
+  {term:'Ecosystem',def:'A community of living organisms interacting with their environment',color:'#7c3aed'},
+  {term:'Habitat',def:'The natural environment where an organism lives',color:'#0891b2'},
+  {term:'Predator',def:'An animal that hunts and eats other animals',color:'#dc2626'},
+  {term:'Prey',def:'An animal that is hunted and eaten by a predator',color:'#2563eb'},
+  {term:'Adaptation',def:'A feature that helps an organism survive in its environment',color:'#059669'},
+  {term:'Food Chain',def:'A series showing how energy passes from one organism to another',color:'#ca8a04'},
 ];
 words=EXAMPLES.map(e=>({...e,id:Date.now()+Math.random()}));
 renderColours();
 renderWall();
 </script>
 
+
+
 <!-- HOW TO USE -->
-<div style="max-width:860px;margin:0 auto;padding:32px 20px 48px">
-  <div style="background:#ffffff;border-radius:16px;border:1px solid #e5e0d8;box-shadow:0 4px 20px rgba(0,0,0,0.06);overflow:hidden">
-    <div style="background:#2d4a3e;padding:16px 24px;display:flex;align-items:center;gap:10px">
-      <span style="font-size:1.2rem">📖</span>
-      <h2 style="font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;color:white;margin:0">How to Use the Word Wall</h2>
+<div style="max-width:860px;margin:0 auto;padding:24px 20px 40px">
+  <div style="background:#ffffff;border-radius:14px;border:1px solid #e5e0d8;box-shadow:0 4px 16px rgba(0,0,0,0.06);overflow:hidden">
+    <div style="background:#2d4a3e;padding:14px 20px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:1.1rem">📖</span>
+      <h2 style="font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:800;color:white;margin:0">About This Tool</h2>
     </div>
-    <div style="padding:20px 24px">
-      <p style="font-family:'Nunito',sans-serif;font-size:0.92rem;font-weight:600;color:#3a4a42;line-height:1.85">The Word Wall lets you build and display an interactive vocabulary board on the projector — far more flexible than a physical word wall because it can be updated instantly during a lesson. Type a word or term in the <strong>Word / Term</strong> field, add an optional definition, choose a card colour, and click <strong>Add to Wall</strong>. Words appear as colour-coded cards in the display area. For larger lists, use the <strong>Bulk Import</strong> panel — paste in one word per line, or use the format <em>Word | Definition</em> to include definitions. Click any card to <strong>zoom it full screen</strong> on the projector — ideal for drawing attention to a specific term during explanation. Click again (or press Escape) to return to the wall. Hover over a card and click the × to remove it. Use the <strong>A–Z</strong> button to sort the wall alphabetically, and <strong>Print</strong> to create a physical copy for students.</p>
+    <div style="padding:16px 20px">
+      <p style="font-family:'Nunito',sans-serif;font-size:0.9rem;font-weight:600;color:#3a4a42;line-height:1.75">The Word Wall displays an interactive vocabulary board on the projector that can be updated during a lesson. Type a word and optional definition, pick a colour, and click <strong>Add to Wall</strong>. Click any card to zoom it full screen — press Escape to return to the wall.</p>
     </div>
   </div>
 </div>
-
-
 <!-- COOKIE CONSENT BANNER -->
 <div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a2e25;color:#f0f0e8;padding:16px 24px;z-index:9999;font-family:'Nunito',sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,0.2);border-top:3px solid #4caf50;">
   <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap">

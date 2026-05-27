@@ -47,8 +47,8 @@
     justify-content: space-between;
   }
   nav a { color: var(--muted); text-decoration: none; font-weight: 700; font-size: 14px; transition: colour 0.2s; }
-  nav a:hover { colour: var(--text); color: var(--text); }
-  nav .tool-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; colour: var(--text); color: var(--text); }
+  nav a:hover { color: var(--text); color: var(--text); }
+  nav .tool-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: var(--text); color: var(--text); }
 
   main {
     flex: 1;
@@ -79,12 +79,12 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.95rem;
     font-weight: 800;
-    colour: var(--muted);
+    color: var(--muted);
     color: var(--muted);
     cursor: pointer;
     transition: all 0.2s;
   }
-  .mode-tab.active { background: var(--green); colour: #0f1923; color: #0f1923; }
+  .mode-tab.active { background: var(--green); color: #0f1923; color: #0f1923; }
 
   /* CIRCLE TIMER */
   .circle-wrap {
@@ -124,7 +124,7 @@
     font-size: clamp(3.5rem, 12vw, 5.5rem);
     letter-spacing: 4px;
     line-height: 1;
-    colour: var(--text);
+    color: var(--text);
     color: var(--text);
     transition: colour 0.5s;
   }
@@ -133,7 +133,7 @@
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 2px;
-    colour: var(--muted);
+    color: var(--muted);
     color: var(--muted);
   }
 
@@ -158,16 +158,16 @@
     gap: 8px;
     letter-spacing: 0.5px;
   }
-  .btn-start { background: var(--green); colour: #0f1923; color: #0f1923; box-shadow: 0 0 24px rgba(0,230,118,0.25); }
+  .btn-start { background: var(--green); color: #0f1923; color: #0f1923; box-shadow: 0 0 24px rgba(0,230,118,0.25); }
   .btn-start:hover { transform: translateY(-2px); box-shadow: 0 0 36px rgba(0,230,118,0.4); }
-  .btn-pause { background: var(--yellow); colour: #0f1923; color: #0f1923; box-shadow: 0 0 24px rgba(255,234,0,0.2); }
+  .btn-pause { background: var(--yellow); color: #0f1923; color: #0f1923; box-shadow: 0 0 24px rgba(255,234,0,0.2); }
   .btn-pause:hover { transform: translateY(-2px); }
-  .btn-reset { background: rgba(255,255,255,0.07); colour: var(--text); color: var(--text); border: 1px solid var(--border); }
+  .btn-reset { background: rgba(255,255,255,0.07); color: var(--text); color: var(--text); border: 1px solid var(--border); }
   .btn-reset:hover { background: rgba(255,255,255,0.12); }
 
   /* PRESETS */
   .presets-section { width: 100%; }
-  .presets-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; colour: var(--muted); color: var(--muted); margin-bottom: 10px; text-align: center; }
+  .presets-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); color: var(--muted); margin-bottom: 10px; text-align: center; }
   .presets { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
   .preset-btn {
     padding: 9px 18px;
@@ -177,12 +177,12 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.88rem;
     font-weight: 800;
-    colour: var(--text);
+    color: var(--text);
     color: var(--text);
     cursor: pointer;
     transition: all 0.15s;
   }
-  .preset-btn:hover { border-colour: var(--green); border-color: var(--green); colour: var(--green); color: var(--green); }
+  .preset-btn:hover { border-color: var(--green); border-color: var(--green); color: var(--green); color: var(--green); }
 
   /* CUSTOM INPUT */
   .custom-wrap {
@@ -196,7 +196,7 @@
     width: 100%;
     max-width: 380px;
   }
-  .custom-wrap label { font-size: 0.8rem; font-weight: 800; colour: var(--muted); color: var(--muted); white-space: nowrap; }
+  .custom-wrap label { font-size: 0.8rem; font-weight: 800; color: var(--muted); color: var(--muted); white-space: nowrap; }
   .time-inputs { display: flex; align-items: center; gap: 6px; }
   .time-input {
     width: 60px;
@@ -204,7 +204,7 @@
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 8px;
-    colour: var(--text);
+    color: var(--text);
     color: var(--text);
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.5rem;
@@ -212,14 +212,14 @@
     padding: 6px;
     outline: none;
   }
-  .time-input:focus { border-colour: var(--green); border-color: var(--green); }
-  .time-sep { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; colour: var(--muted); color: var(--muted); }
+  .time-input:focus { border-color: var(--green); border-color: var(--green); }
+  .time-sep { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--muted); color: var(--muted); }
   .set-btn {
     padding: 8px 16px;
     border-radius: 8px;
     border: none;
     background: var(--green);
-    colour: #0f1923;
+    color: #0f1923;
     color: #0f1923;
     font-family: 'Nunito', sans-serif;
     font-weight: 800;
@@ -245,7 +245,7 @@
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1px;
-    colour: var(--muted);
+    color: var(--muted);
     color: var(--muted);
     border-bottom: 1px solid var(--border);
     display: flex;
@@ -260,16 +260,16 @@
     font-weight: 700;
     border-bottom: 1px solid rgba(255,255,255,0.04);
   }
-  .lap-num { colour: var(--muted); color: var(--muted); }
-  .lap-time { font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; colour: var(--green); color: var(--green); }
+  .lap-num { color: var(--muted); color: var(--muted); }
+  .lap-time { font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; color: var(--green); color: var(--green); }
 
   /* URGENCY STATES */
   body.urgent-yellow .circle-progress { stroke: var(--yellow); }
-  body.urgent-yellow .time-display { colour: var(--yellow); color: var(--yellow); }
+  body.urgent-yellow .time-display { color: var(--yellow); color: var(--yellow); }
   body.urgent-orange .circle-progress { stroke: var(--orange); }
-  body.urgent-orange .time-display { colour: var(--orange); color: var(--orange); }
+  body.urgent-orange .time-display { color: var(--orange); color: var(--orange); }
   body.urgent-red .circle-progress { stroke: var(--red); }
-  body.urgent-red .time-display { colour: var(--red); color: var(--red); text-shadow: 0 0 30px rgba(255,23,68,0.5); }
+  body.urgent-red .time-display { color: var(--red); color: var(--red); text-shadow: 0 0 30px rgba(255,23,68,0.5); }
   body.urgent-red { animation: redPulse 1s ease-in-out infinite; }
   @keyframes redPulse { 0%,100% { background: #0f1923; } 50% { background: #1a0a0d; } }
 
@@ -281,7 +281,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     background: var(--red);
-    colour: white;
+    color: white;
     color: white;
     font-family: 'Bebas Neue', sans-serif;
     font-size: 5rem;
@@ -295,9 +295,9 @@
   }
   @keyframes bannerPop { from { transform: translate(-50%,-50%) scale(0.7); opacity: 0; } to { transform: translate(-50%,-50%) scale(1); opacity: 1; } }
 
-  footer { padding: 20px; font-size: 12px; colour: var(--muted); color: var(--muted); font-weight: 600; }
-  footer a { colour: var(--muted); color: var(--muted); text-decoration: none; }
-  footer a:hover { colour: var(--green); color: var(--green); }
+  footer { padding: 20px; font-size: 12px; color: var(--muted); color: var(--muted); font-weight: 600; }
+  footer a { color: var(--muted); color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--green); color: var(--green); }
 </style>
 </head>
 <body>
@@ -574,20 +574,20 @@
   updateDisplay();
 </script>
 
+
+
 <!-- HOW TO USE -->
-<div style="max-width:860px;margin:0 auto;padding:32px 20px 48px">
-  <div style="background:#ffffff;border-radius:16px;border:1px solid #e5e0d8;box-shadow:0 4px 20px rgba(0,0,0,0.06);overflow:hidden">
-    <div style="background:#2d4a3e;padding:16px 24px;display:flex;align-items:center;gap:10px">
-      <span style="font-size:1.2rem">📖</span>
-      <h2 style="font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;color:white;margin:0">How to Use the Classroom Timer</h2>
+<div style="max-width:860px;margin:0 auto;padding:24px 20px 40px">
+  <div style="background:#ffffff;border-radius:14px;border:1px solid #e5e0d8;box-shadow:0 4px 16px rgba(0,0,0,0.06);overflow:hidden">
+    <div style="background:#2d4a3e;padding:14px 20px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:1.1rem">📖</span>
+      <h2 style="font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:800;color:white;margin:0">About This Tool</h2>
     </div>
-    <div style="padding:20px 24px">
-      <p style="font-family:'Nunito',sans-serif;font-size:0.92rem;font-weight:600;color:#3a4a42;line-height:1.85">The Classroom Timer works in two modes: <strong>Countdown</strong> for timed activities and <strong>Stopwatch</strong> for open-ended tasks. In countdown mode, click one of the quick preset buttons (1, 2, 3, 5, 10, 15, 20, or 30 minutes) or enter a custom time using the minute and second inputs, then click <strong>Start</strong>. The circular progress ring shrinks as time runs out, and the colour shifts from green to yellow to orange to red as the deadline approaches — making urgency visible from across the room without a word being said. An audio alert sounds when time is up. In stopwatch mode, use the <strong>Lap</strong> button to record split times for activities like relay tasks or reading fluency checks. Press <strong>Space</strong> to start and pause from anywhere on the page.</p>
+    <div style="padding:16px 20px">
+      <p style="font-family:'Nunito',sans-serif;font-size:0.9rem;font-weight:600;color:#3a4a42;line-height:1.75">The Classroom Timer runs as a countdown or stopwatch, with a circular progress ring that changes colour as time runs out — green, yellow, orange, then red. Select a preset time or enter a custom one, then press <strong>Start</strong>. An audio alert plays when time is up.</p>
     </div>
   </div>
 </div>
-
-
 <!-- COOKIE CONSENT BANNER -->
 <div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a2e25;color:#f0f0e8;padding:16px 24px;z-index:9999;font-family:'Nunito',sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,0.2);border-top:3px solid #4caf50;">
   <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap">

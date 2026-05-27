@@ -16,12 +16,12 @@
 <style>
   :root { --bg: #0a0a0a; --surface: #111; --border: #222; --text: #f8f8f8; --muted: #555; --radius: 12px; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); colour: var(--text); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+  body { background: var(--bg); color: var(--text); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
 
   nav { background: #000; border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
-  nav a { colour: var(--muted); color: var(--muted); text-decoration: none; font-weight: 700; font-size: 14px; }
-  nav a:hover { colour: var(--text); color: var(--text); }
-  nav .tool-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; colour: #ffd700; color: #ffd700; }
+  nav a { color: var(--muted); color: var(--muted); text-decoration: none; font-weight: 700; font-size: 14px; }
+  nav a:hover { color: var(--text); color: var(--text); }
+  nav .tool-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: #ffd700; color: #ffd700; }
 
   /* SETUP PANEL */
   .setup-panel {
@@ -30,8 +30,8 @@
     padding: 0 20px;
     width: 100%;
   }
-  .setup-panel h1 { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; letter-spacing: 3px; colour: #ffd700; color: #ffd700; margin-bottom: 6px; }
-  .setup-panel p { colour: var(--muted); color: var(--muted); font-size: 0.9rem; font-weight: 600; margin-bottom: 28px; }
+  .setup-panel h1 { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; letter-spacing: 3px; color: #ffd700; color: #ffd700; margin-bottom: 6px; }
+  .setup-panel p { color: var(--muted); color: var(--muted); font-size: 0.9rem; font-weight: 600; margin-bottom: 28px; }
 
   .team-setup { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
   .team-setup-row { display: flex; align-items: center; gap: 10px; }
@@ -41,16 +41,16 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 10px;
-    colour: var(--text); color: var(--text);
+    color: var(--text); color: var(--text);
     font-family: 'Nunito', sans-serif;
     font-size: 1rem;
     font-weight: 800;
     padding: 11px 14px;
     outline: none;
-    transition: border-colour 0.2s;
+    transition: border-color 0.2s;
   }
-  .team-name-input:focus { border-colour: #ffd700; border-color: #ffd700; }
-  .remove-team-btn { width: 34px; height: 34px; border-radius: 50%; border: none; background: rgba(255,100,100,0.15); colour: #ff6464; color: #ff6464; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; flex-shrink: 0; }
+  .team-name-input:focus { border-color: #ffd700; border-color: #ffd700; }
+  .remove-team-btn { width: 34px; height: 34px; border-radius: 50%; border: none; background: rgba(255,100,100,0.15); color: #ff6464; color: #ff6464; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; flex-shrink: 0; }
   .remove-team-btn:hover { background: rgba(255,100,100,0.3); }
 
   .add-team-btn {
@@ -62,17 +62,17 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.9rem;
     font-weight: 800;
-    colour: var(--muted); color: var(--muted);
+    color: var(--muted); color: var(--muted);
     cursor: pointer;
     transition: all 0.15s;
   }
-  .add-team-btn:hover { border-colour: #ffd700; border-color: #ffd700; colour: #ffd700; color: #ffd700; }
+  .add-team-btn:hover { border-color: #ffd700; border-color: #ffd700; color: #ffd700; color: #ffd700; }
 
   .launch-btn {
     width: 100%;
     padding: 16px;
     background: #ffd700;
-    colour: #000; color: #000;
+    color: #000; color: #000;
     border: none;
     border-radius: 12px;
     font-family: 'Bebas Neue', sans-serif;
@@ -97,7 +97,7 @@
     flex-wrap: wrap;
     gap: 10px;
   }
-  .sb-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 3px; colour: #ffd700; color: #ffd700; }
+  .sb-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 3px; color: #ffd700; color: #ffd700; }
   .sb-controls { display: flex; gap: 8px; flex-wrap: wrap; }
   .sb-btn {
     padding: 8px 16px;
@@ -107,13 +107,13 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.82rem;
     font-weight: 800;
-    colour: var(--text); color: var(--text);
+    color: var(--text); color: var(--text);
     cursor: pointer;
     transition: all 0.15s;
     display: flex; align-items: center; gap: 5px;
   }
-  .sb-btn:hover { border-colour: #ffd700; border-color: #ffd700; colour: #ffd700; color: #ffd700; }
-  .sb-btn.danger:hover { border-colour: #ff6464; border-color: #ff6464; colour: #ff6464; color: #ff6464; }
+  .sb-btn:hover { border-color: #ffd700; border-color: #ffd700; color: #ffd700; color: #ffd700; }
+  .sb-btn.danger:hover { border-color: #ff6464; border-color: #ff6464; color: #ff6464; color: #ff6464; }
 
   /* TEAMS GRID */
   .teams-grid {
@@ -135,7 +135,7 @@
     border: 2px solid var(--border);
     transition: all 0.3s;
   }
-  .team-card.leader { border-colour: #ffd700; border-color: #ffd700; box-shadow: 0 0 30px rgba(255,215,0,0.15); }
+  .team-card.leader { border-color: #ffd700; border-color: #ffd700; box-shadow: 0 0 30px rgba(255,215,0,0.15); }
   .team-card.leader::before { content: '👑'; position: absolute; top: 12px; right: 14px; font-size: 1.4rem; }
 
   .team-top {
@@ -154,7 +154,7 @@
     font-family: 'Bebas Neue', sans-serif;
     font-size: clamp(1.4rem, 3vw, 2rem);
     letter-spacing: 2px;
-    colour: var(--text); color: var(--text);
+    color: var(--text); color: var(--text);
     text-align: center;
     line-height: 1;
   }
@@ -162,7 +162,7 @@
     font-family: 'Bebas Neue', sans-serif;
     font-size: clamp(4rem, 10vw, 7rem);
     line-height: 1;
-    colour: var(--text); color: var(--text);
+    color: var(--text); color: var(--text);
     transition: all 0.15s;
     text-align: center;
   }
@@ -183,9 +183,9 @@
     min-width: 48px;
   }
   .score-btn:active { transform: scale(0.93); }
-  .score-btn.plus { colour: #000; color: #000; }
-  .score-btn.minus { background: rgba(255,255,255,0.07); colour: rgba(255,255,255,0.5); color: rgba(255,255,255,0.5); }
-  .score-btn.minus:hover { background: rgba(255,100,100,0.15); colour: #ff6464; color: #ff6464; }
+  .score-btn.plus { color: #000; color: #000; }
+  .score-btn.minus { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.5); color: rgba(255,255,255,0.5); }
+  .score-btn.minus:hover { background: rgba(255,100,100,0.15); color: #ff6464; color: #ff6464; }
 
   /* SCORE POPUP */
   .score-popup { position: fixed; pointer-events: none; font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; letter-spacing: 2px; z-index: 1000; animation: floatUp 0.8s ease forwards; }
@@ -206,12 +206,12 @@
     overflow-x: auto;
     min-height: 40px;
   }
-  .history-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; colour: var(--muted); color: var(--muted); flex-shrink: 0; }
-  .history-event { font-size: 0.78rem; font-weight: 700; colour: rgba(255,255,255,0.5); color: rgba(255,255,255,0.5); white-space: nowrap; flex-shrink: 0; }
-  .history-event:first-of-type { colour: rgba(255,255,255,0.8); color: rgba(255,255,255,0.8); }
+  .history-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); color: var(--muted); flex-shrink: 0; }
+  .history-event { font-size: 0.78rem; font-weight: 700; color: rgba(255,255,255,0.5); color: rgba(255,255,255,0.5); white-space: nowrap; flex-shrink: 0; }
+  .history-event:first-of-type { color: rgba(255,255,255,0.8); color: rgba(255,255,255,0.8); }
 
-  footer { text-align: center; padding: 12px; font-size: 12px; colour: var(--muted); color: var(--muted); font-weight: 600; background: #000; border-top: 1px solid var(--border); }
-  footer a { colour: var(--muted); color: var(--muted); text-decoration: none; }
+  footer { text-align: center; padding: 12px; font-size: 12px; color: var(--muted); color: var(--muted); font-weight: 600; background: #000; border-top: 1px solid var(--border); }
+  footer a { color: var(--muted); color: var(--muted); text-decoration: none; }
 </style>
 </head>
 <body>
@@ -254,10 +254,10 @@
 
 <script>
 const DEFAULT_TEAMS = [
-  { name: 'Team Red',   colour: '#e74c3c', score: 0 },
-  { name: 'Team Blue',  colour: '#3498db', score: 0 },
-  { name: 'Team Green', colour: '#2ecc71', score: 0 },
-  { name: 'Team Gold',  colour: '#f1c40f', score: 0 },
+  { name: 'Team Red',   color: '#e74c3c', score: 0 },
+  { name: 'Team Blue',  color: '#3498db', score: 0 },
+  { name: 'Team Green', color: '#2ecc71', score: 0 },
+  { name: 'Team Gold',  color: '#f1c40f', score: 0 },
 ];
 const SCORE_VALUES = [1, 2, 3, 5, 10];
 
@@ -284,7 +284,7 @@ function launchScoreboard() {
   const rows = document.querySelectorAll('.team-setup-row');
   teams = [...rows].map(r => ({
     name:   r.querySelector('.team-name-input').value.trim() || 'Team',
-    colour: r.querySelector('.colour-pick').value,
+    color: r.querySelector('.colour-pick').value,
     score:  0,
   })).filter(t => t.name);
   if (teams.length < 2) { alert('Please add at least 2 teams.'); return; }
@@ -319,7 +319,7 @@ function renderScoreboard() {
     card.innerHTML = `
       <div class="team-top" style="background:${team.colour}"></div>
       <div class="team-body">
-        <div class="team-name-display" style="colour:${team.colour};color:${team.colour}">${team.name}</div>
+        <div class="team-name-display" style="color:${team.colour};color:${team.colour}">${team.name}</div>
         <div class="team-score" id="score-${i}">${team.score}</div>
         <div class="score-btns">
           ${plusBtns}
@@ -429,20 +429,20 @@ function spawnConfetti(colour) {
 DEFAULT_TEAMS.forEach(t => addTeamSetup(t));
 </script>
 
+
+
 <!-- HOW TO USE -->
-<div style="max-width:860px;margin:0 auto;padding:32px 20px 48px">
-  <div style="background:#ffffff;border-radius:16px;border:1px solid #e5e0d8;box-shadow:0 4px 20px rgba(0,0,0,0.06);overflow:hidden">
-    <div style="background:#2d4a3e;padding:16px 24px;display:flex;align-items:center;gap:10px">
-      <span style="font-size:1.2rem">📖</span>
-      <h2 style="font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;color:white;margin:0">How to Use the Scoreboard</h2>
+<div style="max-width:860px;margin:0 auto;padding:24px 20px 40px">
+  <div style="background:#ffffff;border-radius:14px;border:1px solid #e5e0d8;box-shadow:0 4px 16px rgba(0,0,0,0.06);overflow:hidden">
+    <div style="background:#2d4a3e;padding:14px 20px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:1.1rem">📖</span>
+      <h2 style="font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:800;color:white;margin:0">About This Tool</h2>
     </div>
-    <div style="padding:20px 24px">
-      <p style="font-family:'Nunito',sans-serif;font-size:0.92rem;font-weight:600;color:#3a4a42;line-height:1.85">The Scoreboard brings a sports-stadium energy to classroom competitions. On the setup screen, enter a name for each team and choose their colour using the colour picker — you can add up to eight teams. Click <strong>Launch Scoreboard</strong> to display the live board. Each team card shows their current score in large numbers. Award points by clicking the <strong>+1</strong>, <strong>+2</strong>, <strong>+3</strong>, <strong>+5</strong>, or <strong>+10</strong> buttons on each card — a floating number animates upward with every click. Deduct a point with <strong>-1</strong>. The leading team automatically receives a 👑 crown. A scrolling history bar at the bottom of the screen logs every score change. Click <strong>Celebrate!</strong> to trigger confetti in the leading team's colour along with a fanfare sound. Use <strong>Reset Scores</strong> to zero out all teams between rounds, and <strong>Edit Teams</strong> to go back and change team names or colours.</p>
+    <div style="padding:16px 20px">
+      <p style="font-family:'Nunito',sans-serif;font-size:0.9rem;font-weight:600;color:#3a4a42;line-height:1.75">The Scoreboard displays a live, sports-style points board for classroom competitions. Set up your teams on the opening screen, click <strong>Launch Scoreboard</strong>, then use the point buttons on each team card to award or deduct points. Click <strong>Celebrate!</strong> to trigger confetti for the winning team.</p>
     </div>
   </div>
 </div>
-
-
 <!-- COOKIE CONSENT BANNER -->
 <div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a2e25;color:#f0f0e8;padding:16px 24px;z-index:9999;font-family:'Nunito',sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,0.2);border-top:3px solid #4caf50;">
   <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap">

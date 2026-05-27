@@ -29,7 +29,7 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
-  body { background: var(--bg); colour: var(--text); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+  body { background: var(--bg); color: var(--text); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
 
   /* starfield bg */
   body::before {
@@ -52,9 +52,9 @@
     display: flex; align-items: center; justify-content: space-between;
     backdrop-filter: blur(10px);
   }
-  nav a { colour: var(--muted); color: var(--muted); text-decoration: none; font-weight: 700; font-size: 14px; transition: colour 0.2s; }
-  nav a:hover { colour: var(--text); color: var(--text); }
-  nav .tool-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; colour: var(--accent); color: var(--accent); }
+  nav a { color: var(--muted); color: var(--muted); text-decoration: none; font-weight: 700; font-size: 14px; transition: colour 0.2s; }
+  nav a:hover { color: var(--text); color: var(--text); }
+  nav .tool-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: var(--accent); color: var(--accent); }
 
   .app {
     flex: 1;
@@ -79,10 +79,10 @@
   .sidebar-header h2 {
     font-family: 'DM Serif Display', serif;
     font-size: 1.15rem;
-    colour: var(--text); color: var(--text);
+    color: var(--text); color: var(--text);
     margin-bottom: 4px;
   }
-  .sidebar-header p { font-size: 0.78rem; colour: var(--muted); color: var(--muted); font-weight: 600; }
+  .sidebar-header p { font-size: 0.78rem; color: var(--muted); color: var(--muted); font-weight: 600; }
 
   .segments-list {
     flex: 1;
@@ -103,7 +103,7 @@
     position: relative;
   }
   .segment-item.current {
-    border-colour: var(--accent);
+    border-color: var(--accent);
     border-color: var(--accent);
     background: rgba(124,106,255,0.08);
     box-shadow: 0 0 20px rgba(124,106,255,0.15);
@@ -113,7 +113,7 @@
   }
   .segment-item.done .seg-label { text-decoration: line-through; }
 
-  .seg-drag { colour: var(--muted); color: var(--muted); font-size: 1rem; cursor: grab; flex-shrink: 0; }
+  .seg-drag { color: var(--muted); color: var(--muted); font-size: 1rem; cursor: grab; flex-shrink: 0; }
   .seg-colour-dot {
     width: 12px; height: 12px;
     border-radius: 50%;
@@ -123,16 +123,16 @@
   .seg-info { flex: 1; min-width: 0; }
   .seg-label {
     font-size: 0.9rem; font-weight: 800;
-    colour: var(--text); color: var(--text);
+    color: var(--text); color: var(--text);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     border: none; background: transparent;
     font-family: 'Nunito', sans-serif;
     outline: none; width: 100%;
   }
-  .seg-label:focus { colour: var(--accent); color: var(--accent); }
+  .seg-label:focus { color: var(--accent); color: var(--accent); }
   .seg-duration {
     font-size: 0.75rem; font-weight: 800;
-    colour: var(--muted); color: var(--muted);
+    color: var(--muted); color: var(--muted);
     margin-top: 2px;
   }
 
@@ -141,23 +141,23 @@
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 8px;
-    colour: var(--text); color: var(--text);
+    color: var(--text); color: var(--text);
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.1rem;
     letter-spacing: 1px;
     text-align: center;
     padding: 5px 4px;
     outline: none;
-    transition: border-colour 0.2s;
+    transition: border-color 0.2s;
   }
-  .seg-mins:focus { border-colour: var(--accent); border-color: var(--accent); }
+  .seg-mins:focus { border-color: var(--accent); border-color: var(--accent); }
 
   .seg-del {
     width: 26px; height: 26px;
     border-radius: 50%;
     border: none;
     background: rgba(255,106,106,0.1);
-    colour: var(--accent2); color: var(--accent2);
+    color: var(--accent2); color: var(--accent2);
     font-size: 0.9rem;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
@@ -182,21 +182,21 @@
     background: var(--surface2);
     border: 1px solid var(--border);
     border-radius: 10px;
-    colour: var(--text); color: var(--text);
+    color: var(--text); color: var(--text);
     font-family: 'Nunito', sans-serif;
     font-size: 0.88rem;
     font-weight: 700;
     padding: 9px 12px;
     outline: none;
-    transition: border-colour 0.2s;
+    transition: border-color 0.2s;
   }
-  .add-seg-input:focus { border-colour: var(--accent); border-color: var(--accent); }
+  .add-seg-input:focus { border-color: var(--accent); border-color: var(--accent); }
   .add-seg-mins {
     width: 56px;
     background: var(--surface2);
     border: 1px solid var(--border);
     border-radius: 10px;
-    colour: var(--text); color: var(--text);
+    color: var(--text); color: var(--text);
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1rem;
     text-align: center;
@@ -208,7 +208,7 @@
     background: var(--accent);
     border: none;
     border-radius: 10px;
-    colour: white; color: white;
+    color: white; color: white;
     font-family: 'Nunito', sans-serif;
     font-weight: 900;
     font-size: 0.88rem;
@@ -220,7 +220,7 @@
 
   /* PRESETS */
   .presets-area { padding: 0 12px 12px; }
-  .presets-label { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; colour: var(--muted); color: var(--muted); margin-bottom: 8px; }
+  .presets-label { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); color: var(--muted); margin-bottom: 8px; }
   .preset-chips { display: flex; gap: 6px; flex-wrap: wrap; }
   .preset-chip {
     padding: 5px 12px;
@@ -228,11 +228,11 @@
     border: 1px solid var(--border);
     background: var(--surface2);
     font-size: 0.75rem; font-weight: 800;
-    colour: var(--muted); color: var(--muted);
+    color: var(--muted); color: var(--muted);
     cursor: pointer;
     transition: all 0.15s;
   }
-  .preset-chip:hover { border-colour: var(--accent); border-color: var(--accent); colour: var(--accent); color: var(--accent); }
+  .preset-chip:hover { border-color: var(--accent); border-color: var(--accent); color: var(--accent); color: var(--accent); }
 
   /* ── DISPLAY ── */
   .display {
@@ -278,13 +278,13 @@
     border-radius: 100px;
     font-size: 0.75rem;
     font-weight: 800;
-    colour: rgba(255,255,255,0.4); color: rgba(255,255,255,0.4);
+    color: rgba(255,255,255,0.4); color: rgba(255,255,255,0.4);
     border: 1px solid var(--border);
     transition: all 0.3s;
     white-space: nowrap;
   }
-  .seg-chip.chip-done { colour: rgba(255,255,255,0.25); color: rgba(255,255,255,0.25); text-decoration: line-through; border-colour: transparent; border-color: transparent; }
-  .seg-chip.chip-current { colour: white; color: white; border-colour: currentColour; border-color: currentColor; font-size: 0.8rem; }
+  .seg-chip.chip-done { color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.25); text-decoration: line-through; border-color: transparent; border-color: transparent; }
+  .seg-chip.chip-current { color: white; color: white; border-color: currentColour; border-color: currentColor; font-size: 0.8rem; }
 
   /* CURRENT SEGMENT LABEL */
   .current-seg-label {
@@ -292,13 +292,13 @@
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 3px;
-    colour: var(--muted); color: var(--muted);
+    color: var(--muted); color: var(--muted);
     text-align: center;
   }
   .current-seg-name {
     font-family: 'DM Serif Display', serif;
     font-size: clamp(1.4rem, 3vw, 2rem);
-    colour: var(--text); color: var(--text);
+    color: var(--text); color: var(--text);
     text-align: center;
     margin-top: 2px;
   }
@@ -309,25 +309,25 @@
     font-size: clamp(5rem, 16vw, 10rem);
     letter-spacing: 6px;
     line-height: 1;
-    colour: var(--text); color: var(--text);
+    color: var(--text); color: var(--text);
     transition: colour 0.5s; color: var(--text);
     text-align: center;
     text-shadow: 0 0 60px rgba(124,106,255,0.2);
   }
-  .big-time.urgent { colour: var(--yellow); color: var(--yellow); text-shadow: 0 0 40px rgba(255,209,102,0.3); }
-  .big-time.critical { colour: var(--accent2); color: var(--accent2); text-shadow: 0 0 40px rgba(255,106,106,0.4); animation: pulse 0.8s ease-in-out infinite; }
+  .big-time.urgent { color: var(--yellow); color: var(--yellow); text-shadow: 0 0 40px rgba(255,209,102,0.3); }
+  .big-time.critical { color: var(--accent2); color: var(--accent2); text-shadow: 0 0 40px rgba(255,106,106,0.4); animation: pulse 0.8s ease-in-out infinite; }
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.7; } }
 
   /* NEXT UP */
   .next-up {
     font-size: 0.82rem;
     font-weight: 800;
-    colour: var(--muted); color: var(--muted);
+    color: var(--muted); color: var(--muted);
     text-align: center;
     min-height: 20px;
     transition: all 0.3s;
   }
-  .next-up span { colour: var(--text); color: var(--text); }
+  .next-up span { color: var(--text); color: var(--text); }
 
   /* CONTROLS */
   .display-controls { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
@@ -342,23 +342,23 @@
     transition: all 0.2s;
     display: flex; align-items: center; gap: 8px;
   }
-  .ctrl-play { background: var(--accent); colour: white; color: white; box-shadow: 0 4px 24px rgba(124,106,255,0.3); }
+  .ctrl-play { background: var(--accent); color: white; color: white; box-shadow: 0 4px 24px rgba(124,106,255,0.3); }
   .ctrl-play:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(124,106,255,0.45); }
-  .ctrl-pause { background: var(--yellow); colour: #0e0e16; color: #0e0e16; }
+  .ctrl-pause { background: var(--yellow); color: #0e0e16; color: #0e0e16; }
   .ctrl-pause:hover { transform: translateY(-2px); }
-  .ctrl-skip { background: var(--surface2); colour: var(--text); color: var(--text); border: 1px solid var(--border); }
-  .ctrl-skip:hover { border-colour: var(--accent); border-color: var(--accent); colour: var(--accent); color: var(--accent); }
-  .ctrl-reset { background: var(--surface2); colour: var(--muted); color: var(--muted); border: 1px solid var(--border); }
-  .ctrl-reset:hover { colour: var(--accent2); color: var(--accent2); border-colour: var(--accent2); border-color: var(--accent2); }
+  .ctrl-skip { background: var(--surface2); color: var(--text); color: var(--text); border: 1px solid var(--border); }
+  .ctrl-skip:hover { border-color: var(--accent); border-color: var(--accent); color: var(--accent); color: var(--accent); }
+  .ctrl-reset { background: var(--surface2); color: var(--muted); color: var(--muted); border: 1px solid var(--border); }
+  .ctrl-reset:hover { color: var(--accent2); color: var(--accent2); border-color: var(--accent2); border-color: var(--accent2); }
 
   /* TOTAL TIME */
   .total-info {
     font-size: 0.8rem;
-    colour: var(--muted); color: var(--muted);
+    color: var(--muted); color: var(--muted);
     font-weight: 700;
     text-align: center;
   }
-  .total-info span { colour: var(--text); color: var(--text); font-weight: 800; }
+  .total-info span { color: var(--text); color: var(--text); font-weight: 800; }
 
   /* TRANSITION OVERLAY */
   .transition-overlay {
@@ -372,9 +372,9 @@
     transition: opacity 0.3s;
   }
   .transition-overlay.show { opacity: 1; pointer-events: all; }
-  .transition-overlay .next-label { font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 3px; colour: rgba(255,255,255,0.7); color: rgba(255,255,255,0.7); margin-bottom: 12px; }
-  .transition-overlay .next-name { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 6vw, 4rem); colour: white; color: white; text-align: center; padding: 0 24px; }
-  .transition-overlay .tap-hint { margin-top: 32px; font-size: 0.85rem; font-weight: 700; colour: rgba(255,255,255,0.5); color: rgba(255,255,255,0.5); }
+  .transition-overlay .next-label { font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 3px; color: rgba(255,255,255,0.7); color: rgba(255,255,255,0.7); margin-bottom: 12px; }
+  .transition-overlay .next-name { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 6vw, 4rem); color: white; color: white; text-align: center; padding: 0 24px; }
+  .transition-overlay .tap-hint { margin-top: 32px; font-size: 0.85rem; font-weight: 700; color: rgba(255,255,255,0.5); color: rgba(255,255,255,0.5); }
 
   /* DONE OVERLAY */
   .done-overlay {
@@ -389,20 +389,20 @@
   .done-overlay.show { display: flex; }
   .done-icon { font-size: 5rem; animation: popIn 0.5s ease; }
   @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-  .done-title { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; letter-spacing: 4px; colour: var(--green); color: var(--green); text-shadow: 0 0 40px rgba(61,220,132,0.4); }
-  .done-sub { font-size: 1rem; font-weight: 700; colour: var(--muted); color: var(--muted); }
+  .done-title { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; letter-spacing: 4px; color: var(--green); color: var(--green); text-shadow: 0 0 40px rgba(61,220,132,0.4); }
+  .done-sub { font-size: 1rem; font-weight: 700; color: var(--muted); color: var(--muted); }
 
   /* EMPTY STATE */
   .empty-state {
     text-align: center;
     padding: 40px;
-    colour: var(--muted); color: var(--muted);
+    color: var(--muted); color: var(--muted);
   }
   .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
   .empty-state p { font-size: 0.9rem; font-weight: 700; line-height: 1.6; max-width: 280px; margin: 0 auto; }
 
-  footer { position: relative; z-index: 1; text-align: center; padding: 12px; font-size: 12px; colour: var(--muted); color: var(--muted); font-weight: 600; background: var(--surface); border-top: 1px solid var(--border); }
-  footer a { colour: var(--muted); color: var(--muted); text-decoration: none; }
+  footer { position: relative; z-index: 1; text-align: center; padding: 12px; font-size: 12px; color: var(--muted); color: var(--muted); font-weight: 600; background: var(--surface); border-top: 1px solid var(--border); }
+  footer a { color: var(--muted); color: var(--muted); text-decoration: none; }
 
   @media (max-width: 700px) {
     .app { grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: auto; }
@@ -548,7 +548,7 @@ let running = false;
 let interval = null;
 
 function loadPreset(key) {
-  segments = PRESETS[key].map((s, i) => ({ ...s, id: Date.now() + i, colour: SEG_COLOURS[i % SEG_COLOURS.length] }));
+  segments = PRESETS[key].map((s, i) => ({ ...s, id: Date.now() + i, color: SEG_COLOURS[i % SEG_COLOURS.length] }));
   currentIdx = 0; remaining = 0; elapsed = 0; running = false;
   clearInterval(interval);
   renderSidebar(); renderDisplay();
@@ -558,7 +558,7 @@ function addSegment() {
   const name = document.getElementById('newSegName').value.trim();
   const mins = parseInt(document.getElementById('newSegMins').value) || 5;
   if (!name) { document.getElementById('newSegName').focus(); return; }
-  segments.push({ label: name, mins, id: Date.now(), colour: SEG_COLOURS[segments.length % SEG_COLOURS.length] });
+  segments.push({ label: name, mins, id: Date.now(), color: SEG_COLOURS[segments.length % SEG_COLOURS.length] });
   document.getElementById('newSegName').value = '';
   renderSidebar(); renderDisplay();
 }
@@ -778,20 +778,20 @@ function beepDone() {
 loadPreset('standard');
 </script>
 
+
+
 <!-- HOW TO USE -->
-<div style="max-width:860px;margin:0 auto;padding:32px 20px 48px">
-  <div style="background:#ffffff;border-radius:16px;border:1px solid #e5e0d8;box-shadow:0 4px 20px rgba(0,0,0,0.06);overflow:hidden">
-    <div style="background:#2d4a3e;padding:16px 24px;display:flex;align-items:center;gap:10px">
-      <span style="font-size:1.2rem">📖</span>
-      <h2 style="font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;color:white;margin:0">How to Use the Lesson Timer Pro</h2>
+<div style="max-width:860px;margin:0 auto;padding:24px 20px 40px">
+  <div style="background:#ffffff;border-radius:14px;border:1px solid #e5e0d8;box-shadow:0 4px 16px rgba(0,0,0,0.06);overflow:hidden">
+    <div style="background:#2d4a3e;padding:14px 20px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:1.1rem">📖</span>
+      <h2 style="font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:800;color:white;margin:0">About This Tool</h2>
     </div>
-    <div style="padding:20px 24px">
-      <p style="font-family:'Nunito',sans-serif;font-size:0.92rem;font-weight:600;color:#3a4a42;line-height:1.85">Lesson Timer Pro lets you plan your entire lesson as a sequence of timed segments, then run through them automatically on the projector. Start by loading a template — choose from <strong>Standard 60min</strong>, <strong>Double Period</strong>, <strong>Short 30min</strong>, or <strong>Exam Class</strong> — or build your own by typing a segment name, setting its duration in minutes, and clicking <strong>Add</strong>. Segments appear in the sidebar where you can edit their names and times. Click <strong>Start</strong> on the main display to begin. The large countdown shows the time remaining in the current segment, and a progress rail across the top shows how far through the lesson you are. When a segment ends, a sound plays and a full-screen transition card shows the name of the next segment — click anywhere to continue. Use <strong>Skip</strong> to jump ahead if a segment runs short, and <strong>Reset</strong> to start the lesson again from the beginning. Keyboard shortcut: press <strong>Space</strong> to start and pause.</p>
+    <div style="padding:16px 20px">
+      <p style="font-family:'Nunito',sans-serif;font-size:0.9rem;font-weight:600;color:#3a4a42;line-height:1.75">Lesson Timer Pro lets you plan your entire lesson as a sequence of timed segments. Load a template or add your own segments in the sidebar, then press <strong>Start</strong> to begin. The timer auto-advances through each stage with a sound alert and full-screen transition between segments.</p>
     </div>
   </div>
 </div>
-
-
 <!-- COOKIE CONSENT BANNER -->
 <div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a2e25;color:#f0f0e8;padding:16px 24px;z-index:9999;font-family:'Nunito',sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,0.2);border-top:3px solid #4caf50;">
   <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap">

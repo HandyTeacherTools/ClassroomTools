@@ -18,25 +18,25 @@
     --radius: 16px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); colour: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; }
+  body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; }
 
-  nav { background: #010409; border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: centre; justify-content: space-between; }
-  nav a { colour: var(--muted); text-decoration: none; font-weight: 700; font-size: 14px; transition: colour 0.2s; }
-  nav a:hover { colour: var(--text); }
-  nav .tool-title { font-family: 'Boogaloo', cursive; font-size: 1.4rem; colour: var(--gold); letter-spacing: 1px; }
+  nav { background: #010409; border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+  nav a { color: var(--muted); text-decoration: none; font-weight: 700; font-size: 14px; transition: colour 0.2s; }
+  nav a:hover { color: var(--text); }
+  nav .tool-title { font-family: 'Boogaloo', cursive; font-size: 1.4rem; color: var(--gold); letter-spacing: 1px; }
 
   main { max-width: 1200px; margin: 0 auto; padding: 32px 20px 60px; }
 
   /* HEADER CONTROLS */
   .top-controls {
     display: flex;
-    align-items: centre;
+    align-items: center;
     justify-content: space-between;
     margin-bottom: 28px;
     flex-wrap: wrap;
     gap: 12px;
   }
-  .top-controls h1 { font-family: 'Boogaloo', cursive; font-size: 2rem; colour: var(--gold); letter-spacing: 1px; }
+  .top-controls h1 { font-family: 'Boogaloo', cursive; font-size: 2rem; color: var(--gold); letter-spacing: 1px; }
 
   .mode-switch {
     display: flex;
@@ -52,34 +52,34 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.9rem;
     font-weight: 800;
-    colour: var(--muted);
+    color: var(--muted);
     cursor: pointer;
     transition: all 0.2s;
   }
-  .mode-btn.active { background: var(--gold); colour: #0d1117; }
+  .mode-btn.active { background: var(--gold); color: #0d1117; }
 
   .btn {
     padding: 10px 18px;
     border-radius: 10px;
     border: 1px solid var(--border);
     background: var(--card);
-    colour: var(--text);
+    color: var(--text);
     font-family: 'Nunito', sans-serif;
     font-size: 0.88rem;
     font-weight: 800;
     cursor: pointer;
     transition: all 0.2s;
     display: flex;
-    align-items: centre;
+    align-items: center;
     gap: 6px;
   }
-  .btn:hover { border-colour: var(--gold); colour: var(--gold); }
+  .btn:hover { border-color: var(--gold); color: var(--gold); }
   .btn-add {
     padding: 12px 20px;
     border-radius: 12px;
     border: 2px dashed var(--border);
     background: rgba(255,215,0,0.04);
-    colour: var(--muted);
+    color: var(--muted);
     font-family: 'Nunito', sans-serif;
     font-size: 0.95rem;
     font-weight: 800;
@@ -88,7 +88,7 @@
     width: 100%;
     margin-top: 4px;
   }
-  .btn-add:hover { border-colour: var(--gold); colour: var(--gold); background: rgba(255,215,0,0.07); }
+  .btn-add:hover { border-color: var(--gold); color: var(--gold); background: rgba(255,215,0,0.07); }
 
   /* TEAMS / INDIVIDUALS GRID */
   .tracker-grid {
@@ -106,12 +106,12 @@
     transition: all 0.2s;
     position: relative;
   }
-  .entity-card:hover { border-colour: rgba(255,215,0,0.3); }
+  .entity-card:hover { border-color: rgba(255,215,0,0.3); }
 
   .entity-header {
     padding: 16px 16px 12px;
     display: flex;
-    align-items: centre;
+    align-items: center;
     gap: 12px;
     position: relative;
   }
@@ -120,21 +120,21 @@
     width: 48px; height: 48px;
     border-radius: 50%;
     display: flex;
-    align-items: centre;
-    justify-content: centre;
+    align-items: center;
+    justify-content: center;
     font-size: 1.4rem;
     flex-shrink: 0;
     font-family: 'Boogaloo', cursive;
     font-size: 1.2rem;
     font-weight: bold;
-    colour: white;
+    color: white;
   }
 
   .entity-info { flex: 1; min-width: 0; }
   .entity-name {
     font-size: 1rem;
     font-weight: 800;
-    colour: var(--text);
+    color: var(--text);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -144,19 +144,19 @@
     border-radius: 4px;
     padding: 0 4px;
   }
-  .entity-rank { font-size: 0.75rem; colour: var(--muted); font-weight: 700; margin-top: 2px; }
+  .entity-rank { font-size: 0.75rem; color: var(--muted); font-weight: 700; margin-top: 2px; }
 
   /* BIG SCORE */
   .entity-score-wrap {
     padding: 0 16px 8px;
-    text-align: centre;
+    text-align: center;
     position: relative;
   }
   .entity-score {
     font-family: 'Boogaloo', cursive;
     font-size: 3.5rem;
     line-height: 1;
-    colour: var(--gold);
+    color: var(--gold);
     transition: all 0.2s;
     display: inline-block;
   }
@@ -169,7 +169,7 @@
     70%  { transform: scale(0.95); }
     100% { transform: scale(1); }
   }
-  .score-unit { font-size: 0.85rem; colour: var(--muted); font-weight: 700; margin-top: -4px; }
+  .score-unit { font-size: 0.85rem; color: var(--muted); font-weight: 700; margin-top: -4px; }
 
   /* POINT BUTTONS */
   .point-controls {
@@ -190,16 +190,16 @@
     cursor: pointer;
     transition: all 0.15s;
     display: flex;
-    align-items: centre;
-    justify-content: centre;
+    align-items: center;
+    justify-content: center;
     gap: 3px;
   }
   .pt-btn:active { transform: scale(0.93); }
-  .pt-plus  { background: rgba(0,255,128,0.12); colour: #00ff80; }
+  .pt-plus  { background: rgba(0,255,128,0.12); color: #00ff80; }
   .pt-plus:hover  { background: rgba(0,255,128,0.22); }
-  .pt-minus { background: rgba(255,69,69,0.12); colour: #ff4545; }
+  .pt-minus { background: rgba(255,69,69,0.12); color: #ff4545; }
   .pt-minus:hover { background: rgba(255,69,69,0.22); }
-  .pt-big   { background: rgba(255,215,0,0.12); colour: var(--gold); }
+  .pt-big   { background: rgba(255,215,0,0.12); color: var(--gold); }
   .pt-big:hover   { background: rgba(255,215,0,0.22); }
 
   /* STREAK */
@@ -208,7 +208,7 @@
     display: flex;
     gap: 3px;
     height: 24px;
-    align-items: centre;
+    align-items: center;
   }
   .streak-dot {
     width: 10px; height: 10px;
@@ -235,12 +235,12 @@
     border-radius: 50%;
     border: none;
     background: rgba(255,69,69,0.15);
-    colour: #ff4545;
+    color: #ff4545;
     font-size: 0.9rem;
     cursor: pointer;
     display: none;
-    align-items: centre;
-    justify-content: centre;
+    align-items: center;
+    justify-content: center;
     transition: background 0.15s;
     z-index: 5;
   }
@@ -271,10 +271,10 @@
     margin-bottom: 24px;
     display: flex;
     gap: 10px;
-    align-items: centre;
+    align-items: center;
     flex-wrap: wrap;
   }
-  .global-controls span { font-size: 0.85rem; font-weight: 700; colour: var(--muted); margin-right: 4px; }
+  .global-controls span { font-size: 0.85rem; font-weight: 700; color: var(--muted); margin-right: 4px; }
   .btn-global {
     padding: 8px 16px;
     border-radius: 8px;
@@ -283,11 +283,11 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.85rem;
     font-weight: 800;
-    colour: var(--text);
+    color: var(--text);
     cursor: pointer;
     transition: all 0.15s;
   }
-  .btn-global:hover { border-colour: var(--gold); colour: var(--gold); }
+  .btn-global:hover { border-color: var(--gold); color: var(--gold); }
 
   /* CROWN animation */
   @keyframes crownPop {
@@ -297,8 +297,8 @@
   }
   .crown-pop { animation: crownPop 0.5s ease; }
 
-  footer { text-align: centre; padding: 20px; font-size: 12px; colour: var(--muted); font-weight: 600; }
-  footer a { colour: var(--muted); text-decoration: none; }
+  footer { text-align: center; padding: 20px; font-size: 12px; color: var(--muted); font-weight: 600; }
+  footer a { color: var(--muted); text-decoration: none; }
 
   @media (max-width: 600px) {
     .tracker-grid { grid-template-columns: 1fr 1fr; }
@@ -319,7 +319,7 @@
 <nav>
   <a href="index.html">← All Tools</a>
   <span class="tool-title">⭐ Reward Points</span>
-  <span style="font-size:12px;colour:var(--muted)">handyteachertools.com</span>
+  <span style="font-size:12px;color:var(--muted)">handyteachertools.com</span>
 </nav>
 
 <main>
@@ -354,9 +354,9 @@
 <!-- SETUP MODAL -->
 <div id="setupModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:none;align-items:centre;justify-content:centre;padding:20px">
   <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;max-width:480px;width:100%;max-height:80vh;overflow-y:auto">
-    <h2 style="font-family:'Boogaloo',cursive;font-size:1.5rem;colour:var(--gold);margin-bottom:16px">⚙️ Setup Names</h2>
-    <p style="font-size:0.85rem;colour:var(--muted);font-weight:700;margin-bottom:8px">One name per line (teams or students):</p>
-    <textarea id="setupTextarea" style="width:100%;height:180px;background:#0d1117;border:1px solid var(--border);border-radius:10px;colour:var(--text);padding:12px;font-family:'Nunito',sans-serif;font-size:0.9rem;resize:vertical;outline:none" placeholder="Team Red&#10;Team Blue&#10;Team Green&#10;Team Yellow"></textarea>
+    <h2 style="font-family:'Boogaloo',cursive;font-size:1.5rem;color:var(--gold);margin-bottom:16px">⚙️ Setup Names</h2>
+    <p style="font-size:0.85rem;color:var(--muted);font-weight:700;margin-bottom:8px">One name per line (teams or students):</p>
+    <textarea id="setupTextarea" style="width:100%;height:180px;background:#0d1117;border:1px solid var(--border);border-radius:10px;color:var(--text);padding:12px;font-family:'Nunito',sans-serif;font-size:0.9rem;resize:vertical;outline:none" placeholder="Team Red&#10;Team Blue&#10;Team Green&#10;Team Yellow"></textarea>
     <div style="display:flex;gap:10px;margin-top:16px">
       <button class="btn" style="flex:1;justify-content:centre" onclick="applySetup()">✅ Apply</button>
       <button class="btn" style="flex:1;justify-content:centre" onclick="closeSetup()">Cancel</button>
@@ -525,20 +525,20 @@
   init();
 </script>
 
+
+
 <!-- HOW TO USE -->
-<div style="max-width:860px;margin:0 auto;padding:32px 20px 48px">
-  <div style="background:#ffffff;border-radius:16px;border:1px solid #e5e0d8;box-shadow:0 4px 20px rgba(0,0,0,0.06);overflow:hidden">
-    <div style="background:#2d4a3e;padding:16px 24px;display:flex;align-items:center;gap:10px">
-      <span style="font-size:1.2rem">📖</span>
-      <h2 style="font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;color:white;margin:0">How to Use the Reward Points Tracker</h2>
+<div style="max-width:860px;margin:0 auto;padding:24px 20px 40px">
+  <div style="background:#ffffff;border-radius:14px;border:1px solid #e5e0d8;box-shadow:0 4px 16px rgba(0,0,0,0.06);overflow:hidden">
+    <div style="background:#2d4a3e;padding:14px 20px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:1.1rem">📖</span>
+      <h2 style="font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:800;color:white;margin:0">About This Tool</h2>
     </div>
-    <div style="padding:20px 24px">
-      <p style="font-family:'Nunito',sans-serif;font-size:0.92rem;font-weight:600;color:#3a4a42;line-height:1.85">The Reward Points Tracker lets you run a live points system for teams or individual students, displayed on the projector for the whole class to see. Switch between <strong>Teams</strong> and <strong>Students</strong> mode using the toggle at the top. Click <strong>Setup</strong> to enter your team or student names — or edit them directly on any card. Award points using the <strong>+1</strong>, <strong>+5</strong>, and <strong>+10 ⭐</strong> buttons on each card, and deduct with <strong>-1</strong> when needed. A floating number pops up with every click to confirm the change, and the score animates to draw attention. The leading team automatically receives a 👑 crown. Use the <strong>Give All</strong> buttons in the top bar to award points to the entire class at once — useful for whole-class achievements. Click <strong>Sort by Score</strong> to rank teams on screen, and <strong>Reset All</strong> at the end of the lesson to start fresh tomorrow.</p>
+    <div style="padding:16px 20px">
+      <p style="font-family:'Nunito',sans-serif;font-size:0.9rem;font-weight:600;color:#3a4a42;line-height:1.75">The Reward Points Tracker displays a live points board for teams or students on the projector. Click the <strong>+1</strong>, <strong>+5</strong>, or <strong>+10</strong> buttons to award points — the leading team gets a 👑 crown automatically. Use <strong>Reset All</strong> to start fresh each lesson.</p>
     </div>
   </div>
 </div>
-
-
 <!-- COOKIE CONSENT BANNER -->
 <div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a2e25;color:#f0f0e8;padding:16px 24px;z-index:9999;font-family:'Nunito',sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,0.2);border-top:3px solid #4caf50;">
   <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap">

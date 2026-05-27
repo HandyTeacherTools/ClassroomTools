@@ -23,7 +23,7 @@
     --radius: 20px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); colour: var(--text); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+  body { background: var(--bg); color: var(--text); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
 
   /* Fun confetti-dot background */
   body::before {
@@ -39,9 +39,9 @@
   }
 
   nav { background: white; border-bottom: 2px solid var(--border); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
-  nav a { colour: var(--muted); color: var(--muted); text-decoration: none; font-weight: 700; font-size: 14px; }
-  nav a:hover { colour: var(--text); color: var(--text); }
-  nav .tool-title { font-family: 'Boogaloo', cursive; font-size: 1.4rem; colour: #ff6b6b; color: #ff6b6b; letter-spacing: 1px; }
+  nav a { color: var(--muted); color: var(--muted); text-decoration: none; font-weight: 700; font-size: 14px; }
+  nav a:hover { color: var(--text); color: var(--text); }
+  nav .tool-title { font-family: 'Boogaloo', cursive; font-size: 1.4rem; color: #ff6b6b; color: #ff6b6b; letter-spacing: 1px; }
 
   main { flex: 1; max-width: 860px; margin: 0 auto; padding: 36px 20px 60px; width: 100%; position: relative; z-index: 1; }
 
@@ -55,16 +55,16 @@
     font-family: 'Nunito', sans-serif;
     font-size: 0.85rem;
     font-weight: 800;
-    colour: var(--muted); color: var(--muted);
+    color: var(--muted); color: var(--muted);
     cursor: pointer;
     transition: all 0.15s;
   }
-  .filter-tab:hover { border-colour: currentColour; border-color: currentColor; }
-  .filter-tab.active { colour: white; color: white; border-colour: transparent; border-color: transparent; }
+  .filter-tab:hover { border-color: currentColour; border-color: currentColor; }
+  .filter-tab.active { color: white; color: white; border-color: transparent; border-color: transparent; }
   .filter-tab[data-cat="all"].active    { background: #2d1f0e; }
   .filter-tab[data-cat="move"].active   { background: #ff6b6b; }
   .filter-tab[data-cat="breathe"].active { background: #4ecdc4; }
-  .filter-tab[data-cat="focus"].active  { background: #ffd166; colour: #2d1f0e; color: #2d1f0e; }
+  .filter-tab[data-cat="focus"].active  { background: #ffd166; color: #2d1f0e; color: #2d1f0e; }
   .filter-tab[data-cat="social"].active { background: #a29bfe; }
   .filter-tab[data-cat="quick"].active  { background: #fd79a8; }
 
@@ -85,7 +85,7 @@
     align-items: center;
     justify-content: center;
     gap: 16px;
-    transition: border-colour 0.4s;
+    transition: border-color 0.4s;
   }
   .pick-card::before {
     content: '';
@@ -110,19 +110,19 @@
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 2px;
-    colour: var(--muted); color: var(--muted);
+    color: var(--muted); color: var(--muted);
   }
   .activity-name {
     font-family: 'Boogaloo', cursive;
     font-size: clamp(2rem, 6vw, 3.2rem);
-    colour: var(--text); color: var(--text);
+    color: var(--text); color: var(--text);
     line-height: 1.1;
     transition: colour 0.3s;
   }
   .activity-desc {
     font-size: 1rem;
     font-weight: 700;
-    colour: var(--muted); color: var(--muted);
+    color: var(--muted); color: var(--muted);
     line-height: 1.7;
     max-width: 520px;
   }
@@ -136,7 +136,7 @@
     padding: 6px 16px;
     font-size: 0.82rem;
     font-weight: 800;
-    colour: var(--muted); color: var(--muted);
+    color: var(--muted); color: var(--muted);
   }
 
   .empty-card {
@@ -148,7 +148,7 @@
     margin-bottom: 24px;
   }
   .empty-card .icon { font-size: 3rem; margin-bottom: 12px; }
-  .empty-card p { font-size: 1rem; font-weight: 700; colour: var(--muted); color: var(--muted); }
+  .empty-card p { font-size: 1rem; font-weight: 700; color: var(--muted); color: var(--muted); }
 
   /* PICK BUTTON */
   .pick-btn {
@@ -157,7 +157,7 @@
     margin: 0 auto 24px;
     padding: 20px;
     background: #ff6b6b;
-    colour: white; color: white;
+    color: white; color: white;
     border: none;
     border-radius: 16px;
     font-family: 'Boogaloo', cursive;
@@ -172,7 +172,7 @@
   .pick-btn:active { transform: scale(0.97); }
 
   /* ACTIVITIES GRID */
-  .grid-label { font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; colour: var(--muted); color: var(--muted); margin-bottom: 14px; }
+  .grid-label { font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); color: var(--muted); margin-bottom: 14px; }
   .activities-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
   .activity-mini {
     background: var(--card);
@@ -185,11 +185,11 @@
     align-items: center;
     gap: 10px;
   }
-  .activity-mini:hover { border-colour: currentColour; border-color: currentColor; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+  .activity-mini:hover { border-color: currentColour; border-color: currentColor; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
   .activity-mini .mini-emoji { font-size: 1.5rem; flex-shrink: 0; }
   .activity-mini .mini-info { min-width: 0; }
-  .activity-mini .mini-name { font-size: 0.88rem; font-weight: 800; colour: var(--text); color: var(--text); line-height: 1.2; }
-  .activity-mini .mini-dur { font-size: 0.72rem; font-weight: 700; colour: var(--muted); color: var(--muted); margin-top: 2px; }
+  .activity-mini .mini-name { font-size: 0.88rem; font-weight: 800; color: var(--text); color: var(--text); line-height: 1.2; }
+  .activity-mini .mini-dur { font-size: 0.72rem; font-weight: 700; color: var(--muted); color: var(--muted); margin-top: 2px; }
 
   /* TIMER */
   .break-timer {
@@ -205,16 +205,16 @@
     align-items: center;
   }
   .break-timer.visible { display: flex; }
-  .break-timer-label { font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; colour: var(--muted); color: var(--muted); }
-  .break-timer-time { font-family: 'Boogaloo', cursive; font-size: 3rem; colour: var(--text); color: var(--text); line-height: 1; }
+  .break-timer-label { font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); color: var(--muted); }
+  .break-timer-time { font-family: 'Boogaloo', cursive; font-size: 3rem; color: var(--text); color: var(--text); line-height: 1; }
   .break-timer-bar { width: 100%; max-width: 320px; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
   .break-timer-fill { height: 100%; background: #ff6b6b; border-radius: 4px; width: 100%; transition: width 1s linear; }
   .timer-btns { display: flex; gap: 8px; }
-  .timer-btn { padding: 8px 16px; border-radius: 8px; border: 2px solid var(--border); background: white; font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 800; colour: var(--text); color: var(--text); cursor: pointer; transition: all 0.15s; }
-  .timer-btn:hover { border-colour: #ff6b6b; border-color: #ff6b6b; colour: #ff6b6b; color: #ff6b6b; }
+  .timer-btn { padding: 8px 16px; border-radius: 8px; border: 2px solid var(--border); background: white; font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 800; color: var(--text); color: var(--text); cursor: pointer; transition: all 0.15s; }
+  .timer-btn:hover { border-color: #ff6b6b; border-color: #ff6b6b; color: #ff6b6b; color: #ff6b6b; }
 
-  footer { text-align: center; padding: 20px; font-size: 12px; colour: var(--muted); color: var(--muted); font-weight: 600; position: relative; z-index: 1; }
-  footer a { colour: var(--muted); color: var(--muted); text-decoration: none; }
+  footer { text-align: center; padding: 20px; font-size: 12px; color: var(--muted); color: var(--muted); font-weight: 600; position: relative; z-index: 1; }
+  footer a { color: var(--muted); color: var(--muted); text-decoration: none; }
 </style>
 </head>
 <body>
@@ -271,42 +271,42 @@
 <script>
 const ACTIVITIES = [
   // MOVE
-  { cat: 'move', emoji: '⭐', name: 'Star Jumps', desc: 'Do 20 star jumps as fast as you can. Keep count together as a class!', duration: '1 min', mins: 1, colour: '#ff6b6b' },
-  { cat: 'move', emoji: '🙅', name: 'Simon Says', desc: 'Quick round of Simon Says — teacher leads. Keep it quick with silly actions!', duration: '3 min', mins: 3, colour: '#ff6b6b' },
-  { cat: 'move', emoji: '💃', name: 'Freeze Dance', desc: 'Play 30 seconds of music — everyone dances. When it stops, freeze like a statue!', duration: '2 min', mins: 2, colour: '#ff6b6b' },
-  { cat: 'move', emoji: '🤸', name: 'Stretch Break', desc: 'Reach up high, touch your toes, roll your shoulders, twist side to side. Hold each for 5 seconds.', duration: '2 min', mins: 2, colour: '#ff6b6b' },
-  { cat: 'move', emoji: '🦶', name: 'Foot Tap Relay', desc: 'Stand up and tap your feet as fast as you can for 30 seconds. Who can keep going the longest?', duration: '1 min', mins: 1, colour: '#ff6b6b' },
-  { cat: 'move', emoji: '🤾', name: 'Air Catch', desc: 'Students mime throwing and catching an invisible ball with their neighbour. Get faster each round!', duration: '2 min', mins: 2, colour: '#ff6b6b' },
-  { cat: 'move', emoji: '🐻', name: 'Animal Walks', desc: 'Call out animals — everyone walks like that animal across their space. Try: bear, crab, penguin, frog!', duration: '3 min', mins: 3, colour: '#ff6b6b' },
+  { cat: 'move', emoji: '⭐', name: 'Star Jumps', desc: 'Do 20 star jumps as fast as you can. Keep count together as a class!', duration: '1 min', mins: 1, color: '#ff6b6b' },
+  { cat: 'move', emoji: '🙅', name: 'Simon Says', desc: 'Quick round of Simon Says — teacher leads. Keep it quick with silly actions!', duration: '3 min', mins: 3, color: '#ff6b6b' },
+  { cat: 'move', emoji: '💃', name: 'Freeze Dance', desc: 'Play 30 seconds of music — everyone dances. When it stops, freeze like a statue!', duration: '2 min', mins: 2, color: '#ff6b6b' },
+  { cat: 'move', emoji: '🤸', name: 'Stretch Break', desc: 'Reach up high, touch your toes, roll your shoulders, twist side to side. Hold each for 5 seconds.', duration: '2 min', mins: 2, color: '#ff6b6b' },
+  { cat: 'move', emoji: '🦶', name: 'Foot Tap Relay', desc: 'Stand up and tap your feet as fast as you can for 30 seconds. Who can keep going the longest?', duration: '1 min', mins: 1, color: '#ff6b6b' },
+  { cat: 'move', emoji: '🤾', name: 'Air Catch', desc: 'Students mime throwing and catching an invisible ball with their neighbour. Get faster each round!', duration: '2 min', mins: 2, color: '#ff6b6b' },
+  { cat: 'move', emoji: '🐻', name: 'Animal Walks', desc: 'Call out animals — everyone walks like that animal across their space. Try: bear, crab, penguin, frog!', duration: '3 min', mins: 3, color: '#ff6b6b' },
 
   // BREATHE
-  { cat: 'breathe', emoji: '🌬️', name: 'Box Breathing', desc: 'Breathe in for 4 counts → hold for 4 → breathe out for 4 → hold for 4. Repeat 4 times. Eyes closed.', duration: '2 min', mins: 2, colour: '#4ecdc4' },
-  { cat: 'breathe', emoji: '🎈', name: 'Balloon Breaths', desc: 'Imagine your belly is a balloon. Breathe in slowly to inflate it, breathe out slowly to deflate. Do this 5 times.', duration: '2 min', mins: 2, colour: '#4ecdc4' },
-  { cat: 'breathe', emoji: '🌊', name: 'Ocean Breathing', desc: 'Breathe in through your nose for 5 counts (the wave comes in), out through your mouth for 5 (the wave goes out). Repeat slowly.', duration: '2 min', mins: 2, colour: '#4ecdc4' },
-  { cat: 'breathe', emoji: '✋', name: 'Five Finger Breathing', desc: 'Trace your hand — breathe in up each finger, breathe out down each finger. Go slowly. Both hands.', duration: '2 min', mins: 2, colour: '#4ecdc4' },
-  { cat: 'breathe', emoji: '🕯️', name: 'Candle Breathing', desc: 'Imagine a candle in front of you. Breathe in through your nose, then blow the candle out slowly without putting it out. Repeat 6 times.', duration: '1 min', mins: 1, colour: '#4ecdc4' },
+  { cat: 'breathe', emoji: '🌬️', name: 'Box Breathing', desc: 'Breathe in for 4 counts → hold for 4 → breathe out for 4 → hold for 4. Repeat 4 times. Eyes closed.', duration: '2 min', mins: 2, color: '#4ecdc4' },
+  { cat: 'breathe', emoji: '🎈', name: 'Balloon Breaths', desc: 'Imagine your belly is a balloon. Breathe in slowly to inflate it, breathe out slowly to deflate. Do this 5 times.', duration: '2 min', mins: 2, color: '#4ecdc4' },
+  { cat: 'breathe', emoji: '🌊', name: 'Ocean Breathing', desc: 'Breathe in through your nose for 5 counts (the wave comes in), out through your mouth for 5 (the wave goes out). Repeat slowly.', duration: '2 min', mins: 2, color: '#4ecdc4' },
+  { cat: 'breathe', emoji: '✋', name: 'Five Finger Breathing', desc: 'Trace your hand — breathe in up each finger, breathe out down each finger. Go slowly. Both hands.', duration: '2 min', mins: 2, color: '#4ecdc4' },
+  { cat: 'breathe', emoji: '🕯️', name: 'Candle Breathing', desc: 'Imagine a candle in front of you. Breathe in through your nose, then blow the candle out slowly without putting it out. Repeat 6 times.', duration: '1 min', mins: 1, color: '#4ecdc4' },
 
   // FOCUS
-  { cat: 'focus', emoji: '🔢', name: 'Count Backwards', desc: 'Everyone silently counts backwards from 100 by 7s (100, 93, 86…). How far can you get in 60 seconds?', duration: '1 min', mins: 1, colour: '#ffd166' },
-  { cat: 'focus', emoji: '👁️', name: 'Spot the Difference', desc: 'Students close their eyes. Change 5 things in the room. Who can spot the most changes when they open their eyes?', duration: '3 min', mins: 3, colour: '#ffd166' },
-  { cat: 'focus', emoji: '🤫', name: 'Silent Minute', desc: 'One full minute of complete silence. No fidgeting. Eyes closed. Focus on your breathing. Ring a bell to start and end.', duration: '1 min', mins: 1, colour: '#ffd166' },
-  { cat: 'focus', emoji: '🎨', name: 'Doodle Break', desc: 'Students draw whatever comes to mind for 3 minutes. No instructions, no right answer. Share with a neighbour.', duration: '3 min', mins: 3, colour: '#ffd166' },
-  { cat: 'focus', emoji: '🪨', name: 'Statue Challenge', desc: 'Everyone freezes in the position they are in. Who can hold the stillest for 30 seconds? A great refocusing tool!', duration: '1 min', mins: 1, colour: '#ffd166' },
-  { cat: 'focus', emoji: '🧩', name: '20 Uses', desc: 'Give students an everyday object (pencil, chair, cup). How many uses can they think of in 2 minutes? Get creative!', duration: '2 min', mins: 2, colour: '#ffd166' },
+  { cat: 'focus', emoji: '🔢', name: 'Count Backwards', desc: 'Everyone silently counts backwards from 100 by 7s (100, 93, 86…). How far can you get in 60 seconds?', duration: '1 min', mins: 1, color: '#ffd166' },
+  { cat: 'focus', emoji: '👁️', name: 'Spot the Difference', desc: 'Students close their eyes. Change 5 things in the room. Who can spot the most changes when they open their eyes?', duration: '3 min', mins: 3, color: '#ffd166' },
+  { cat: 'focus', emoji: '🤫', name: 'Silent Minute', desc: 'One full minute of complete silence. No fidgeting. Eyes closed. Focus on your breathing. Ring a bell to start and end.', duration: '1 min', mins: 1, color: '#ffd166' },
+  { cat: 'focus', emoji: '🎨', name: 'Doodle Break', desc: 'Students draw whatever comes to mind for 3 minutes. No instructions, no right answer. Share with a neighbour.', duration: '3 min', mins: 3, color: '#ffd166' },
+  { cat: 'focus', emoji: '🪨', name: 'Statue Challenge', desc: 'Everyone freezes in the position they are in. Who can hold the stillest for 30 seconds? A great refocusing tool!', duration: '1 min', mins: 1, color: '#ffd166' },
+  { cat: 'focus', emoji: '🧩', name: '20 Uses', desc: 'Give students an everyday object (pencil, chair, cup). How many uses can they think of in 2 minutes? Get creative!', duration: '2 min', mins: 2, color: '#ffd166' },
 
   // SOCIAL
-  { cat: 'social', emoji: '👋', name: 'Two Truths One Lie', desc: 'Each student writes 2 truths and 1 lie. Share with a neighbour and guess which is the lie!', duration: '4 min', mins: 4, colour: '#a29bfe' },
-  { cat: 'social', emoji: '🤝', name: 'Handshake Design', desc: 'Pairs design a unique handshake in 60 seconds, then perform it for the class. The sillier the better!', duration: '3 min', mins: 3, colour: '#a29bfe' },
-  { cat: 'social', emoji: '🎭', name: 'Emoji Round', desc: 'Go around the room — each student says one emoji that describes their current mood. No explanations needed!', duration: '2 min', mins: 2, colour: '#a29bfe' },
-  { cat: 'social', emoji: '📢', name: 'Compliment Circle', desc: 'Each student says one genuine compliment to the person on their left. Go around the whole room!', duration: '3 min', mins: 3, colour: '#a29bfe' },
-  { cat: 'social', emoji: '🤔', name: 'Would You Rather?', desc: 'Teacher asks a fun Would You Rather question. Students move to one side of the room for their choice and explain why!', duration: '3 min', mins: 3, colour: '#a29bfe' },
+  { cat: 'social', emoji: '👋', name: 'Two Truths One Lie', desc: 'Each student writes 2 truths and 1 lie. Share with a neighbour and guess which is the lie!', duration: '4 min', mins: 4, color: '#a29bfe' },
+  { cat: 'social', emoji: '🤝', name: 'Handshake Design', desc: 'Pairs design a unique handshake in 60 seconds, then perform it for the class. The sillier the better!', duration: '3 min', mins: 3, color: '#a29bfe' },
+  { cat: 'social', emoji: '🎭', name: 'Emoji Round', desc: 'Go around the room — each student says one emoji that describes their current mood. No explanations needed!', duration: '2 min', mins: 2, color: '#a29bfe' },
+  { cat: 'social', emoji: '📢', name: 'Compliment Circle', desc: 'Each student says one genuine compliment to the person on their left. Go around the whole room!', duration: '3 min', mins: 3, color: '#a29bfe' },
+  { cat: 'social', emoji: '🤔', name: 'Would You Rather?', desc: 'Teacher asks a fun Would You Rather question. Students move to one side of the room for their choice and explain why!', duration: '3 min', mins: 3, color: '#a29bfe' },
 
   // QUICK (1 min or less)
-  { cat: 'quick', emoji: '👏', name: 'Clap Pattern', desc: 'Teacher claps a pattern — class echoes it back. Get faster and more complex each round. Keep going for 60 seconds!', duration: '1 min', mins: 1, colour: '#fd79a8' },
-  { cat: 'quick', emoji: '🤜', name: 'Rock Paper Scissors', desc: 'Everyone stands. Play Rock Paper Scissors with someone nearby. Loser sits down. Last one standing wins!', duration: '1 min', mins: 1, colour: '#fd79a8' },
-  { cat: 'quick', emoji: '😂', name: 'Class Laugh', desc: 'Everyone does a fake laugh together for 30 seconds. It always turns into a real one! Great energy reset.', duration: '30 sec', mins: 1, colour: '#fd79a8' },
-  { cat: 'quick', emoji: '🙌', name: 'High Five Round', desc: 'Everyone stands and gives a high five to 5 different people in 30 seconds. Sit down when done!', duration: '1 min', mins: 1, colour: '#fd79a8' },
-  { cat: 'quick', emoji: '🧠', name: 'One Word Whip', desc: 'Go around the room as fast as possible — each person says one word that comes to mind. No repeating. Keep it moving!', duration: '1 min', mins: 1, colour: '#fd79a8' },
+  { cat: 'quick', emoji: '👏', name: 'Clap Pattern', desc: 'Teacher claps a pattern — class echoes it back. Get faster and more complex each round. Keep going for 60 seconds!', duration: '1 min', mins: 1, color: '#fd79a8' },
+  { cat: 'quick', emoji: '🤜', name: 'Rock Paper Scissors', desc: 'Everyone stands. Play Rock Paper Scissors with someone nearby. Loser sits down. Last one standing wins!', duration: '1 min', mins: 1, color: '#fd79a8' },
+  { cat: 'quick', emoji: '😂', name: 'Class Laugh', desc: 'Everyone does a fake laugh together for 30 seconds. It always turns into a real one! Great energy reset.', duration: '30 sec', mins: 1, color: '#fd79a8' },
+  { cat: 'quick', emoji: '🙌', name: 'High Five Round', desc: 'Everyone stands and gives a high five to 5 different people in 30 seconds. Sit down when done!', duration: '1 min', mins: 1, color: '#fd79a8' },
+  { cat: 'quick', emoji: '🧠', name: 'One Word Whip', desc: 'Go around the room as fast as possible — each person says one word that comes to mind. No repeating. Keep it moving!', duration: '1 min', mins: 1, color: '#fd79a8' },
 ];
 
 let currentFilter = 'all';
@@ -442,20 +442,20 @@ function renderGrid() {
 renderGrid();
 </script>
 
+
+
 <!-- HOW TO USE -->
-<div style="max-width:860px;margin:0 auto;padding:32px 20px 48px">
-  <div style="background:#ffffff;border-radius:16px;border:1px solid #e5e0d8;box-shadow:0 4px 20px rgba(0,0,0,0.06);overflow:hidden">
-    <div style="background:#2d4a3e;padding:16px 24px;display:flex;align-items:center;gap:10px">
-      <span style="font-size:1.2rem">📖</span>
-      <h2 style="font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;color:white;margin:0">How to Use the Brain Break Picker</h2>
+<div style="max-width:860px;margin:0 auto;padding:24px 20px 40px">
+  <div style="background:#ffffff;border-radius:14px;border:1px solid #e5e0d8;box-shadow:0 4px 16px rgba(0,0,0,0.06);overflow:hidden">
+    <div style="background:#2d4a3e;padding:14px 20px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:1.1rem">📖</span>
+      <h2 style="font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:800;color:white;margin:0">About This Tool</h2>
     </div>
-    <div style="padding:20px 24px">
-      <p style="font-family:'Nunito',sans-serif;font-size:0.92rem;font-weight:600;color:#3a4a42;line-height:1.85">The Brain Break Picker gives you a library of 25 classroom-ready activities to use whenever students need to reset their focus. Filter by category using the tabs at the top — <strong>Move</strong> for physical activities, <strong>Breathe</strong> for calming breathing exercises, <strong>Focus</strong> for mental resets, <strong>Social</strong> for connection activities, and <strong>Quick</strong> for breaks that take under a minute. Click the big <strong>Pick a Brain Break!</strong> button to randomly select an activity from the current category, or browse the grid below and click any card to select it directly. The selected activity is displayed in a large card with a full description of how to run it. Click <strong>Start Timer</strong> to count down the activity duration — the bar fills as time runs out and an audio alert plays when done. The picker avoids repeating activities until all have been shown at least once.</p>
+    <div style="padding:16px 20px">
+      <p style="font-family:'Nunito',sans-serif;font-size:0.9rem;font-weight:600;color:#3a4a42;line-height:1.75">The Brain Break Picker gives you 25 ready-to-use classroom activities for when students need a reset. Filter by type — Move, Breathe, Focus, Social, or Quick — then click <strong>Pick a Brain Break!</strong> for a random selection, or choose one from the grid. Hit <strong>Start Timer</strong> to count down the activity.</p>
     </div>
   </div>
 </div>
-
-
 <!-- COOKIE CONSENT BANNER -->
 <div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a2e25;color:#f0f0e8;padding:16px 24px;z-index:9999;font-family:'Nunito',sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,0.2);border-top:3px solid #4caf50;">
   <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
