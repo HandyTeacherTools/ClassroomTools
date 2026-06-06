@@ -1,630 +1,466 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-CA">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Whiteboard — Handy Teacher Tools</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Kalam:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
   :root {
-    --bg: #1a1a2e;
-    --toolbar: #16213e;
-    --border: #0f3460;
-    --accent: #e94560;
-    --white: #f0f0f0;
-    --text: #e8eaf6;
-    --muted: #7986cb;
+    --bg:#0f172a; --surface:#1e293b; --border:#334155;
+    --text:#f1f5f9; --muted:#94a3b8; --accent:#38bdf8;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; overflow: hidden; }
-  body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; display: flex; flex-direction: column; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html,body { height:100%; overflow:hidden; }
+  body { font-family:'Segoe UI',system-ui,sans-serif; background:#1a1a1a; color:var(--text); display:flex; flex-direction:column; }
+
+  .top-bar {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:6px 14px; background:#111; border-bottom:1px solid #333;
+    font-size:.8rem; color:#999; flex-shrink:0; z-index:10;
+  }
+  .top-bar a { color:var(--accent); text-decoration:none; }
 
   /* TOOLBAR */
   .toolbar {
-    background: var(--toolbar);
-    border-bottom: 1px solid var(--border);
-    padding: 8px 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-    z-index: 10;
-    user-select: none;
+    display:flex; align-items:center; flex-wrap:wrap; gap:4px;
+    padding:6px 10px; background:#1a1a1a; border-bottom:1px solid #333;
+    flex-shrink:0; z-index:10;
   }
-
-  .toolbar-brand { font-family: 'Kalam', cursive; font-size: 1.1rem; color: var(--white); font-weight: 700; margin-right: 8px; white-space: nowrap; }
-  .toolbar-brand a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.75rem; font-family: 'Nunito'; margin-right: 8px; }
-  .toolbar-brand a:hover { color: white; }
-
-  .divider { width: 1px; height: 32px; background: var(--border); flex-shrink: 0; }
+  .tool-group { display:flex; align-items:center; gap:3px; padding:0 6px; border-right:1px solid #333; }
+  .tool-group:last-child { border-right:none; }
 
   .tool-btn {
-    width: 38px; height: 38px;
-    border: 2px solid transparent;
-    border-radius: 10px;
-    background: rgba(255,255,255,0.06);
-    color: var(--text);
-    font-size: 1.1rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.15s;
-    flex-shrink: 0;
-    position: relative;
+    width:36px; height:36px; border-radius:7px; border:2px solid transparent;
+    background:transparent; color:#ccc; font-size:1.1rem; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; transition:all .12s;
+    position:relative;
   }
-  .tool-btn:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2); }
-  .tool-btn.active { background: rgba(233,69,96,0.2); border-color: var(--accent); }
+  .tool-btn:hover { background:#2a2a2a; color:#fff; }
+  .tool-btn.active { background:#38bdf8; color:#000; border-color:#38bdf8; }
   .tool-btn[title]:hover::after {
-    content: attr(title);
-    position: absolute;
-    bottom: -28px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,0.8);
-    color: white;
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-size: 11px;
-    white-space: nowrap;
-    pointer-events: none;
-    z-index: 100;
+    content:attr(title);
+    position:absolute; bottom:-28px; left:50%; transform:translateX(-50%);
+    background:#111; color:#fff; font-size:.7rem; padding:3px 7px;
+    border-radius:4px; white-space:nowrap; pointer-events:none; z-index:99;
   }
 
-  /* COLOR PALETTE */
-  .colour-palette { display: flex; gap: 5px; align-items: center; }
-  .colour-swatch {
-    width: 26px; height: 26px;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: all 0.15s;
-    flex-shrink: 0;
-  }
-  .colour-swatch:hover { transform: scale(1.2); }
-  .colour-swatch.active { border-color: white; box-shadow: 0 0 0 2px rgba(255,255,255,0.4); }
-  input[type=colour] { width: 26px; height: 26px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; cursor: pointer; padding: 0; background: none; }
-
-  /* SIZE SLIDER */
-  .size-wrap { display: flex; align-items: center; gap: 8px; }
-  .size-wrap span { font-size: 0.75rem; color: var(--muted); font-weight: 700; }
-  input[type=range].size-slider {
-    -webkit-appearance: none;
-    width: 80px; height: 4px;
-    background: var(--border);
-    border-radius: 2px;
-    cursor: pointer;
-  }
-  input[type=range].size-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 16px; height: 16px;
-    background: var(--accent);
-    border-radius: 50%;
-    box-shadow: 0 0 6px rgba(233,69,96,0.5);
-  }
-  .size-preview {
-    background: white;
-    border-radius: 50%;
-    flex-shrink: 0;
+  input[type="range"] { width:70px; accent-color:#38bdf8; cursor:pointer; }
+  input[type="color"] {
+    width:32px; height:32px; border-radius:50%; border:2px solid #444;
+    padding:1px; background:none; cursor:pointer;
   }
 
-  /* OPACITY */
-  .opacity-wrap { display: flex; align-items: center; gap: 6px; }
-  .opacity-wrap span { font-size: 0.75rem; color: var(--muted); font-weight: 700; min-width: 28px; text-align: right; }
-  input[type=range].opacity-slider {
-    -webkit-appearance: none;
-    width: 60px; height: 4px;
-    background: var(--border);
-    border-radius: 2px;
-    cursor: pointer;
+  .colour-swatches { display:flex; gap:4px; flex-wrap:wrap; max-width:180px; }
+  .swatch {
+    width:22px; height:22px; border-radius:50%; cursor:pointer;
+    border:2px solid transparent; transition:all .1s; flex-shrink:0;
   }
-  input[type=range].opacity-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 16px; height: 16px;
-    background: var(--muted);
-    border-radius: 50%;
-  }
+  .swatch:hover, .swatch.active { border-color:#fff; transform:scale(1.2); }
 
-  /* TEXT CONTROLS (shown when text tool active) */
-  .text-controls { display: none; align-items: center; gap: 8px; }
-  .text-controls.visible { display: flex; }
-  .font-size-select {
-    background: rgba(255,255,255,0.1);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: white;
-    padding: 4px 8px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 0.85rem;
-    cursor: pointer;
-  }
-
-  /* CANVAS */
-  .canvas-wrap {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-  }
-  canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-    cursor: crosshair;
-    touch-action: none;
-  }
-  canvas.cursor-eraser { cursor: cell; }
-  canvas.cursor-text    { cursor: text; }
-  canvas.cursor-select  { cursor: default; }
-
-  /* TEXT INPUT OVERLAY */
-  #textInput {
-    position: absolute;
-    background: transparent;
-    border: 2px dashed rgba(255,255,255,0.5);
-    border-radius: 4px;
-    color: white;
-    font-family: 'Kalam', cursive;
-    padding: 4px 8px;
-    outline: none;
-    min-width: 120px;
-    min-height: 40px;
-    resize: none;
-    display: none;
-    z-index: 10;
-    line-height: 1.3;
-    background: rgba(0,0,0,0.2);
-  }
-
-  /* ZOOM INDICATOR */
-  .zoom-indicator {
-    position: absolute;
-    bottom: 12px;
-    right: 12px;
-    background: rgba(0,0,0,0.6);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 5px 12px;
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--muted);
-    pointer-events: none;
-  }
-
-  /* BG OPTIONS */
-  .bg-btns { display: flex; gap: 4px; }
+  .bg-btns { display:flex; gap:3px; }
   .bg-btn {
-    width: 26px; height: 26px;
-    border-radius: 6px;
-    border: 2px solid transparent;
-    cursor: pointer;
-    transition: all 0.15s;
-    font-size: 14px;
-    display: flex; align-items: center; justify-content: center;
+    width:28px; height:28px; border-radius:5px; border:2px solid transparent;
+    cursor:pointer; transition:all .12s; font-size:.85rem;
+    display:flex; align-items:center; justify-content:center;
   }
-  .bg-btn:hover { transform: scale(1.1); }
-  .bg-btn.active { border-color: white; }
-  .bg-dark  { background: #1a1a2e; color: white; }
-  .bg-white { background: #f5f5f5; color: #333; }
-  .bg-green { background: #1b4332; color: #90ee90; }
-  .bg-grid  { background: #0a0a1a; color: var(--muted); }
+  .bg-btn:hover { border-color:#888; }
+  .bg-btn.active { border-color:#38bdf8; }
 
-  /* UNDO/REDO counter */
-  .history-info { font-size: 11px; color: var(--muted); font-weight: 700; }
+  /* CANVAS WRAPPER — fills all remaining space */
+  .canvas-wrapper {
+    flex:1; overflow:hidden; position:relative; min-height:0;
+  }
+  #wb-canvas {
+    display:block;
+    width:100%;
+    height:100%;
+    cursor:crosshair;
+    touch-action:none;
+  }
+  #wb-canvas.cursor-text { cursor:text; }
+  #wb-canvas.cursor-eraser { cursor:cell; }
+
+  /* Text input overlay */
+  #text-input-overlay {
+    position:absolute; display:none;
+    background:rgba(255,255,255,0.05);
+    border:2px dashed #38bdf8;
+    border-radius:4px; min-width:80px; min-height:40px;
+    outline:none; color:inherit; font-family:'Segoe UI',sans-serif;
+    padding:4px 8px; resize:both; overflow:auto;
+    white-space:pre; z-index:20;
+  }
+
+  .footer { display:none; } /* hidden in full board mode */
+
+  #cookie-banner { position:fixed;bottom:0;left:0;right:0;background:#1e293b;border-top:1px solid #334155;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;z-index:999;font-size:.8rem;color:#94a3b8; }
+  #cookie-banner a { color:#38bdf8; }
+  #cookie-banner .cookie-btns { display:flex;gap:8px;flex-shrink:0; }
+  #cookie-banner button { padding:5px 12px;border-radius:6px;border:none;cursor:pointer;font-size:.8rem;font-weight:600; }
+  .btn-accept { background:#38bdf8;color:#0f172a; }
+  .btn-decline { background:#334155;color:#f1f5f9; }
 </style>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-M5DCBRK7DE"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-M5DCBRK7DE');
-  </script>
 </head>
 <body>
 
-<nav style="background:#1a1a2e;border-bottom:1px solid #253040;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;z-index:20;flex-shrink:0">
-  <a href="index.html" style="color:#7986cb;text-decoration:none;font-weight:700;font-size:14px">← All Tools</a>
-  <span style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;color:#f0f0f0">✏️ Whiteboard</span>
-  <span style="font-size:12px;color:#607080">handyteachertools.com</span>
-</nav>
+<div class="top-bar">
+  <a href="index.html">← All Tools</a>
+  <span>✏️ Whiteboard &mdash; handyteachertools.com</span>
+</div>
 
 <!-- TOOLBAR -->
 <div class="toolbar">
-  <div class="toolbar-brand">
-    <a href="index.html">← Home</a>
-    ✏️ Whiteboard
-  </div>
-  <div class="divider"></div>
-
-  <!-- DRAWING TOOLS -->
-  <button class="tool-btn active" id="toolPen"     onclick="setTool('pen')"     title="Pen (P)">✏️</button>
-  <button class="tool-btn"        id="toolMarker"  onclick="setTool('marker')"  title="Marker (M)">🖊️</button>
-  <button class="tool-btn"        id="toolLine"    onclick="setTool('line')"    title="Line (L)">╱</button>
-  <button class="tool-btn"        id="toolRect"    onclick="setTool('rect')"    title="Rectangle (R)">▭</button>
-  <button class="tool-btn"        id="toolCircle"  onclick="setTool('circle')"  title="Circle (C)">○</button>
-  <button class="tool-btn"        id="toolArrow"   onclick="setTool('arrow')"   title="Arrow (A)">→</button>
-  <button class="tool-btn"        id="toolText"    onclick="setTool('text')"    title="Text (T)">T</button>
-  <button class="tool-btn"        id="toolEraser"  onclick="setTool('eraser')"  title="Eraser (E)">🧹</button>
-
-  <div class="divider"></div>
-
-  <!-- COLORS -->
-  <div class="colour-palette">
-    <div class="colour-swatch active" style="background:#f0f0f0" data-colour="#f0f0f0" onclick="setColor(this)" title="White"></div>
-    <div class="colour-swatch" style="background:#ff4757" data-colour="#ff4757" onclick="setColor(this)" title="Red"></div>
-    <div class="colour-swatch" style="background:#ffa502" data-colour="#ffa502" onclick="setColor(this)" title="Orange"></div>
-    <div class="colour-swatch" style="background:#ffdd59" data-colour="#ffdd59" onclick="setColor(this)" title="Yellow"></div>
-    <div class="colour-swatch" style="background:#7bed9f" data-colour="#7bed9f" onclick="setColor(this)" title="Green"></div>
-    <div class="colour-swatch" style="background:#70a1ff" data-colour="#70a1ff" onclick="setColor(this)" title="Blue"></div>
-    <div class="colour-swatch" style="background:#ff6b81" data-colour="#ff6b81" onclick="setColor(this)" title="Pink"></div>
-    <input type="colour" id="customColor" value="#f0f0f0" oninput="setCustomColor(this.value)" title="Custom colour"/>
+  <!-- Tools -->
+  <div class="tool-group">
+    <button class="tool-btn active" id="tool-pen"     title="Pen (P)"     onclick="setTool('pen')">✏️</button>
+    <button class="tool-btn"        id="tool-marker"  title="Marker (M)"  onclick="setTool('marker')">🖊️</button>
+    <button class="tool-btn"        id="tool-eraser"  title="Eraser (E)"  onclick="setTool('eraser')">🧹</button>
+    <button class="tool-btn"        id="tool-line"    title="Line (L)"    onclick="setTool('line')">╱</button>
+    <button class="tool-btn"        id="tool-rect"    title="Rectangle (R)" onclick="setTool('rect')">▭</button>
+    <button class="tool-btn"        id="tool-circle"  title="Circle (C)"  onclick="setTool('circle')">○</button>
+    <button class="tool-btn"        id="tool-arrow"   title="Arrow (A)"   onclick="setTool('arrow')">→</button>
+    <button class="tool-btn"        id="tool-text"    title="Text (T)"    onclick="setTool('text')">T</button>
   </div>
 
-  <div class="divider"></div>
-
-  <!-- SIZE -->
-  <div class="size-wrap">
-    <span>SIZE</span>
-    <input type="range" class="size-slider" id="sizeSlider" min="1" max="40" value="4" oninput="updateSize(this.value)"/>
-    <div class="size-preview" id="sizePreview" style="width:8px;height:8px;background:white"></div>
+  <!-- Size -->
+  <div class="tool-group">
+    <span style="font-size:.75rem;color:#888;">SIZE</span>
+    <input type="range" id="size-slider" min="2" max="60" value="5" oninput="brushSize=+this.value">
   </div>
 
-  <div class="divider"></div>
-
-  <!-- TEXT CONTROLS -->
-  <div class="text-controls" id="textControls">
-    <span style="font-size:0.75rem;color:var(--muted);font-weight:700">SIZE</span>
-    <select class="font-size-select" id="fontSizeSelect" onchange="updateFontSize(this.value)">
-      <option value="20">Small</option>
-      <option value="32" selected>Medium</option>
-      <option value="48">Large</option>
-      <option value="72">XL</option>
-      <option value="96">XXL</option>
-    </select>
-    <div class="divider" style="height:24px"></div>
+  <!-- Colours -->
+  <div class="tool-group">
+    <div class="colour-swatches" id="swatches"></div>
+    <input type="color" id="colour-picker" value="#ffffff" oninput="setColour(this.value)" title="Custom colour">
   </div>
 
-  <!-- BACKGROUND -->
-  <div class="bg-btns">
-    <button class="bg-btn bg-dark active"  id="bgDark"  onclick="setBg('dark')"  title="Dark">🌙</button>
-    <button class="bg-btn bg-white"        id="bgWhite" onclick="setBg('white')" title="White">☀️</button>
-    <button class="bg-btn bg-green"        id="bgGreen" onclick="setBg('green')" title="Chalkboard">🟢</button>
-    <button class="bg-btn bg-grid"         id="bgGrid"  onclick="setBg('grid')"  title="Grid">⊞</button>
+  <!-- Backgrounds -->
+  <div class="tool-group">
+    <div class="bg-btns">
+      <div class="bg-btn active" id="bg-dark"  title="Dark"       style="background:#1a1a1a"        onclick="setBg('dark')"></div>
+      <div class="bg-btn"        id="bg-white" title="White"      style="background:#fff"           onclick="setBg('white')"></div>
+      <div class="bg-btn"        id="bg-green" title="Chalkboard" style="background:#2d5a27"        onclick="setBg('green')"></div>
+      <div class="bg-btn"        id="bg-grid"  title="Grid"       style="background:#fff;color:#aaa;font-size:.6rem;text-align:center;line-height:28px;" onclick="setBg('grid')">▦</div>
+    </div>
   </div>
 
-  <div class="divider"></div>
-
-  <!-- ACTIONS -->
-  <button class="tool-btn" onclick="undo()"  title="Undo (Ctrl+Z)">↩️</button>
-  <button class="tool-btn" onclick="redo()"  title="Redo (Ctrl+Y)">↪️</button>
-  <button class="tool-btn" onclick="clearCanvas()" title="Clear All">🗑️</button>
-  <button class="tool-btn" onclick="saveImage()"   title="Save Image">💾</button>
-
-  <span class="history-info" id="historyInfo"></span>
+  <!-- Actions -->
+  <div class="tool-group">
+    <button class="tool-btn" title="Undo (Ctrl+Z)"    onclick="undo()">↩️</button>
+    <button class="tool-btn" title="Redo (Ctrl+Y)"    onclick="redo()">↪️</button>
+    <button class="tool-btn" title="Clear board"      onclick="clearBoard()">🗑️</button>
+    <button class="tool-btn" title="Save as PNG"      onclick="saveImage()">💾</button>
+    <button class="tool-btn" title="Fullscreen (F11)" onclick="toggleFullscreen()">⛶</button>
+  </div>
 </div>
 
-<div class="canvas-wrap" id="canvasWrap">
-  <canvas id="canvas"></canvas>
-  <textarea id="textInput" rows="1" placeholder="Type here..." onkeydown="handleTextKey(event)"></textarea>
-  <div class="zoom-indicator" id="zoomIndicator">100%</div>
+<!-- CANVAS -->
+<div class="canvas-wrapper" id="canvas-wrapper">
+  <canvas id="wb-canvas"></canvas>
+  <textarea id="text-input-overlay" onblur="commitText()"></textarea>
+</div>
+
+<div id="cookie-banner">
+  <span>🍪 We use advertising cookies (via Google AdSense) to keep this site free for teachers. Our tools collect no personal data. <a href="cookies.html">Cookie Policy</a> · <a href="privacy.html">Privacy Policy</a></span>
+  <div class="cookie-btns">
+    <button class="btn-accept" onclick="acceptCookies()">✅ Accept</button>
+    <button class="btn-decline" onclick="declineCookies()">Decline</button>
+  </div>
 </div>
 
 <script>
-  const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');
-  const wrap = document.getElementById('canvasWrap');
-  const textInput = document.getElementById('textInput');
+if(localStorage.getItem('cookieChoice')) document.getElementById('cookie-banner').style.display='none';
+function acceptCookies(){ localStorage.setItem('cookieChoice','accepted'); document.getElementById('cookie-banner').style.display='none'; }
+function declineCookies(){ localStorage.setItem('cookieChoice','declined'); document.getElementById('cookie-banner').style.display='none'; }
 
-  let tool = 'pen';
-  let colour = '#f0f0f0';
-  let size = 4;
-  let fontSize = 32;
-  let bgMode = 'dark';
-  let drawing = false;
-  let startX, startY, lastX, lastY;
-  let history = [];
-  let redoStack = [];
-  let bgCanvas = null; // for snapshot behind drawing
-  let textX, textY;
+// ---- STATE ----
+let tool = 'pen';
+let brushSize = 5;
+let colour = '#ffffff';
+let bgMode = 'dark';
+let drawing = false;
+let startX, startY;
+let undoStack = [];
+let redoStack = [];
+let textPos = {x:0,y:0};
 
-  const BG_COLORS = {
-    dark: '#1a1a2e', white: '#f5f5f5', green: '#1b4332', grid: '#0a0a1a'
-  };
+const SWATCHES = ['#ffffff','#000000','#ef4444','#f97316','#eab308',
+  '#22c55e','#38bdf8','#818cf8','#f472b6','#a78bfa','#34d399','#fbbf24'];
 
-  // Resize canvas
-  function resize() {
-    const snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    canvas.width  = wrap.clientWidth  * devicePixelRatio;
-    canvas.height = wrap.clientHeight * devicePixelRatio;
-    canvas.style.width  = wrap.clientWidth  + 'px';
-    canvas.style.height = wrap.clientHeight + 'px';
-    ctx.scale(devicePixelRatio, devicePixelRatio);
-    drawBackground();
-    ctx.putImageData(snapshot, 0, 0);
-  }
+const canvas = document.getElementById('wb-canvas');
+const ctx = canvas.getContext('2d');
+const wrapper = document.getElementById('canvas-wrapper');
+const textOverlay = document.getElementById('text-input-overlay');
 
-  function drawBackground() {
-    const w = wrap.clientWidth, h = wrap.clientHeight;
-    ctx.fillStyle = BG_COLORS[bgMode];
-    ctx.fillRect(0, 0, w, h);
-    if (bgMode === 'grid') {
-      ctx.strokeStyle = 'rgba(99,120,170,0.2)';
-      ctx.lineWidth = 0.5;
-      for (let x = 0; x < w; x += 40) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
-      for (let y = 0; y < h; y += 40) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
-    }
-  }
-
-  function saveHistory() {
-    history.push(canvas.toDataURL());
-    if (history.length > 40) history.shift();
-    redoStack = [];
-    updateHistoryInfo();
-  }
-
-  function updateHistoryInfo() {
-    document.getElementById('historyInfo').textContent = history.length > 0 ? `${history.length} steps` : '';
-  }
-
-  function undo() {
-    if (history.length === 0) return;
-    redoStack.push(canvas.toDataURL());
-    const img = new Image();
-    img.onload = () => { ctx.clearRect(0,0,canvas.width,canvas.height); ctx.drawImage(img,0,0); };
-    img.src = history.pop();
-    updateHistoryInfo();
-  }
-  function redo() {
-    if (redoStack.length === 0) return;
-    history.push(canvas.toDataURL());
-    const img = new Image();
-    img.onload = () => { ctx.clearRect(0,0,canvas.width,canvas.height); ctx.drawImage(img,0,0); };
-    img.src = redoStack.pop();
-    updateHistoryInfo();
-  }
-
-  function clearCanvas() {
-    if (!confirm('Clear the whiteboard?')) return;
-    saveHistory();
-    drawBackground();
-  }
-
-  function saveImage() {
-    const a = document.createElement('a');
-    a.download = 'whiteboard.png';
-    a.href = canvas.toDataURL();
-    a.click();
-  }
-
-  // Tool setup
-  function setTool(t) {
-    tool = t;
-    ['Pen','Marker','Line','Rect','Circle','Arrow','Text','Eraser'].forEach(name => {
-      document.getElementById('tool'+name).classList.toggle('active', t === name.toLowerCase());
-    });
-    canvas.className = '';
-    if (t === 'eraser') canvas.classList.add('cursor-eraser');
-    else if (t === 'text') canvas.classList.add('cursor-text');
-    document.getElementById('textControls').classList.toggle('visible', t === 'text');
-  }
-
-  function setColor(el) {
-    colour = el.dataset.colour;
-    document.querySelectorAll('.colour-swatch').forEach(s => s.classList.remove('active'));
-    el.classList.add('active');
-    document.getElementById('customColor').value = colour;
-  }
-
-  function setCustomColor(v) {
-    colour = v;
-    document.querySelectorAll('.colour-swatch').forEach(s => s.classList.remove('active'));
-  }
-
-  function updateSize(v) {
-    size = parseInt(v);
-    const px = Math.max(4, Math.min(40, size * 2));
-    document.getElementById('sizePreview').style.width = px + 'px';
-    document.getElementById('sizePreview').style.height = px + 'px';
-  }
-
-  function updateFontSize(v) { fontSize = parseInt(v); }
-
-  function setBg(mode) {
-    bgMode = mode;
-    ['dark','white','green','grid'].forEach(m => {
-      document.getElementById('bg'+m.charAt(0).toUpperCase()+m.slice(1)).classList.toggle('active', m === mode);
-    });
-    saveHistory();
-    // Redraw background but preserve strokes
-    const snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    drawBackground();
-    // Reapply strokes from saved image
-    if (history.length > 0) {
-      const img = new Image();
-      img.onload = () => ctx.drawImage(img, 0, 0);
-      img.src = history[history.length-1];
-    }
-  }
-
-  // Setup context
-  function setupCtx(preview) {
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    if (tool === 'eraser') {
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.strokeStyle = 'rgba(0,0,0,1)';
-      ctx.lineWidth = size * 4;
-    } else if (tool === 'marker') {
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.globalAlpha = 0.5;
-      ctx.strokeStyle = colour;
-      ctx.lineWidth = size * 3;
-    } else {
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.globalAlpha = 1;
-      ctx.strokeStyle = colour;
-      ctx.lineWidth = size;
-    }
-  }
-
-  // Mouse / touch events
-  function getPos(e) {
-    const rect = canvas.getBoundingClientRect();
-    const src = e.touches ? e.touches[0] : e;
-    return { x: src.clientX - rect.left, y: src.clientY - rect.top };
-  }
-
-  canvas.addEventListener('pointerdown', e => {
-    if (tool === 'text') { openTextInput(e); return; }
-    drawing = true;
-    const {x, y} = getPos(e);
-    startX = lastX = x; startY = lastY = y;
-    saveHistory();
-    setupCtx();
-    if (tool === 'pen' || tool === 'marker' || tool === 'eraser') {
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-    }
-    bgCanvas = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  });
-
-  canvas.addEventListener('pointermove', e => {
-    if (!drawing) return;
-    const {x, y} = getPos(e);
-    setupCtx();
-    if (tool === 'pen' || tool === 'marker' || tool === 'eraser') {
-      ctx.lineTo(x, y);
-      ctx.stroke();
-      lastX = x; lastY = y;
-    } else {
-      // Preview shapes
-      ctx.putImageData(bgCanvas, 0, 0);
-      drawShape(tool, startX, startY, x, y);
-    }
-  });
-
-  canvas.addEventListener('pointerup', e => {
-    if (!drawing) return;
-    drawing = false;
-    ctx.globalAlpha = 1;
-    ctx.globalCompositeOperation = 'source-over';
-  });
-
-  function drawShape(t, x1, y1, x2, y2) {
-    setupCtx();
-    ctx.beginPath();
-    if (t === 'line') {
-      ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
-    } else if (t === 'rect') {
-      ctx.strokeRect(x1, y1, x2-x1, y2-y1);
-    } else if (t === 'circle') {
-      const rx = (x2-x1)/2, ry = (y2-y1)/2;
-      ctx.ellipse(x1+rx, y1+ry, Math.abs(rx), Math.abs(ry), 0, 0, Math.PI*2);
-      ctx.stroke();
-    } else if (t === 'arrow') {
-      const dx = x2-x1, dy = y2-y1;
-      const angle = Math.atan2(dy, dx);
-      const headLen = 20 + size;
-      ctx.moveTo(x1, y1);
-      ctx.lineTo(x2, y2);
-      ctx.lineTo(x2 - headLen*Math.cos(angle-Math.PI/7), y2 - headLen*Math.sin(angle-Math.PI/7));
-      ctx.moveTo(x2, y2);
-      ctx.lineTo(x2 - headLen*Math.cos(angle+Math.PI/7), y2 - headLen*Math.sin(angle+Math.PI/7));
-      ctx.stroke();
-    }
-    ctx.globalAlpha = 1;
-  }
-
-  // TEXT TOOL
-  function openTextInput(e) {
-    const {x, y} = getPos(e);
-    textX = x; textY = y;
-    textInput.style.display = 'block';
-    textInput.style.left = x + 'px';
-    textInput.style.top  = y + 'px';
-    textInput.style.fontSize = fontSize + 'px';
-    textInput.style.colour = colour;
-    textInput.value = '';
-    textInput.focus();
-  }
-
-  function handleTextKey(e) {
-    if (e.key === 'Escape') { commitText(); textInput.style.display = 'none'; }
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commitText(); }
-  }
-  textInput.addEventListener('blur', () => { if (textInput.style.display !== 'none') commitText(); });
-
-  function commitText() {
-    const val = textInput.value.trim();
-    if (val) {
-      saveHistory();
-      ctx.save();
-      ctx.globalAlpha = 1;
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.font = `${fontSize}px Kalam, cursive`;
-      ctx.fillStyle = colour;
-      ctx.fillText(val, textX, textY + fontSize);
-      ctx.restore();
-    }
-    textInput.style.display = 'none';
-    textInput.value = '';
-  }
-
-  // Keyboard shortcuts
-  document.addEventListener('keydown', e => {
-    if (textInput === document.activeElement) return;
-    if (e.ctrlKey || e.metaKey) {
-      if (e.key === 'z') { e.preventDefault(); undo(); }
-      if (e.key === 'y') { e.preventDefault(); redo(); }
-      return;
-    }
-    const map = { p:'pen', m:'marker', l:'line', r:'rect', c:'circle', a:'arrow', t:'text', e:'eraser' };
-    if (map[e.key.toLowerCase()]) setTool(map[e.key.toLowerCase()]);
-  });
-
-  window.addEventListener('resize', resize);
-  resize();
+// ---- CANVAS SIZING ----
+function resizeCanvas(){
+  const w = wrapper.clientWidth;
+  const h = wrapper.clientHeight;
+  // Save current drawing
+  const imgData = ctx.getImageData(0,0,canvas.width,canvas.height);
+  canvas.width  = w;
+  canvas.height = h;
   drawBackground();
-</script>
-<footer style="text-align:center;padding:10px;font-size:12px;color:#607080;font-weight:600;background:#0f1923;border-top:1px solid #253040"><a href="index.html" style="color:#607080;text-decoration:none">← Back to all tools</a> · handyteachertools.com</footer>
+  ctx.putImageData(imgData,0,0);
+}
 
+function drawBackground(){
+  const w=canvas.width, h=canvas.height;
+  if(bgMode==='dark'){
+    ctx.fillStyle='#1a1a1a';
+  } else if(bgMode==='white'){
+    ctx.fillStyle='#ffffff';
+  } else if(bgMode==='green'){
+    ctx.fillStyle='#2d5a27';
+  } else {
+    ctx.fillStyle='#ffffff';
+  }
+  ctx.fillRect(0,0,w,h);
 
+  if(bgMode==='grid'){
+    ctx.strokeStyle='#d0d0d0';
+    ctx.lineWidth=0.5;
+    const step=30;
+    for(let x=0;x<w;x+=step){ ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke(); }
+    for(let y=0;y<h;y+=step){ ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke(); }
+  }
+}
 
-<!-- HOW TO USE -->
-<div style="max-width:860px;margin:0 auto;padding:24px 20px 40px">
-  <div style="background:#ffffff;border-radius:14px;border:1px solid #e5e0d8;box-shadow:0 4px 16px rgba(0,0,0,0.06);overflow:hidden">
-    <div style="background:#2d4a3e;padding:14px 20px;display:flex;align-items:center;gap:10px">
-      <span style="font-size:1.1rem">📖</span>
-      <h2 style="font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:800;color:white;margin:0">About This Tool</h2>
-    </div>
-    <div style="padding:16px 20px">
-      <p style="font-family:'Nunito',sans-serif;font-size:0.9rem;font-weight:600;color:#3a4a42;line-height:1.75">The Whiteboard gives you a full digital drawing surface to annotate and explain on the projector. Select a tool from the top bar — pen, marker, shapes, text, or eraser — pick a colour, and draw. Press <strong>Ctrl+Z</strong> to undo and <strong>Save</strong> to download your work as a PNG.</p>
-    </div>
-  </div>
-</div>
-<!-- COOKIE CONSENT BANNER -->
-<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a2e25;color:#f0f0e8;padding:16px 24px;z-index:9999;font-family:'Nunito',sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,0.2);border-top:3px solid #4caf50;">
-  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
-    <div style="flex:1;min-width:240px">
-      <p style="font-size:0.88rem;font-weight:700;line-height:1.6;color:rgba(255,255,255,0.85)">
-        🍪 We use advertising cookies (via Google AdSense) to keep this site free for teachers.
-        Our tools themselves collect no data. See our
-        <a href="cookies.html" style="color:#ffc107;font-weight:800;text-decoration:none">Cookie Policy</a>
-        and
-        <a href="privacy.html" style="color:#ffc107;font-weight:800;text-decoration:none">Privacy Policy</a>.
-      </p>
-    </div>
-    <div style="display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap">
-      <button onclick="acceptCookies()" style="padding:10px 22px;background:#4caf50;color:white;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;cursor:pointer;">✅ Accept All</button>
-      <button onclick="declineCookies()" style="padding:10px 22px;background:transparent;color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.3);border-radius:8px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;cursor:pointer;">Decline</button>
-      <a href="cookies.html" style="padding:10px 16px;color:rgba(255,255,255,0.5);font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:700;text-decoration:none;display:flex;align-items:center;">More info</a>
-    </div>
-  </div>
-</div>
-<script>
-(function(){var c=localStorage.getItem('htt_cookie_consent');if(!c){document.getElementById('cookieBanner').style.display='block';}})();
-function acceptCookies(){localStorage.setItem('htt_cookie_consent','accepted');document.getElementById('cookieBanner').style.display='none';}
-function declineCookies(){localStorage.setItem('htt_cookie_consent','declined');document.getElementById('cookieBanner').style.display='none';}
+function setBg(mode){
+  bgMode=mode;
+  document.querySelectorAll('.bg-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('bg-'+mode).classList.add('active');
+  saveUndo();
+  drawBackground();
+  restoreDrawing();
+}
+
+// Store drawings as image data separate from bg
+let drawingLayer = null;
+function saveDrawingLayer(){
+  drawingLayer = ctx.getImageData(0,0,canvas.width,canvas.height);
+}
+function restoreDrawing(){
+  if(drawingLayer) ctx.putImageData(drawingLayer,0,0);
+}
+
+// ---- COLOURS ----
+function buildSwatches(){
+  const container=document.getElementById('swatches');
+  container.innerHTML='';
+  SWATCHES.forEach(c=>{
+    const div=document.createElement('div');
+    div.className='swatch'+(c===colour?' active':'');
+    div.style.background=c;
+    div.onclick=()=>setColour(c);
+    container.appendChild(div);
+  });
+}
+function setColour(c){
+  colour=c;
+  document.getElementById('colour-picker').value=c.length===7?c:'#ffffff';
+  document.querySelectorAll('.swatch').forEach(s=>{
+    s.classList.toggle('active', s.style.background===c || rgbToHex(s.style.background)===c.toLowerCase());
+  });
+}
+function rgbToHex(rgb){
+  const m=rgb.match(/\d+/g); if(!m||m.length<3) return rgb;
+  return '#'+m.slice(0,3).map(n=>parseInt(n).toString(16).padStart(2,'0')).join('');
+}
+
+// ---- TOOL ----
+function setTool(t){
+  tool=t;
+  document.querySelectorAll('.tool-btn[id^="tool-"]').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tool-'+t)?.classList.add('active');
+  canvas.className = t==='text'?'cursor-text':t==='eraser'?'cursor-eraser':'';
+  if(t!=='text') commitText();
+}
+
+// ---- UNDO/REDO ----
+function saveUndo(){
+  undoStack.push(canvas.toDataURL());
+  if(undoStack.length>40) undoStack.shift();
+  redoStack=[];
+}
+function undo(){
+  if(!undoStack.length) return;
+  redoStack.push(canvas.toDataURL());
+  const img=new Image();
+  img.onload=()=>{ ctx.clearRect(0,0,canvas.width,canvas.height); ctx.drawImage(img,0,0); };
+  img.src=undoStack.pop();
+}
+function redo(){
+  if(!redoStack.length) return;
+  undoStack.push(canvas.toDataURL());
+  const img=new Image();
+  img.onload=()=>{ ctx.clearRect(0,0,canvas.width,canvas.height); ctx.drawImage(img,0,0); };
+  img.src=redoStack.pop();
+}
+function clearBoard(){
+  if(!confirm('Clear the whiteboard?')) return;
+  saveUndo();
+  drawBackground();
+}
+
+// ---- DRAWING ----
+let snapshot = null;
+
+function getPos(e){
+  const rect=canvas.getBoundingClientRect();
+  const evt=e.touches?e.touches[0]:e;
+  return { x:(evt.clientX-rect.left)*(canvas.width/rect.width),
+           y:(evt.clientY-rect.top)*(canvas.height/rect.height) };
+}
+
+canvas.addEventListener('pointerdown', e=>{
+  if(tool==='text'){ placeText(e); return; }
+  const pos=getPos(e);
+  saveUndo();
+  drawing=true;
+  startX=pos.x; startY=pos.y;
+  snapshot=ctx.getImageData(0,0,canvas.width,canvas.height);
+
+  if(tool==='pen'||tool==='marker'||tool==='eraser'){
+    ctx.beginPath();
+    ctx.moveTo(pos.x,pos.y);
+  }
+});
+
+canvas.addEventListener('pointermove', e=>{
+  if(!drawing) return;
+  const pos=getPos(e);
+  const sz = tool==='marker'?brushSize*3:brushSize;
+
+  if(tool==='pen'||tool==='marker'){
+    ctx.lineCap='round';
+    ctx.lineJoin='round';
+    ctx.lineWidth=sz;
+    ctx.strokeStyle=colour;
+    ctx.globalCompositeOperation='source-over';
+    if(tool==='marker') ctx.globalAlpha=0.45; else ctx.globalAlpha=1;
+    ctx.lineTo(pos.x,pos.y);
+    ctx.stroke();
+  } else if(tool==='eraser'){
+    ctx.globalCompositeOperation='destination-out';
+    ctx.globalAlpha=1;
+    ctx.beginPath();
+    ctx.arc(pos.x,pos.y,sz*1.5,0,Math.PI*2);
+    ctx.fill();
+    // Restore bg where erased
+    ctx.globalCompositeOperation='destination-over';
+    drawBackground();
+    ctx.globalCompositeOperation='source-over';
+  } else {
+    // Shape preview
+    ctx.putImageData(snapshot,0,0);
+    ctx.globalCompositeOperation='source-over';
+    ctx.globalAlpha=1;
+    ctx.strokeStyle=colour;
+    ctx.fillStyle=colour+'33';
+    ctx.lineWidth=brushSize;
+    ctx.lineCap='round';
+    if(tool==='line'){
+      ctx.beginPath(); ctx.moveTo(startX,startY); ctx.lineTo(pos.x,pos.y); ctx.stroke();
+    } else if(tool==='rect'){
+      ctx.beginPath();
+      ctx.rect(startX,startY,pos.x-startX,pos.y-startY);
+      ctx.fill(); ctx.stroke();
+    } else if(tool==='circle'){
+      const rx=(pos.x-startX)/2, ry=(pos.y-startY)/2;
+      ctx.beginPath();
+      ctx.ellipse(startX+rx,startY+ry,Math.abs(rx),Math.abs(ry),0,0,Math.PI*2);
+      ctx.fill(); ctx.stroke();
+    } else if(tool==='arrow'){
+      drawArrow(startX,startY,pos.x,pos.y);
+    }
+  }
+});
+
+canvas.addEventListener('pointerup', e=>{
+  if(!drawing) return;
+  drawing=false;
+  ctx.globalAlpha=1;
+  ctx.globalCompositeOperation='source-over';
+  ctx.closePath?.();
+});
+canvas.addEventListener('pointerleave', ()=>{ if(drawing){ drawing=false; ctx.globalAlpha=1; ctx.globalCompositeOperation='source-over'; }});
+
+function drawArrow(x1,y1,x2,y2){
+  const angle=Math.atan2(y2-y1,x2-x1);
+  const len=20+brushSize;
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x2,y2);
+  ctx.lineTo(x2-len*Math.cos(angle-Math.PI/6), y2-len*Math.sin(angle-Math.PI/6));
+  ctx.lineTo(x2-len*Math.cos(angle+Math.PI/6), y2-len*Math.sin(angle+Math.PI/6));
+  ctx.closePath();
+  ctx.fillStyle=colour;
+  ctx.fill();
+}
+
+// ---- TEXT ----
+function placeText(e){
+  commitText();
+  const pos=getPos(e);
+  textPos={x:pos.x,y:pos.y};
+  const rect=canvas.getBoundingClientRect();
+  const scaleX=rect.width/canvas.width;
+  const scaleY=rect.height/canvas.height;
+  textOverlay.style.display='block';
+  textOverlay.style.left=(pos.x*scaleX+wrapper.getBoundingClientRect().left - wrapper.getBoundingClientRect().left)+'px';
+  textOverlay.style.top=(pos.y*scaleY)+'px';
+  textOverlay.style.fontSize=Math.max(14,brushSize*3)+'px';
+  textOverlay.style.color=colour;
+  textOverlay.value='';
+  textOverlay.focus();
+}
+function commitText(){
+  const val=textOverlay.value.trim();
+  if(val){
+    saveUndo();
+    ctx.font=`bold ${Math.max(14,brushSize*3)}px Segoe UI, sans-serif`;
+    ctx.fillStyle=colour;
+    ctx.globalAlpha=1;
+    val.split('\n').forEach((line,i)=>{
+      ctx.fillText(line, textPos.x, textPos.y + i*Math.max(18,brushSize*3.6));
+    });
+  }
+  textOverlay.style.display='none';
+  textOverlay.value='';
+}
+
+// ---- SAVE ----
+function saveImage(){
+  const a=document.createElement('a');
+  a.download='whiteboard.png';
+  a.href=canvas.toDataURL('image/png');
+  a.click();
+}
+
+// ---- FULLSCREEN ----
+function toggleFullscreen(){
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen().then(()=>setTimeout(resizeCanvas,200));
+  else document.exitFullscreen();
+}
+document.addEventListener('fullscreenchange',()=>setTimeout(resizeCanvas,200));
+
+// ---- KEYBOARD SHORTCUTS ----
+document.addEventListener('keydown',e=>{
+  if(e.target===textOverlay) return;
+  if(e.ctrlKey&&e.key==='z'){ undo(); return; }
+  if(e.ctrlKey&&e.key==='y'){ redo(); return; }
+  const map={p:'pen',m:'marker',e:'eraser',l:'line',r:'rect',c:'circle',a:'arrow',t:'text'};
+  if(map[e.key.toLowerCase()]) setTool(map[e.key.toLowerCase()]);
+  if(e.key==='F11'){ e.preventDefault(); toggleFullscreen(); }
+});
+
+// ---- INIT ----
+window.addEventListener('resize',resizeCanvas);
+buildSwatches();
+resizeCanvas();
+drawBackground();
+saveUndo();
 </script>
 </body>
 </html>

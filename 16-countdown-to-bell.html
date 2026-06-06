@@ -1,308 +1,370 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-CA">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Countdown to Bell — Handy Teacher Tools</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet"/>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-M5DCBRK7DE"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-M5DCBRK7DE');</script>
 <style>
-  :root { --bg:#0a0e1a; --surface:#111827; --border:#1f2937; --text:#f9fafb; --muted:#6b7280; --radius:20px; }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  html,body{height:100%;}
-  body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-height:100vh;display:flex;flex-direction:column;}
+  :root {
+    --green: #22c55e;
+    --yellow: #eab308;
+    --orange: #f97316;
+    --red: #ef4444;
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --border: #334155;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .top-bar a { color: var(--accent); text-decoration: none; }
+  .top-bar a:hover { text-decoration: underline; }
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    gap: 20px;
+  }
+  #period-name {
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    min-height: 2.5rem;
+    text-align: center;
+  }
+  #timer-display {
+    font-size: clamp(5rem, 22vw, 18rem);
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--green);
+    transition: color 0.5s;
+    text-align: center;
+    text-shadow: 0 0 60px currentColor;
+  }
+  #timer-display.yellow { color: var(--yellow); }
+  #timer-display.orange { color: var(--orange); }
+  #timer-display.red { color: var(--red); animation: flash 1s infinite; }
+  @keyframes flash { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  #status-label {
+    font-size: clamp(0.9rem, 2vw, 1.3rem);
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    min-height: 1.8rem;
+  }
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  .btn {
+    padding: 10px 22px;
+    border-radius: 8px;
+    border: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn:hover { filter: brightness(1.15); transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn-primary { background: var(--accent); color: #0f172a; }
+  .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+  #dismissed-banner {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    flex-direction: column;
+    gap: 20px;
+  }
+  #dismissed-banner.show { display: flex; }
+  #dismissed-banner h1 {
+    font-size: clamp(3rem, 10vw, 8rem);
+    color: var(--green);
+    animation: flash 1.5s infinite;
+  }
+  #dismissed-banner button { padding: 14px 40px; font-size: 1.1rem; }
 
-  nav{background:rgba(10,14,26,0.97);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;z-index:10;}
-  nav a{color:var(--muted);text-decoration:none;font-weight:700;font-size:14px;}
-  nav a:hover{color:var(--text);}
-  nav .tool-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;color:#60a5fa;}
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 30px;
+    width: 90%;
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .modal h2 { font-size: 1.2rem; color: var(--text); }
+  label { font-size: 0.9rem; color: var(--muted); display: block; margin-bottom: 5px; }
+  input[type="time"], input[type="text"] {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 1rem;
+  }
+  .presets { display: flex; flex-wrap: wrap; gap: 8px; }
+  .preset-btn {
+    padding: 7px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .preset-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
 
-  main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;gap:28px;position:relative;overflow:hidden;}
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 12px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+  .footer a { color: var(--accent); text-decoration: none; }
 
-  /* animated bg ring */
-  main::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;border:1px solid rgba(96,165,250,0.04);top:50%;left:50%;transform:translate(-50%,-50%);animation:ringPulse 4s ease-in-out infinite;}
-  main::after{content:'';position:absolute;width:800px;height:800px;border-radius:50%;border:1px solid rgba(96,165,250,0.03);top:50%;left:50%;transform:translate(-50%,-50%);animation:ringPulse 4s ease-in-out infinite 1s;}
-  @keyframes ringPulse{0%,100%{opacity:0.4;transform:translate(-50%,-50%) scale(1);}50%{opacity:1;transform:translate(-50%,-50%) scale(1.02);}}
-
-  /* LIVE CLOCK */
-  .live-clock{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.5rem,4vw,2.5rem);letter-spacing:4px;color:var(--muted);position:relative;z-index:1;}
-
-  /* BIG COUNTDOWN */
-  .countdown-wrap{position:relative;z-index:1;text-align:center;}
-  .countdown-label{font-size:0.8rem;font-weight:900;text-transform:uppercase;letter-spacing:3px;color:var(--muted);margin-bottom:8px;}
-  .big-countdown{font-family:'Bebas Neue',sans-serif;font-size:clamp(6rem,22vw,16rem);line-height:0.9;letter-spacing:4px;color:var(--text);transition:color 0.5s;text-shadow:0 0 80px rgba(96,165,250,0.1);}
-  .big-countdown.green{color:#4ade80;text-shadow:0 0 60px rgba(74,222,128,0.2);}
-  .big-countdown.yellow{color:#facc15;text-shadow:0 0 60px rgba(250,204,21,0.2);}
-  .big-countdown.orange{color:#fb923c;text-shadow:0 0 60px rgba(251,146,60,0.25);}
-  .big-countdown.red{color:#f87171;text-shadow:0 0 60px rgba(248,113,113,0.3);animation:urgentPulse 0.8s ease-in-out infinite;}
-  @keyframes urgentPulse{0%,100%{opacity:1;}50%{opacity:0.75;}}
-  .countdown-sub{font-size:clamp(1rem,2.5vw,1.5rem);font-weight:800;color:var(--muted);margin-top:12px;letter-spacing:1px;}
-
-  /* PROGRESS BAR */
-  .progress-wrap{width:100%;max-width:700px;position:relative;z-index:1;}
-  .progress-track{width:100%;height:10px;background:var(--border);border-radius:5px;overflow:hidden;}
-  .progress-fill{height:100%;border-radius:5px;background:linear-gradient(to right,#60a5fa,#4ade80);transition:width 1s linear,background 0.5s;}
-  .progress-labels{display:flex;justify-content:space-between;margin-top:6px;font-size:0.72rem;font-weight:700;color:var(--muted);}
-
-  /* PERIOD LABEL */
-  .period-label{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.4rem,3vw,2.2rem);letter-spacing:3px;color:rgba(255,255,255,0.5);position:relative;z-index:1;}
-
-  /* CONTROLS */
-  .controls{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;}
-  .ctrl-btn{padding:12px 22px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:7px;}
-  .ctrl-btn:hover{border-color:#60a5fa;color:#60a5fa;}
-  .ctrl-btn.primary{background:#60a5fa;color:#0a0e1a;border-color:#60a5fa;}
-  .ctrl-btn.primary:hover{opacity:0.85;}
-
-  /* SETUP PANEL */
-  .setup-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:100%;max-width:560px;position:relative;z-index:1;display:none;}
-  .setup-panel.visible{display:block;}
-  .setup-panel h3{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;color:#60a5fa;margin-bottom:20px;}
-  .setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
-  .setup-field{display:flex;flex-direction:column;gap:6px;}
-  .setup-field label{font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);}
-  .setup-field input,.setup-field select{background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:700;padding:10px 14px;outline:none;transition:border-color 0.2s;}
-  .setup-field input:focus,.setup-field select:focus{border-color:#60a5fa;}
-
-  /* PERIOD PRESETS */
-  .period-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
-  .period-chip{padding:7px 14px;border-radius:100px;border:1px solid var(--border);background:transparent;font-family:'Nunito',sans-serif;font-size:0.78rem;font-weight:800;color:var(--muted);cursor:pointer;transition:all 0.15s;}
-  .period-chip:hover{border-color:#60a5fa;color:#60a5fa;}
-
-  /* DONE STATE */
-  .done-banner{display:none;font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,10vw,7rem);letter-spacing:4px;color:#4ade80;text-shadow:0 0 60px rgba(74,222,128,0.4);text-align:center;animation:popIn 0.5s ease;position:relative;z-index:1;}
-  .done-banner.show{display:block;}
-  @keyframes popIn{from{transform:scale(0.7);opacity:0;}to{transform:scale(1);opacity:1;}}
-
-  footer{text-align:center;padding:12px;font-size:12px;color:var(--muted);font-weight:600;background:var(--surface);border-top:1px solid var(--border);position:relative;z-index:1;}
-  footer a{color:var(--muted);text-decoration:none;}
+  /* Cookie banner */
+  #cookie-banner {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    z-index: 999;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  #cookie-banner a { color: var(--accent); }
+  #cookie-banner .cookie-btns { display: flex; gap: 8px; flex-shrink: 0; }
+  #cookie-banner button { padding: 7px 16px; border-radius: 6px; border: none; cursor: pointer; font-size: 0.82rem; font-weight: 600; }
+  .btn-accept { background: var(--accent); color: #0f172a; }
+  .btn-decline { background: var(--border); color: var(--text); }
 </style>
 </head>
 <body>
-<nav>
+
+<div class="top-bar">
   <a href="index.html">← All Tools</a>
-  <span class="tool-title">🔔 Countdown to Bell</span>
-  <span style="font-size:12px;color:var(--muted)">handyteachertools.com</span>
-</nav>
+  <span>🔔 Countdown to Bell &mdash; handyteachertools.com</span>
+</div>
 
-<main>
-  <div class="live-clock" id="liveClock">00:00:00</div>
-
-  <div class="countdown-wrap" id="countdownWrap">
-    <div class="countdown-label" id="countdownLabel">Time Remaining</div>
-    <div class="big-countdown green" id="bigCountdown">–:––</div>
-    <div class="countdown-sub" id="countdownSub">Set an end time to begin</div>
-  </div>
-
-  <div class="progress-wrap" id="progressWrap" style="display:none">
-    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:100%"></div></div>
-    <div class="progress-labels"><span id="startLabel">Start</span><span id="endLabel">End</span></div>
-  </div>
-
-  <div class="period-label" id="periodLabel"></div>
-
-  <div class="done-banner" id="doneBanner">🔔 Class Dismissed!</div>
-
+<div class="main">
+  <div id="period-name"></div>
+  <div id="timer-display">–:––</div>
+  <div id="status-label">Set an end time to begin</div>
   <div class="controls">
-    <button class="ctrl-btn primary" onclick="toggleSetup()">⚙ Set End Time</button>
-    <button class="ctrl-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
-    <button class="ctrl-btn" onclick="resetCountdown()">↺ Reset</button>
+    <button class="btn btn-primary" onclick="openModal()">⚙ Set End Time</button>
+    <button class="btn btn-secondary" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+    <button class="btn btn-secondary" onclick="resetTimer()">↺ Reset</button>
   </div>
+</div>
 
-  <div class="setup-panel" id="setupPanel">
-    <h3>Set Class End Time</h3>
-    <div style="margin-bottom:12px">
-      <div style="font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:8px">Quick Period Presets</div>
-      <div class="period-chips">
-        <span class="period-chip" onclick="setPreset(45,'Period')">45 min</span>
-        <span class="period-chip" onclick="setPreset(50,'Period')">50 min</span>
-        <span class="period-chip" onclick="setPreset(60,'Period')">60 min</span>
-        <span class="period-chip" onclick="setPreset(75,'Period')">75 min</span>
-        <span class="period-chip" onclick="setPreset(90,'Double Period')">90 min</span>
+<!-- Dismissed banner -->
+<div id="dismissed-banner">
+  <h1>🔔 Class Dismissed!</h1>
+  <button class="btn btn-secondary" onclick="document.getElementById('dismissed-banner').classList.remove('show'); resetTimer();">↺ Reset</button>
+</div>
+
+<!-- Settings modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h2>⚙ Set Class End Time</h2>
+    <div>
+      <label>Quick Period Presets</label>
+      <div class="presets">
+        <button class="preset-btn" onclick="setPreset(45)">45 min</button>
+        <button class="preset-btn" onclick="setPreset(50)">50 min</button>
+        <button class="preset-btn" onclick="setPreset(60)">60 min</button>
+        <button class="preset-btn" onclick="setPreset(75)">75 min</button>
+        <button class="preset-btn" onclick="setPreset(90)">90 min</button>
       </div>
     </div>
-    <div class="setup-grid">
-      <div class="setup-field">
-        <label>End Time</label>
-        <input type="time" id="endTimeInput"/>
-      </div>
-      <div class="setup-field">
-        <label>Period / Class Name</label>
-        <input type="text" id="periodNameInput" placeholder="e.g. Period 3 · Maths" maxlength="40"/>
-      </div>
+    <div>
+      <label for="end-time-input">End Time</label>
+      <input type="time" id="end-time-input">
     </div>
-    <button class="ctrl-btn primary" style="width:100%;justify-content:center" onclick="applySetup()">✅ Start Countdown</button>
+    <div>
+      <label for="period-input">Period / Class Name (optional)</label>
+      <input type="text" id="period-input" placeholder="e.g. Period 3 – Math">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="startCountdown()">✅ Start Countdown</button>
+    </div>
   </div>
-</main>
+</div>
 
-<footer><a href="index.html">← Back to all tools</a> · handyteachertools.com</footer>
+<div class="footer">
+  <a href="index.html">← Back to all tools</a> &middot; handyteachertools.com
+  <br><br>
+  <strong>About:</strong> Countdown to Bell shows a large, always-visible timer counting down to the end of class. Click <strong>Set End Time</strong>, enter your bell time or use a quick preset, then click <strong>Start Countdown</strong>. The number changes colour as time runs out — green, yellow, orange, then flashing red.
+</div>
+
+<div id="cookie-banner">
+  <span>🍪 We use advertising cookies (via Google AdSense) to keep this site free for teachers. Our tools collect no personal data. <a href="cookies.html">Cookie Policy</a> · <a href="privacy.html">Privacy Policy</a></span>
+  <div class="cookie-btns">
+    <button class="btn-accept" onclick="acceptCookies()">✅ Accept</button>
+    <button class="btn-decline" onclick="declineCookies()">Decline</button>
+  </div>
+</div>
 
 <script>
-let endTime = null;
-let startTime = null;
-let totalDuration = 0;
-let ticker = null;
-let donePlayed = false;
+  // Cookie banner
+  if (localStorage.getItem('cookieChoice')) {
+    document.getElementById('cookie-banner').style.display = 'none';
+  }
+  function acceptCookies() { localStorage.setItem('cookieChoice','accepted'); document.getElementById('cookie-banner').style.display='none'; }
+  function declineCookies() { localStorage.setItem('cookieChoice','declined'); document.getElementById('cookie-banner').style.display='none'; }
 
-function pad(n){return String(n).padStart(2,'0');}
-function formatHMS(d){return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;}
+  let timerInterval = null;
+  let targetTime = null;
 
-// Live clock
-setInterval(()=>{
-  document.getElementById('liveClock').textContent = formatHMS(new Date());
-  if(endTime) tick();
-},1000);
-document.getElementById('liveClock').textContent = formatHMS(new Date());
+  function openModal() {
+    // Default to current time + 1 hour
+    const now = new Date();
+    now.setHours(now.getHours() + 1, 0, 0, 0);
+    document.getElementById('end-time-input').value = now.toTimeString().slice(0,5);
+    document.getElementById('modal').classList.add('open');
+  }
+  function closeModal() { document.getElementById('modal').classList.remove('open'); }
 
-function tick(){
-  const now = new Date();
-  const diffMs = endTime - now;
-
-  if(diffMs <= 0){
-    document.getElementById('bigCountdown').textContent = '0:00';
-    document.getElementById('bigCountdown').className = 'big-countdown red';
-    document.getElementById('progressFill').style.width = '0%';
-    document.getElementById('countdownSub').textContent = "Time's up!";
-    if(!donePlayed){ donePlayed=true; showDone(); }
-    return;
+  function setPreset(minutes) {
+    const now = new Date();
+    now.setTime(now.getTime() + minutes * 60000);
+    document.getElementById('end-time-input').value = now.toTimeString().slice(0,5);
   }
 
-  const totalSecs = Math.ceil(diffMs/1000);
-  const hrs = Math.floor(totalSecs/3600);
-  const mins = Math.floor((totalSecs%3600)/60);
-  const secs = totalSecs%60;
+  function startCountdown() {
+    const timeVal = document.getElementById('end-time-input').value;
+    if (!timeVal) return;
+    const [h, m] = timeVal.split(':').map(Number);
+    const now = new Date();
+    targetTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, 0, 0);
+    if (targetTime <= now) targetTime.setDate(targetTime.getDate() + 1);
 
-  const display = hrs>0 ? `${hrs}:${pad(mins)}:${pad(secs)}` : `${mins}:${pad(secs)}`;
-  document.getElementById('bigCountdown').textContent = display;
+    const name = document.getElementById('period-input').value.trim();
+    document.getElementById('period-name').textContent = name;
 
-  // Colour state
-  const el = document.getElementById('bigCountdown');
-  el.className = 'big-countdown';
-  const pct = totalDuration>0?(diffMs/(totalDuration*1000)):1;
-  if(totalSecs<=60) el.classList.add('red');
-  else if(totalSecs<=300) el.classList.add('orange');
-  else if(pct<=0.5) el.classList.add('yellow');
-  else el.classList.add('green');
+    closeModal();
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = setInterval(tick, 500);
+    tick();
+  }
 
-  // Progress bar
-  const fillPct = totalDuration>0?Math.max(0,(diffMs/(totalDuration*1000))*100):100;
-  const fill = document.getElementById('progressFill');
-  fill.style.width = fillPct+'%';
-  if(totalSecs<=60) fill.style.background='#f87171';
-  else if(totalSecs<=300) fill.style.background='linear-gradient(to right,#fb923c,#facc15)';
-  else fill.style.background='linear-gradient(to right,#60a5fa,#4ade80)';
+  function tick() {
+    const now = new Date();
+    const diff = targetTime - now;
+    if (diff <= 0) {
+      clearInterval(timerInterval);
+      document.getElementById('timer-display').textContent = '0:00';
+      document.getElementById('status-label').textContent = '';
+      document.getElementById('dismissed-banner').classList.add('show');
+      return;
+    }
 
-  const hLabel = hrs>0?`${hrs}h `:'';
-  document.getElementById('countdownSub').textContent = `${hLabel}${mins} minute${mins!==1?'s':''} ${secs} second${secs!==1?'s':''} remaining`;
-  document.getElementById('doneBanner').classList.remove('show');
-}
+    const totalSec = Math.ceil(diff / 1000);
+    const h = Math.floor(totalSec / 3600);
+    const m = Math.floor((totalSec % 3600) / 60);
+    const s = totalSec % 60;
 
-function applySetup(){
-  const timeVal = document.getElementById('endTimeInput').value;
-  if(!timeVal){alert('Please enter an end time.');return;}
-  const [h,m] = timeVal.split(':').map(Number);
-  const now = new Date();
-  endTime = new Date(now);
-  endTime.setHours(h,m,0,0);
-  if(endTime<=now) endTime.setDate(endTime.getDate()+1);
-  startTime = new Date();
-  totalDuration = (endTime-startTime)/1000;
-  donePlayed = false;
-  const name = document.getElementById('periodNameInput').value.trim();
-  document.getElementById('periodLabel').textContent = name;
-  document.getElementById('progressWrap').style.display='block';
-  document.getElementById('startLabel').textContent = formatHMS(startTime).slice(0,5);
-  document.getElementById('endLabel').textContent = timeVal;
-  document.getElementById('setupPanel').classList.remove('visible');
-  tick();
-}
+    let display;
+    if (h > 0) {
+      display = h + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+    } else {
+      display = m + ':' + String(s).padStart(2,'0');
+    }
+    document.getElementById('timer-display').textContent = display;
 
-function setPreset(mins,label){
-  const now = new Date();
-  const end = new Date(now.getTime()+mins*60000);
-  const hh = pad(end.getHours()), mm = pad(end.getMinutes());
-  document.getElementById('endTimeInput').value = `${hh}:${mm}`;
-  if(!document.getElementById('periodNameInput').value) document.getElementById('periodNameInput').value=label;
-}
+    // Colour states
+    const el = document.getElementById('timer-display');
+    el.className = '';
+    const totalMinLeft = diff / 60000;
+    if (totalMinLeft <= 1) el.classList.add('red');
+    else if (totalMinLeft <= 3) el.classList.add('orange');
+    else if (totalMinLeft <= 5) el.classList.add('yellow');
 
-function toggleSetup(){
-  document.getElementById('setupPanel').classList.toggle('visible');
-}
+    // Status label
+    const endStr = targetTime.toLocaleTimeString('en-CA', {hour:'numeric', minute:'2-digit'});
+    document.getElementById('status-label').textContent = 'Until ' + endStr;
+  }
 
-function resetCountdown(){
-  endTime=null;startTime=null;totalDuration=0;donePlayed=false;
-  document.getElementById('bigCountdown').textContent='–:––';
-  document.getElementById('bigCountdown').className='big-countdown green';
-  document.getElementById('countdownSub').textContent='Set an end time to begin';
-  document.getElementById('progressWrap').style.display='none';
-  document.getElementById('doneBanner').classList.remove('show');
-  document.getElementById('periodLabel').textContent='';
-}
+  function resetTimer() {
+    clearInterval(timerInterval);
+    targetTime = null;
+    document.getElementById('timer-display').textContent = '–:––';
+    document.getElementById('timer-display').className = '';
+    document.getElementById('status-label').textContent = 'Set an end time to begin';
+    document.getElementById('period-name').textContent = '';
+  }
 
-function showDone(){
-  document.getElementById('doneBanner').classList.add('show');
-  try{
-    const ctx=new(window.AudioContext||window.webkitAudioContext)();
-    [880,1047,1319,1568].forEach((f,i)=>{
-      const o=ctx.createOscillator(),g=ctx.createGain();
-      o.connect(g);g.connect(ctx.destination);
-      o.frequency.value=f;
-      g.gain.setValueAtTime(0.4,ctx.currentTime+i*0.2);
-      g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+i*0.2+0.4);
-      o.start(ctx.currentTime+i*0.2);o.stop(ctx.currentTime+i*0.2+0.5);
-    });
-  }catch(e){}
-}
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+  }
 
-function toggleFullscreen(){
-  if(!document.fullscreenElement) document.documentElement.requestFullscreen?.();
-  else document.exitFullscreen?.();
-}
-
-// Set default end time to next hour
-const n=new Date();
-n.setHours(n.getHours()+1,0,0,0);
-document.getElementById('endTimeInput').value=`${pad(n.getHours())}:${pad(n.getMinutes())}`;
-</script>
-
-
-
-<!-- HOW TO USE -->
-<div style="max-width:860px;margin:0 auto;padding:24px 20px 40px">
-  <div style="background:#ffffff;border-radius:14px;border:1px solid #e5e0d8;box-shadow:0 4px 16px rgba(0,0,0,0.06);overflow:hidden">
-    <div style="background:#2d4a3e;padding:14px 20px;display:flex;align-items:center;gap:10px">
-      <span style="font-size:1.1rem">📖</span>
-      <h2 style="font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:800;color:white;margin:0">About This Tool</h2>
-    </div>
-    <div style="padding:16px 20px">
-      <p style="font-family:'Nunito',sans-serif;font-size:0.9rem;font-weight:600;color:#3a4a42;line-height:1.75">Countdown to Bell shows a large, always-visible timer counting down to the end of class. Click <strong>Set End Time</strong>, enter your bell time or use a preset, then click <strong>Start Countdown</strong>. The number changes colour as time runs out — green, yellow, orange, then flashing red.</p>
-    </div>
-  </div>
-</div>
-<!-- COOKIE CONSENT BANNER -->
-<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a2e25;color:#f0f0e8;padding:16px 24px;z-index:9999;font-family:'Nunito',sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,0.2);border-top:3px solid #4caf50;">
-  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
-    <div style="flex:1;min-width:240px">
-      <p style="font-size:0.88rem;font-weight:700;line-height:1.6;color:rgba(255,255,255,0.85)">
-        🍪 We use advertising cookies (via Google AdSense) to keep this site free for teachers.
-        Our tools themselves collect no data. See our
-        <a href="cookies.html" style="color:#ffc107;font-weight:800;text-decoration:none">Cookie Policy</a>
-        and
-        <a href="privacy.html" style="color:#ffc107;font-weight:800;text-decoration:none">Privacy Policy</a>.
-      </p>
-    </div>
-    <div style="display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap">
-      <button onclick="acceptCookies()" style="padding:10px 22px;background:#4caf50;color:white;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;cursor:pointer;">✅ Accept All</button>
-      <button onclick="declineCookies()" style="padding:10px 22px;background:transparent;color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.3);border-radius:8px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;cursor:pointer;">Decline</button>
-      <a href="cookies.html" style="padding:10px 16px;color:rgba(255,255,255,0.5);font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:700;text-decoration:none;display:flex;align-items:center;">More info</a>
-    </div>
-  </div>
-</div>
-<script>
-(function(){var c=localStorage.getItem('htt_cookie_consent');if(!c){document.getElementById('cookieBanner').style.display='block';}})();
-function acceptCookies(){localStorage.setItem('htt_cookie_consent','accepted');document.getElementById('cookieBanner').style.display='none';}
-function declineCookies(){localStorage.setItem('htt_cookie_consent','declined');document.getElementById('cookieBanner').style.display='none';}
+  // ESC closes modal
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+  });
 </script>
 </body>
 </html>
