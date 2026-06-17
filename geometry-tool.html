@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geometry Tool – Handy Teacher Tools</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f8f9fb;
+    --canvas-bg: #ffffff;
+    --panel-bg: #ffffff;
+    --border: #e2e6ea;
+    --primary: #2563eb;
+    --primary-light: #dbeafe;
+    --primary-hover: #1d4ed8;
+    --accent: #f59e0b;
+    --accent-light: #fef3c7;
+    --danger: #ef4444;
+    --danger-light: #fee2e2;
+    --success: #10b981;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --text-light: #94a3b8;
+    --radius: 8px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.05);
+  }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--panel-bg);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+    box-shadow: var(--shadow);
+    z-index: 10;
+  }
+
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+
+  .header-logo svg { color: var(--primary); }
+
+  .header-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .header-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-top: 1px;
+  }
+
+  .header-spacer { flex: 1; }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ── Layout ── */
+  .app-body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ── Toolbar (left) ── */
+  .toolbar {
+    width: 60px;
+    background: var(--panel-bg);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0;
+    gap: 2px;
+    flex-shrink: 0;
+    overflow-y: auto;
+  }
+
+  .tool-btn {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: var(--radius);
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    color: var(--text-muted);
+    transition: background 0.15s, color 0.15s;
+    position: relative;
+  }
+
+  .tool-btn:hover { background: var(--bg); color: var(--primary); }
+  .tool-btn.active { background: var(--primary-light); color: var(--primary); }
+
+  .tool-btn svg { flex-shrink: 0; }
+
+  .tool-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .toolbar-divider {
+    width: 32px;
+    height: 1px;
+    background: var(--border);
+    margin: 6px 0;
+  }
+
+  /* Tooltip */
+  .tool-btn::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 54px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #1e293b;
+    color: #fff;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 100;
+  }
+
+  .tool-btn:hover::after { opacity: 1; }
+
+  /* ── Canvas ── */
+  .canvas-area {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background: var(--canvas-bg);
+    background-image:
+      linear-gradient(rgba(226,230,234,0.6) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(226,230,234,0.6) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  #mainCanvas {
+    position: absolute;
+    top: 0; left: 0;
+    cursor: crosshair;
+  }
+
+  /* ── Properties Panel (right) ── */
+  .props-panel {
+    width: 220px;
+    background: var(--panel-bg);
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    overflow-y: auto;
+  }
+
+  .panel-section {
+    padding: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .panel-section-title {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+
+  .prop-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    gap: 8px;
+  }
+
+  .prop-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .prop-control {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  input[type="color"] {
+    width: 30px;
+    height: 24px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 1px;
+    background: white;
+  }
+
+  input[type="range"] {
+    width: 80px;
+    accent-color: var(--primary);
+  }
+
+  .range-val {
+    font-size: 11px;
+    color: var(--text-muted);
+    min-width: 18px;
+    text-align: right;
+  }
+
+  .prop-checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary);
+    cursor: pointer;
+  }
+
+  /* ── Measurement badge ── */
+  .measure-badge {
+    display: inline-block;
+    background: var(--accent-light);
+    border: 1px solid #fcd34d;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #92400e;
+    margin: 2px 0;
+  }
+
+  /* ── Measurements list ── */
+  .measurements-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .measure-item {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+
+  .measure-item-label {
+    color: var(--text-muted);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .measure-item-val {
+    font-weight: 700;
+    color: var(--text);
+    font-size: 14px;
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border-radius: var(--radius);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: background 0.15s;
+    text-decoration: none;
+  }
+
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-primary:hover { background: var(--primary-hover); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { background: var(--bg); color: var(--text); }
+
+  .btn-danger { background: var(--danger-light); color: var(--danger); }
+  .btn-danger:hover { background: #fecaca; }
+
+  .btn-sm { padding: 4px 8px; font-size: 11px; }
+
+  /* ── Status bar ── */
+  .status-bar {
+    background: var(--panel-bg);
+    border-top: 1px solid var(--border);
+    padding: 5px 16px;
+    font-size: 11px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+
+  .status-bar span { display: flex; align-items: center; gap: 4px; }
+
+  /* ── Hint overlay ── */
+  .hint-overlay {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(30,41,59,0.85);
+    backdrop-filter: blur(4px);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+    z-index: 50;
+  }
+
+  .hint-overlay.hidden { opacity: 0; }
+
+  /* ── Selection handles ── */
+  .no-select { user-select: none; }
+
+  /* ── Empty state ── */
+  .canvas-empty {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: none;
+    opacity: 0.35;
+    transition: opacity 0.3s;
+  }
+
+  .canvas-empty.hidden { opacity: 0; }
+
+  .canvas-empty svg { margin-bottom: 10px; color: var(--text-muted); }
+  .canvas-empty p { font-size: 14px; color: var(--text-muted); font-weight: 500; }
+  .canvas-empty small { font-size: 11px; color: var(--text-light); }
+
+  /* Color presets */
+  .color-presets {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .color-swatch {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.1s, transform 0.1s;
+  }
+  .color-swatch:hover { transform: scale(1.15); }
+  .color-swatch.selected { border-color: var(--text); }
+</style>
+</head>
+<body class="no-select">
+
+<!-- Header -->
+<header>
+  <div class="header-logo">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="7" fill="#2563eb"/>
+      <polygon points="14,5 23,20 5,20" fill="none" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
+      <circle cx="14" cy="20" r="2.5" fill="white"/>
+      <line x1="8" y1="16" x2="20" y2="16" stroke="white" stroke-width="1.4"/>
+    </svg>
+    <div>
+      <div class="header-title">Geometry Tool</div>
+      <div class="header-sub">Handy Teacher Tools</div>
+    </div>
+  </div>
+  <div class="header-spacer"></div>
+  <div class="header-actions">
+    <button class="btn btn-ghost btn-sm" onclick="clearAll()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+      Clear
+    </button>
+    <button class="btn btn-primary btn-sm" onclick="downloadCanvas()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Save Image
+    </button>
+  </div>
+</header>
+
+<!-- App Body -->
+<div class="app-body">
+
+  <!-- Left Toolbar -->
+  <div class="toolbar">
+    <button class="tool-btn active" id="tool-select" onclick="setTool('select')" data-tip="Select & Move">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3l14 9-7 2-2 7z"/></svg>
+      <span class="tool-label">Select</span>
+    </button>
+
+    <div class="toolbar-divider"></div>
+
+    <button class="tool-btn" id="tool-point" onclick="setTool('point')" data-tip="Plot a Point">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>
+      <span class="tool-label">Point</span>
+    </button>
+
+    <button class="tool-btn" id="tool-line" onclick="setTool('line')" data-tip="Draw a Line Segment">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="4" y1="20" x2="20" y2="4"/></svg>
+      <span class="tool-label">Line</span>
+    </button>
+
+    <button class="tool-btn" id="tool-polygon" onclick="setTool('polygon')" data-tip="Draw Polygon (click points, double-click to close)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,3 21,9 18,21 6,21 3,9"/></svg>
+      <span class="tool-label">Polygon</span>
+    </button>
+
+    <button class="tool-btn" id="tool-rect" onclick="setTool('rect')" data-tip="Draw Rectangle">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="1"/></svg>
+      <span class="tool-label">Rect</span>
+    </button>
+
+    <button class="tool-btn" id="tool-circle" onclick="setTool('circle')" data-tip="Draw Circle">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>
+      <span class="tool-label">Circle</span>
+    </button>
+
+    <button class="tool-btn" id="tool-triangle" onclick="setTool('triangle')" data-tip="Draw Triangle (3 clicks)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,4 22,20 2,20"/></svg>
+      <span class="tool-label">Triangle</span>
+    </button>
+
+    <div class="toolbar-divider"></div>
+
+    <button class="tool-btn" id="tool-angle" onclick="setTool('angle')" data-tip="Measure Angle (click 3 points: A, vertex, B)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20 L20 20 L4 4"/><path d="M10 20 A6 6 0 0 0 4 14" stroke-dasharray="1 1"/></svg>
+      <span class="tool-label">Angle</span>
+    </button>
+
+    <button class="tool-btn" id="tool-measure" onclick="setTool('measure')" data-tip="Measure Distance (click 2 points)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="9" x2="2" y2="15"/><line x1="22" y1="9" x2="22" y2="15"/></svg>
+      <span class="tool-label">Dist</span>
+    </button>
+
+    <div class="toolbar-divider"></div>
+
+    <button class="tool-btn" id="tool-text" onclick="setTool('text')" data-tip="Add Text Label">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
+      <span class="tool-label">Text</span>
+    </button>
+
+    <button class="tool-btn" id="tool-erase" onclick="setTool('erase')" data-tip="Erase Object">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 20H7L3 16l9-9 7 7-4.5 4.5"/><path d="M6.5 17.5l5-5"/></svg>
+      <span class="tool-label">Erase</span>
+    </button>
+  </div>
+
+  <!-- Canvas -->
+  <div class="canvas-area" id="canvasArea">
+    <canvas id="mainCanvas"></canvas>
+
+    <div class="canvas-empty" id="emptyState">
+      <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+        <polygon points="26,8 44,38 8,38" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round"/>
+        <circle cx="26" cy="38" r="3" fill="currentColor"/>
+        <line x1="14" y1="30" x2="38" y2="30" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+      <p>Pick a tool and start drawing</p>
+      <small>Select, draw shapes, measure angles & distances</small>
+    </div>
+
+    <div class="hint-overlay hidden" id="hintOverlay"></div>
+  </div>
+
+  <!-- Right Properties Panel -->
+  <div class="props-panel">
+
+    <!-- Style -->
+    <div class="panel-section">
+      <div class="panel-section-title">Style</div>
+
+      <div class="prop-row">
+        <span class="prop-label">Color</span>
+        <div class="prop-control">
+          <input type="color" id="strokeColor" value="#2563eb" onchange="updateStyle()">
+        </div>
+      </div>
+
+      <div class="color-presets" style="margin-bottom:10px">
+        <div class="color-swatch selected" style="background:#2563eb" onclick="setPresetColor('#2563eb')" title="Blue"></div>
+        <div class="color-swatch" style="background:#ef4444" onclick="setPresetColor('#ef4444')" title="Red"></div>
+        <div class="color-swatch" style="background:#10b981" onclick="setPresetColor('#10b981')" title="Green"></div>
+        <div class="color-swatch" style="background:#f59e0b" onclick="setPresetColor('#f59e0b')" title="Amber"></div>
+        <div class="color-swatch" style="background:#8b5cf6" onclick="setPresetColor('#8b5cf6')" title="Purple"></div>
+        <div class="color-swatch" style="background:#ec4899" onclick="setPresetColor('#ec4899')" title="Pink"></div>
+        <div class="color-swatch" style="background:#0891b2" onclick="setPresetColor('#0891b2')" title="Cyan"></div>
+        <div class="color-swatch" style="background:#1e293b" onclick="setPresetColor('#1e293b')" title="Dark"></div>
+      </div>
+
+      <div class="prop-row">
+        <span class="prop-label">Fill</span>
+        <div class="prop-control">
+          <input type="color" id="fillColor" value="#dbeafe" onchange="updateStyle()">
+          <input type="checkbox" class="prop-checkbox" id="useFill" checked onchange="updateStyle()">
+        </div>
+      </div>
+
+      <div class="prop-row">
+        <span class="prop-label">Thickness</span>
+        <div class="prop-control">
+          <input type="range" id="lineWidth" min="1" max="8" value="2" oninput="updateStyle(); document.getElementById('lwVal').textContent=this.value">
+          <span class="range-val" id="lwVal">2</span>
+        </div>
+      </div>
+
+      <div class="prop-row">
+        <span class="prop-label">Opacity</span>
+        <div class="prop-control">
+          <input type="range" id="fillOpacity" min="0" max="100" value="30" oninput="updateStyle(); document.getElementById('foVal').textContent=this.value+'%'">
+          <span class="range-val" id="foVal">30%</span>
+        </div>
+      </div>
+
+      <div class="prop-row">
+        <span class="prop-label">Dashed</span>
+        <div class="prop-control">
+          <input type="checkbox" class="prop-checkbox" id="isDashed" onchange="updateStyle()">
+        </div>
+      </div>
+
+      <div class="prop-row">
+        <span class="prop-label">Show Labels</span>
+        <div class="prop-control">
+          <input type="checkbox" class="prop-checkbox" id="showLabels" checked onchange="updateStyle()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Measurements -->
+    <div class="panel-section">
+      <div class="panel-section-title">Measurements</div>
+      <div class="measurements-list" id="measurementsList">
+        <div style="font-size:11px;color:var(--text-light)">Draw shapes or use the Angle/Distance tools to see measurements here.</div>
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <div class="panel-section">
+      <div class="panel-section-title">Grid</div>
+      <div class="prop-row">
+        <span class="prop-label">Show Grid</span>
+        <input type="checkbox" class="prop-checkbox" id="showGrid" checked onchange="toggleGrid()">
+      </div>
+      <div class="prop-row">
+        <span class="prop-label">Snap to Grid</span>
+        <input type="checkbox" class="prop-checkbox" id="snapGrid" checked>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="panel-section">
+      <div class="panel-section-title">Actions</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <button class="btn btn-ghost btn-sm" onclick="undo()">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 00-4-4H4"/></svg>
+          Undo (Ctrl+Z)
+        </button>
+        <button class="btn btn-danger btn-sm" onclick="clearAll()">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>
+          Clear All
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Status Bar -->
+<div class="status-bar" id="statusBar">
+  <span>
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
+    Tool: <strong id="statusTool">Select</strong>
+  </span>
+  <span>Objects: <strong id="statusCount">0</strong></span>
+  <span id="statusCoords">x: —, y: —</span>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════
+const canvas = document.getElementById('mainCanvas');
+const ctx = canvas.getContext('2d');
+const area = document.getElementById('canvasArea');
+
+let currentTool = 'select';
+let objects = [];
+let history = []; // for undo
+let selectedObj = null;
+let dragging = false;
+let dragStart = null;
+let dragObjStart = null;
+
+// Drawing in-progress state
+let drawing = false;
+let drawStart = null;
+let polyPoints = []; // for polygon/triangle
+let trianglePoints = [];
+let anglePoints = [];
+let measurePoints = [];
+
+// Style state
+let style = {
+  stroke: '#2563eb',
+  fill: '#dbeafe',
+  useFill: true,
+  lineWidth: 2,
+  fillOpacity: 0.30,
+  dashed: false,
+  showLabels: true
+};
+
+const GRID = 40;
+let objectCounter = 0;
+
+// ═══════════════════════════════════════════════
+//  CANVAS RESIZE
+// ═══════════════════════════════════════════════
+function resizeCanvas() {
+  const rect = area.getBoundingClientRect();
+  canvas.width = rect.width;
+  canvas.height = rect.height;
+  render();
+}
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+// ═══════════════════════════════════════════════
+//  TOOLS
+// ═══════════════════════════════════════════════
+const TOOL_HINTS = {
+  select: 'Click to select, drag to move',
+  point: 'Click to place a point',
+  line: 'Click start, click end',
+  polygon: 'Click to add vertices — double-click to close',
+  rect: 'Drag to draw a rectangle',
+  circle: 'Drag from center outward',
+  triangle: 'Click 3 corners to draw a triangle',
+  angle: 'Click: Point A → Vertex → Point B',
+  measure: 'Click 2 points to measure distance',
+  text: 'Click to add a label',
+  erase: 'Click an object to delete it'
+};
+
+function setTool(tool) {
+  // Reset in-progress drawing
+  drawing = false;
+  drawStart = null;
+  polyPoints = [];
+  trianglePoints = [];
+  anglePoints = [];
+  measurePoints = [];
+
+  currentTool = tool;
+  document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tool-' + tool)?.classList.add('active');
+  document.getElementById('statusTool').textContent = tool.charAt(0).toUpperCase() + tool.slice(1);
+
+  const hint = document.getElementById('hintOverlay');
+  hint.textContent = TOOL_HINTS[tool] || '';
+  hint.classList.remove('hidden');
+  clearTimeout(window._hintTimer);
+  window._hintTimer = setTimeout(() => hint.classList.add('hidden'), 3000);
+
+  canvas.style.cursor = tool === 'erase' ? 'not-allowed'
+    : tool === 'select' ? 'default'
+    : 'crosshair';
+
+  render();
+}
+
+// ═══════════════════════════════════════════════
+//  SNAP
+// ═══════════════════════════════════════════════
+function snap(val) {
+  if (!document.getElementById('snapGrid').checked) return val;
+  return Math.round(val / GRID) * GRID;
+}
+
+function getXY(e) {
+  const r = canvas.getBoundingClientRect();
+  const x = snap(e.clientX - r.left);
+  const y = snap(e.clientY - r.top);
+  return { x, y };
+}
+
+function getRawXY(e) {
+  const r = canvas.getBoundingClientRect();
+  return { x: e.clientX - r.left, y: e.clientY - r.top };
+}
+
+// ═══════════════════════════════════════════════
+//  MOUSE EVENTS
+// ═══════════════════════════════════════════════
+canvas.addEventListener('mousemove', e => {
+  const { x, y } = getRawXY(e);
+  document.getElementById('statusCoords').textContent = `x: ${Math.round(x)}, y: ${Math.round(y)}`;
+
+  if (currentTool === 'select' && dragging && selectedObj) {
+    const dx = x - dragStart.x;
+    const dy = y - dragStart.y;
+    moveObj(selectedObj, dragObjStart, dx, dy);
+    render();
+  }
+
+  // Preview while drawing
+  if (drawing) render(x, y);
+});
+
+canvas.addEventListener('mousedown', e => {
+  if (e.button !== 0) return;
+  const { x, y } = getXY(e);
+  const raw = getRawXY(e);
+
+  if (currentTool === 'select') {
+    const hit = hitTest(raw.x, raw.y);
+    selectedObj = hit;
+    if (hit) {
+      dragging = true;
+      dragStart = raw;
+      dragObjStart = cloneObjGeom(hit);
+    }
+    render();
+    return;
+  }
+
+  if (currentTool === 'erase') {
+    const hit = hitTest(raw.x, raw.y);
+    if (hit) {
+      pushHistory();
+      objects = objects.filter(o => o !== hit);
+      updateMeasurements();
+      updateCount();
+      render();
+    }
+    return;
+  }
+
+  if (currentTool === 'point') {
+    pushHistory();
+    addPoint(x, y);
+    return;
+  }
+
+  if (currentTool === 'line') {
+    if (!drawing) { drawing = true; drawStart = { x, y }; }
+    else {
+      pushHistory();
+      addLine(drawStart.x, drawStart.y, x, y);
+      drawing = false; drawStart = null;
+    }
+    return;
+  }
+
+  if (currentTool === 'rect') {
+    if (!drawing) { drawing = true; drawStart = { x, y }; }
+    return;
+  }
+
+  if (currentTool === 'circle') {
+    if (!drawing) { drawing = true; drawStart = { x, y }; }
+    return;
+  }
+
+  if (currentTool === 'polygon') {
+    polyPoints.push({ x, y });
+    if (!drawing) drawing = true;
+    return;
+  }
+
+  if (currentTool === 'triangle') {
+    trianglePoints.push({ x, y });
+    if (!drawing) drawing = true;
+    if (trianglePoints.length === 3) {
+      pushHistory();
+      addPolygon([...trianglePoints], 'Triangle');
+      trianglePoints = [];
+      drawing = false;
+    }
+    return;
+  }
+
+  if (currentTool === 'angle') {
+    anglePoints.push({ x, y });
+    if (anglePoints.length === 3) {
+      pushHistory();
+      addAngleMeasure([...anglePoints]);
+      anglePoints = [];
+      drawing = false;
+    } else {
+      drawing = true;
+    }
+    return;
+  }
+
+  if (currentTool === 'measure') {
+    measurePoints.push({ x, y });
+    if (measurePoints.length === 2) {
+      pushHistory();
+      addDistanceMeasure([...measurePoints]);
+      measurePoints = [];
+      drawing = false;
+    } else {
+      drawing = true;
+    }
+    return;
+  }
+
+  if (currentTool === 'text') {
+    const label = prompt('Enter label:');
+    if (label) {
+      pushHistory();
+      objects.push({ type: 'text', x, y, text: label, id: ++objectCounter, ...cloneStyle() });
+      updateCount(); showEmpty(); render();
+    }
+    return;
+  }
+});
+
+canvas.addEventListener('mouseup', e => {
+  if (currentTool === 'select') {
+    dragging = false;
+    return;
+  }
+
+  const { x, y } = getXY(e);
+
+  if (currentTool === 'rect' && drawing && drawStart) {
+    if (Math.abs(x - drawStart.x) > 4 && Math.abs(y - drawStart.y) > 4) {
+      pushHistory();
+      addRect(drawStart.x, drawStart.y, x - drawStart.x, y - drawStart.y);
+    }
+    drawing = false; drawStart = null;
+    return;
+  }
+
+  if (currentTool === 'circle' && drawing && drawStart) {
+    const r = Math.hypot(x - drawStart.x, y - drawStart.y);
+    if (r > 4) {
+      pushHistory();
+      addCircle(drawStart.x, drawStart.y, r);
+    }
+    drawing = false; drawStart = null;
+    return;
+  }
+});
+
+canvas.addEventListener('dblclick', e => {
+  if (currentTool === 'polygon' && polyPoints.length >= 3) {
+    pushHistory();
+    addPolygon([...polyPoints], 'Polygon');
+    polyPoints = [];
+    drawing = false;
+    render();
+  }
+});
+
+// ═══════════════════════════════════════════════
+//  ADD OBJECTS
+// ═══════════════════════════════════════════════
+function cloneStyle() {
+  return {
+    stroke: style.stroke,
+    fill: style.fill,
+    useFill: style.useFill,
+    lineWidth: style.lineWidth,
+    fillOpacity: style.fillOpacity,
+    dashed: style.dashed,
+    showLabels: style.showLabels
+  };
+}
+
+function addPoint(x, y) {
+  objects.push({ type: 'point', x, y, id: ++objectCounter, ...cloneStyle() });
+  updateCount(); showEmpty(); render();
+}
+
+function addLine(x1, y1, x2, y2) {
+  const len = Math.hypot(x2 - x1, y2 - y1).toFixed(1);
+  objects.push({ type: 'line', x1, y1, x2, y2, length: len, id: ++objectCounter, ...cloneStyle() });
+  updateCount(); showEmpty(); updateMeasurements(); render();
+}
+
+function addRect(x, y, w, h) {
+  if (w < 0) { x += w; w = -w; }
+  if (h < 0) { y += h; h = -h; }
+  const perimeter = (2 * (w + h)).toFixed(1);
+  const area = (w * h).toFixed(1);
+  objects.push({ type: 'rect', x, y, w, h, perimeter, area: area, id: ++objectCounter, ...cloneStyle() });
+  updateCount(); showEmpty(); updateMeasurements(); render();
+}
+
+function addCircle(cx, cy, r) {
+  const circumference = (2 * Math.PI * r).toFixed(1);
+  const area = (Math.PI * r * r).toFixed(1);
+  objects.push({ type: 'circle', cx, cy, r, circumference, area: area, id: ++objectCounter, ...cloneStyle() });
+  updateCount(); showEmpty(); updateMeasurements(); render();
+}
+
+function addPolygon(pts, label) {
+  const area = polygonArea(pts).toFixed(1);
+  const perimeter = polygonPerimeter(pts).toFixed(1);
+  objects.push({ type: 'polygon', points: pts, area, perimeter, label, id: ++objectCounter, ...cloneStyle() });
+  updateCount(); showEmpty(); updateMeasurements(); render();
+}
+
+function addAngleMeasure(pts) {
+  const angle = calcAngle(pts[0], pts[1], pts[2]).toFixed(1);
+  objects.push({ type: 'angle', points: pts, angle, id: ++objectCounter, ...cloneStyle() });
+  updateCount(); showEmpty(); updateMeasurements(); render();
+}
+
+function addDistanceMeasure(pts) {
+  const dist = Math.hypot(pts[1].x - pts[0].x, pts[1].y - pts[0].y).toFixed(1);
+  objects.push({ type: 'distance', points: pts, dist, id: ++objectCounter, ...cloneStyle() });
+  updateCount(); showEmpty(); updateMeasurements(); render();
+}
+
+// ═══════════════════════════════════════════════
+//  MATH
+// ═══════════════════════════════════════════════
+function calcAngle(a, v, b) {
+  const ax = a.x - v.x, ay = a.y - v.y;
+  const bx = b.x - v.x, by = b.y - v.y;
+  const dot = ax * bx + ay * by;
+  const magA = Math.hypot(ax, ay);
+  const magB = Math.hypot(bx, by);
+  if (magA === 0 || magB === 0) return 0;
+  return Math.acos(Math.max(-1, Math.min(1, dot / (magA * magB)))) * (180 / Math.PI);
+}
+
+function polygonArea(pts) {
+  let area = 0;
+  const n = pts.length;
+  for (let i = 0; i < n; i++) {
+    const j = (i + 1) % n;
+    area += pts[i].x * pts[j].y;
+    area -= pts[j].x * pts[i].y;
+  }
+  return Math.abs(area) / 2;
+}
+
+function polygonPerimeter(pts) {
+  let p = 0;
+  const n = pts.length;
+  for (let i = 0; i < n; i++) {
+    const j = (i + 1) % n;
+    p += Math.hypot(pts[j].x - pts[i].x, pts[j].y - pts[i].y);
+  }
+  return p;
+}
+
+// ═══════════════════════════════════════════════
+//  HIT TESTING
+// ═══════════════════════════════════════════════
+function hitTest(mx, my) {
+  for (let i = objects.length - 1; i >= 0; i--) {
+    const o = objects[i];
+    if (hitObj(o, mx, my)) return o;
+  }
+  return null;
+}
+
+function hitObj(o, mx, my) {
+  const TOL = 8;
+  if (o.type === 'point') return Math.hypot(mx - o.x, my - o.y) <= 10;
+  if (o.type === 'line') return ptSegDist(mx, my, o.x1, o.y1, o.x2, o.y2) <= TOL;
+  if (o.type === 'rect') return mx >= o.x - TOL && mx <= o.x + o.w + TOL && my >= o.y - TOL && my <= o.y + o.h + TOL;
+  if (o.type === 'circle') {
+    const d = Math.hypot(mx - o.cx, my - o.cy);
+    return Math.abs(d - o.r) <= TOL || d <= o.r;
+  }
+  if (o.type === 'polygon' || o.type === 'angle' || o.type === 'distance') {
+    const pts = o.points;
+    for (let i = 0; i < pts.length - 1; i++) {
+      if (ptSegDist(mx, my, pts[i].x, pts[i].y, pts[i+1].x, pts[i+1].y) <= TOL) return true;
+    }
+    return Math.hypot(mx - pts[0].x, my - pts[0].y) <= TOL;
+  }
+  if (o.type === 'text') return mx >= o.x - 4 && mx <= o.x + 120 && my >= o.y - 20 && my <= o.y + 4;
+  return false;
+}
+
+function ptSegDist(px, py, ax, ay, bx, by) {
+  const dx = bx - ax, dy = by - ay;
+  const len2 = dx * dx + dy * dy;
+  if (len2 === 0) return Math.hypot(px - ax, py - ay);
+  let t = ((px - ax) * dx + (py - ay) * dy) / len2;
+  t = Math.max(0, Math.min(1, t));
+  return Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
+}
+
+// ═══════════════════════════════════════════════
+//  MOVE
+// ═══════════════════════════════════════════════
+function cloneObjGeom(o) {
+  return JSON.parse(JSON.stringify(o));
+}
+
+function moveObj(o, start, dx, dy) {
+  if (o.type === 'point') { o.x = start.x + dx; o.y = start.y + dy; }
+  else if (o.type === 'line') { o.x1 = start.x1 + dx; o.y1 = start.y1 + dy; o.x2 = start.x2 + dx; o.y2 = start.y2 + dy; }
+  else if (o.type === 'rect') { o.x = start.x + dx; o.y = start.y + dy; }
+  else if (o.type === 'circle') { o.cx = start.cx + dx; o.cy = start.cy + dy; }
+  else if (o.type === 'polygon' || o.type === 'angle' || o.type === 'distance') {
+    o.points = start.points.map(p => ({ x: p.x + dx, y: p.y + dy }));
+  }
+  else if (o.type === 'text') { o.x = start.x + dx; o.y = start.y + dy; }
+}
+
+// ═══════════════════════════════════════════════
+//  RENDER
+// ═══════════════════════════════════════════════
+function render(previewX, previewY) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw all committed objects
+  objects.forEach(o => drawObj(o, false));
+
+  // Draw preview (in-progress shape)
+  if (drawing && previewX !== undefined) {
+    ctx.save();
+    ctx.globalAlpha = 0.6;
+    applyCtxStyle({ ...style, lineWidth: style.lineWidth });
+
+    if (currentTool === 'line' && drawStart) {
+      ctx.beginPath();
+      ctx.moveTo(drawStart.x, drawStart.y);
+      ctx.lineTo(previewX, previewY);
+      ctx.stroke();
+    }
+
+    if (currentTool === 'rect' && drawStart) {
+      const w = previewX - drawStart.x, h = previewY - drawStart.y;
+      if (style.useFill) { ctx.globalAlpha = style.fillOpacity; ctx.fillStyle = style.fill; ctx.fillRect(drawStart.x, drawStart.y, w, h); ctx.globalAlpha = 0.6; }
+      ctx.strokeRect(drawStart.x, drawStart.y, w, h);
+    }
+
+    if (currentTool === 'circle' && drawStart) {
+      const r = Math.hypot(previewX - drawStart.x, previewY - drawStart.y);
+      ctx.beginPath();
+      ctx.arc(drawStart.x, drawStart.y, r, 0, Math.PI * 2);
+      if (style.useFill) { ctx.save(); ctx.globalAlpha = style.fillOpacity; ctx.fillStyle = style.fill; ctx.fill(); ctx.restore(); }
+      ctx.stroke();
+    }
+
+    if ((currentTool === 'polygon' || currentTool === 'triangle' || currentTool === 'angle' || currentTool === 'measure') && polyPoints.length > 0 || trianglePoints.length > 0 || anglePoints.length > 0 || measurePoints.length > 0) {
+      const pts = currentTool === 'polygon' ? polyPoints
+        : currentTool === 'triangle' ? trianglePoints
+        : currentTool === 'angle' ? anglePoints
+        : measurePoints;
+      if (pts.length > 0) {
+        ctx.beginPath();
+        ctx.moveTo(pts[0].x, pts[0].y);
+        pts.forEach((p, i) => { if (i > 0) ctx.lineTo(p.x, p.y); });
+        ctx.lineTo(previewX, previewY);
+        ctx.stroke();
+        // dots at each point
+        pts.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+          ctx.fillStyle = style.stroke;
+          ctx.fill();
+        });
+      }
+    }
+
+    ctx.restore();
+  }
+}
+
+function applyCtxStyle(s) {
+  ctx.strokeStyle = s.stroke;
+  ctx.lineWidth = s.lineWidth;
+  ctx.setLineDash(s.dashed ? [8, 4] : []);
+}
+
+function drawObj(o, ghost) {
+  ctx.save();
+  applyCtxStyle(o);
+  if (o === selectedObj) {
+    ctx.shadowColor = 'rgba(37,99,235,0.4)';
+    ctx.shadowBlur = 8;
+  }
+
+  if (o.type === 'point') {
+    ctx.beginPath();
+    ctx.arc(o.x, o.y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = o.stroke;
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    if (o.showLabels) {
+      drawLabel(ctx, `P${o.id}`, o.x + 8, o.y - 8, o.stroke);
+    }
+  }
+
+  else if (o.type === 'line') {
+    ctx.beginPath();
+    ctx.moveTo(o.x1, o.y1);
+    ctx.lineTo(o.x2, o.y2);
+    ctx.stroke();
+    // endpoint dots
+    [{ x: o.x1, y: o.y1 }, { x: o.x2, y: o.y2 }].forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = o.stroke;
+      ctx.fill();
+    });
+    if (o.showLabels) {
+      const mx = (o.x1 + o.x2) / 2, my = (o.y1 + o.y2) / 2;
+      drawLabel(ctx, `${pxToCm(o.length)} cm`, mx + 6, my - 6, o.stroke);
+    }
+  }
+
+  else if (o.type === 'rect') {
+    if (o.useFill) {
+      ctx.globalAlpha = o.fillOpacity;
+      ctx.fillStyle = o.fill;
+      ctx.fillRect(o.x, o.y, o.w, o.h);
+      ctx.globalAlpha = 1;
+    }
+    ctx.strokeRect(o.x, o.y, o.w, o.h);
+    if (o.showLabels) {
+      drawLabel(ctx, `${pxToCm(o.w)}×${pxToCm(o.h)} cm`, o.x + o.w / 2 - 30, o.y + o.h / 2, o.stroke);
+    }
+  }
+
+  else if (o.type === 'circle') {
+    ctx.beginPath();
+    ctx.arc(o.cx, o.cy, o.r, 0, Math.PI * 2);
+    if (o.useFill) {
+      ctx.save();
+      ctx.globalAlpha = o.fillOpacity;
+      ctx.fillStyle = o.fill;
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.stroke();
+    // center dot
+    ctx.beginPath();
+    ctx.arc(o.cx, o.cy, 3, 0, Math.PI * 2);
+    ctx.fillStyle = o.stroke;
+    ctx.fill();
+    if (o.showLabels) {
+      drawLabel(ctx, `r=${pxToCm(o.r)} cm`, o.cx + 6, o.cy - o.r / 2, o.stroke);
+    }
+  }
+
+  else if (o.type === 'polygon') {
+    const pts = o.points;
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    pts.forEach((p, i) => { if (i > 0) ctx.lineTo(p.x, p.y); });
+    ctx.closePath();
+    if (o.useFill) {
+      ctx.save();
+      ctx.globalAlpha = o.fillOpacity;
+      ctx.fillStyle = o.fill;
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.stroke();
+    if (o.showLabels) {
+      const cx = pts.reduce((s, p) => s + p.x, 0) / pts.length;
+      const cy = pts.reduce((s, p) => s + p.y, 0) / pts.length;
+      drawLabel(ctx, `${pxToCm(o.area)} cm²`, cx, cy, o.stroke);
+    }
+  }
+
+  else if (o.type === 'angle') {
+    const [a, v, b] = o.points;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(v.x, v.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+    ctx.setLineDash([]);
+    // arc
+    const angleA = Math.atan2(a.y - v.y, a.x - v.x);
+    const angleB = Math.atan2(b.y - v.y, b.x - v.x);
+    ctx.beginPath();
+    ctx.arc(v.x, v.y, 28, angleA, angleB, false);
+    ctx.strokeStyle = o.stroke;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    // dots
+    o.points.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, Math.PI * 2); ctx.fillStyle = o.stroke; ctx.fill(); });
+    // label
+    const midAngle = (angleA + angleB) / 2;
+    const lx = v.x + Math.cos(midAngle) * 45;
+    const ly = v.y + Math.sin(midAngle) * 45;
+    drawLabel(ctx, `${o.angle}°`, lx, ly, o.stroke);
+  }
+
+  else if (o.type === 'distance') {
+    const [p1, p2] = o.points;
+    ctx.setLineDash([6, 3]);
+    ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+    ctx.setLineDash([]);
+    [p1, p2].forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, Math.PI * 2); ctx.fillStyle = o.stroke; ctx.fill(); });
+    const mx = (p1.x + p2.x) / 2, my = (p1.y + p2.y) / 2;
+    drawLabel(ctx, `${pxToCm(o.dist)} cm`, mx + 6, my - 8, o.stroke);
+  }
+
+  else if (o.type === 'text') {
+    ctx.font = `600 14px 'Segoe UI', system-ui, sans-serif`;
+    ctx.fillStyle = o.stroke;
+    ctx.fillText(o.text, o.x, o.y);
+  }
+
+  ctx.restore();
+}
+
+function drawLabel(ctx, text, x, y, color) {
+  ctx.save();
+  ctx.font = `600 11px 'Segoe UI', system-ui, sans-serif`;
+  const m = ctx.measureText(text);
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  ctx.fillRect(x - 2, y - 12, m.width + 4, 15);
+  ctx.fillStyle = color || '#1e293b';
+  ctx.fillText(text, x, y);
+  ctx.restore();
+}
+
+// Approximate: 40px ≈ 1 cm at 96dpi (1 grid square = 1 cm)
+function pxToCm(px) {
+  return (px / GRID).toFixed(2);
+}
+
+// ═══════════════════════════════════════════════
+//  MEASUREMENTS PANEL
+// ═══════════════════════════════════════════════
+function updateMeasurements() {
+  const list = document.getElementById('measurementsList');
+  const measured = objects.filter(o => ['line', 'rect', 'circle', 'polygon', 'angle', 'distance'].includes(o.type));
+  if (measured.length === 0) {
+    list.innerHTML = '<div style="font-size:11px;color:var(--text-light)">Draw shapes or use the Angle/Distance tools to see measurements here.</div>';
+    return;
+  }
+
+  list.innerHTML = measured.map(o => {
+    if (o.type === 'line') return `<div class="measure-item"><div class="measure-item-label">Line #${o.id}</div><div class="measure-item-val">Length: ${pxToCm(o.length)} cm</div></div>`;
+    if (o.type === 'rect') return `<div class="measure-item"><div class="measure-item-label">Rectangle #${o.id}</div><div class="measure-item-val">${pxToCm(o.w)}×${pxToCm(o.h)} cm<br>Area: ${(pxToCm(o.w)*pxToCm(o.h)).toFixed(2)} cm²<br>Perim: ${(2*(+pxToCm(o.w)+ +pxToCm(o.h))).toFixed(2)} cm</div></div>`;
+    if (o.type === 'circle') return `<div class="measure-item"><div class="measure-item-label">Circle #${o.id}</div><div class="measure-item-val">r = ${pxToCm(o.r)} cm<br>Area: ${(Math.PI*Math.pow(pxToCm(o.r),2)).toFixed(2)} cm²</div></div>`;
+    if (o.type === 'polygon') return `<div class="measure-item"><div class="measure-item-label">${o.label} #${o.id}</div><div class="measure-item-val">Area: ${(polygonArea(o.points)/GRID/GRID).toFixed(2)} cm²<br>Perim: ${pxToCm(o.perimeter)} cm</div></div>`;
+    if (o.type === 'angle') return `<div class="measure-item"><div class="measure-item-label">Angle #${o.id}</div><div class="measure-item-val">${o.angle}°</div></div>`;
+    if (o.type === 'distance') return `<div class="measure-item"><div class="measure-item-label">Distance #${o.id}</div><div class="measure-item-val">${pxToCm(o.dist)} cm</div></div>`;
+    return '';
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════
+//  STYLE CONTROLS
+// ═══════════════════════════════════════════════
+function updateStyle() {
+  style.stroke = document.getElementById('strokeColor').value;
+  style.fill = document.getElementById('fillColor').value;
+  style.useFill = document.getElementById('useFill').checked;
+  style.lineWidth = parseInt(document.getElementById('lineWidth').value);
+  style.fillOpacity = parseInt(document.getElementById('fillOpacity').value) / 100;
+  style.dashed = document.getElementById('isDashed').checked;
+  style.showLabels = document.getElementById('showLabels').checked;
+  render();
+}
+
+function setPresetColor(hex) {
+  document.getElementById('strokeColor').value = hex;
+  document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+  event.target.classList.add('selected');
+  updateStyle();
+}
+
+function toggleGrid() {
+  const show = document.getElementById('showGrid').checked;
+  area.style.backgroundImage = show
+    ? 'linear-gradient(rgba(226,230,234,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(226,230,234,0.6) 1px, transparent 1px)'
+    : 'none';
+}
+
+// ═══════════════════════════════════════════════
+//  UNDO / CLEAR
+// ═══════════════════════════════════════════════
+function pushHistory() {
+  history.push(JSON.parse(JSON.stringify(objects)));
+  if (history.length > 50) history.shift();
+}
+
+function undo() {
+  if (history.length === 0) return;
+  objects = history.pop();
+  selectedObj = null;
+  updateCount(); showEmpty(); updateMeasurements(); render();
+}
+
+function clearAll() {
+  if (objects.length === 0) return;
+  if (!confirm('Clear everything?')) return;
+  pushHistory();
+  objects = [];
+  selectedObj = null;
+  objectCounter = 0;
+  updateCount(); showEmpty(); updateMeasurements(); render();
+}
+
+// ═══════════════════════════════════════════════
+//  UTILS
+// ═══════════════════════════════════════════════
+function updateCount() {
+  document.getElementById('statusCount').textContent = objects.length;
+}
+
+function showEmpty() {
+  const el = document.getElementById('emptyState');
+  el.classList.toggle('hidden', objects.length > 0);
+}
+
+function downloadCanvas() {
+  const link = document.createElement('a');
+  link.download = 'geometry-drawing.png';
+  link.href = canvas.toDataURL();
+  link.click();
+}
+
+// ═══════════════════════════════════════════════
+//  KEYBOARD
+// ═══════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey && e.key === 'z') { undo(); e.preventDefault(); }
+  if (e.key === 'Escape') {
+    drawing = false; drawStart = null; polyPoints = []; trianglePoints = []; anglePoints = []; measurePoints = [];
+    selectedObj = null;
+    render();
+  }
+  if (e.key === 'Delete' || e.key === 'Backspace') {
+    if (selectedObj && document.activeElement === document.body) {
+      pushHistory();
+      objects = objects.filter(o => o !== selectedObj);
+      selectedObj = null;
+      updateCount(); showEmpty(); updateMeasurements(); render();
+    }
+  }
+  // Tool shortcuts
+  const shortcuts = { 's': 'select', 'p': 'point', 'l': 'line', 'r': 'rect', 'c': 'circle', 't': 'triangle', 'g': 'polygon', 'a': 'angle', 'd': 'measure', 'x': 'erase' };
+  if (!e.ctrlKey && !e.altKey && shortcuts[e.key]) setTool(shortcuts[e.key]);
+});
+</script>
+</body>
+</html>
