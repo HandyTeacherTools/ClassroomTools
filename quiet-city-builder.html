@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quiet City Builder | Handy Teacher Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#161b2b;--panel:#262e48;--go:#ffc83d;--txt:#edf0fa;--bad:#ff5a4a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font:1.05rem/1.5 "Atkinson Hyperlegible",Verdana,sans-serif}
+.wrap{max-width:62rem;margin:0 auto;padding:1rem}
+h1{font:1rem/1.4 "Press Start 2P","Courier New",monospace;margin:.2rem 0 1rem}
+.stage{position:relative;border:4px solid var(--panel);border-radius:.4rem;overflow:hidden;background:#000}
+canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges}
+.stage:fullscreen{display:flex;align-items:center;border:0;border-radius:0}
+.stage:fullscreen canvas{max-height:100vh;margin:auto;width:auto;max-width:100%;aspect-ratio:16/9}
+.hud{position:absolute;left:2%;top:3%;font:clamp(.45rem,1.6vw,.8rem)/1.8 "Press Start 2P","Courier New",monospace;color:#fff;text-shadow:2px 2px 0 #000a;white-space:pre}
+.bar{position:absolute;left:2%;right:2%;bottom:3%;height:clamp(10px,2.4vw,22px);background:#0008;border:3px solid #fff;border-radius:3px}
+.fill{height:100%;width:0;background:var(--go)}
+.mark{position:absolute;top:-6px;bottom:-6px;width:4px;background:#fff;box-shadow:0 0 0 1px #000}
+.status{position:absolute;left:2%;right:2%;bottom:calc(3% + clamp(18px,3.6vw,34px));font:clamp(.5rem,1.8vw,.9rem)/1.6 "Press Start 2P","Courier New",monospace;color:#fff;text-shadow:2px 2px 0 #000;text-align:center}
+.controls{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;margin:1rem 0}
+button,select{font:inherit;font-weight:700;padding:.6rem 1.1rem;border-radius:.4rem;border:2px solid var(--go);background:var(--panel);color:var(--txt);cursor:pointer}
+button.main{background:var(--go);color:#161b2b}
+button:disabled{opacity:.5;cursor:default}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #fff;outline-offset:2px}
+label{display:flex;align-items:center;gap:.6rem;flex:1 1 18rem}
+input[type=range]{flex:1;accent-color:var(--go);min-width:8rem}
+.msg{min-height:1.5rem;color:var(--go)}
+.small{font-size:.92rem;opacity:.85}
+details{background:var(--panel);border-radius:.4rem;padding:.6rem 1rem;margin-top:.8rem}
+summary{cursor:pointer;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Quiet City Builder</h1>
+  <div class="stage" id="stage">
+    <canvas id="cv" width="192" height="108" aria-label="Pixel city that is built while the room stays quiet and stops when it is loud"></canvas>
+    <div class="hud" id="hud"></div>
+    <div class="status" id="status" aria-live="polite">Press Start listening</div>
+    <div class="bar"><div class="fill" id="fill"></div><div class="mark" id="mark"></div></div>
+  </div>
+  <div class="controls">
+    <button class="main" id="start">Start listening</button>
+    <button id="calib" disabled>Calibrate to quiet room</button>
+    <button id="test">Hold to test a loud noise</button>
+    <button id="full">Fullscreen</button>
+    <button id="reset">Reset city</button>
+  </div>
+  <div class="controls">
+    <label>Sensitive <input type="range" id="thr" min="12" max="90" value="35" aria-label="How much noise stops construction"> Tolerant</label>
+    <label>Build speed
+      <select id="speed" aria-label="Quiet time needed per building">
+        <option value="20">Fast: 20 s per building</option>
+        <option value="45" selected>Normal: 45 s per building</option>
+        <option value="90">Slow: 90 s per building</option>
+      </select>
+    </label>
+  </div>
+  <div class="msg" id="msg" role="status"></div>
+  <p class="small">The city only grows during quiet time, and it is saved in this browser so the class can keep building it across days. The microphone only measures volume. Nothing is recorded or sent anywhere.</p>
+  <details>
+    <summary>Classroom ideas</summary>
+    <ul class="small">
+      <li>Click <b>Calibrate to quiet room</b> while the class works silently for 3 seconds.</li>
+      <li>Set a goal: finish the whole city by Friday, using the quiet work periods each day.</li>
+      <li>Use the build speed to match the activity: fast for a short work period, slow for a week-long city.</li>
+    </ul>
+  </details>
+</div>
+<script>
+const W=192,H=108,GY=84,N=12,$=id=>document.getElementById(id),R=Math.random;
+const cv=$("cv"),ctx=cv.getContext("2d");
+let seed=11;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
+const PAL=[["#9aa7b8","#7a889b"],["#c97b63","#a65e49"],["#7fa7c9","#5f87a9"],["#c2ac7e","#9f8a5f"],["#9a9cc4","#797ba3"],["#78ac96","#588c76"]];
+const B=[];for(let i=0;i<N;i++){const mid=1-Math.abs(i-5.5)/6;B.push({x:8+i*16,w:11+(rnd()*5|0),h:14+Math.round(mid*30+rnd()*12),c:PAL[i%PAL.length]})}
+const order=[...Array(N).keys()].sort((a,b)=>Math.abs(a-5.5)-Math.abs(b-5.5));
+const hex=h=>[1,3,5].map(i=>parseInt(h.substr(i,2),16));
+const mix=(a,b,t)=>{a=hex(a);b=hex(b);return "rgb("+a.map((v,i)=>Math.round(v+(b[i]-v)*t)).join(",")+")"};
+const mix3=(s,t)=>t<.5?mix(s[0],s[1],t*2):mix(s[1],s[2],(t-.5)*2);
+const TOP=["#6d8fd6","#4fb3ee","#d9694f"],BOT=["#f9c98a","#cdeefb","#fbd08a"];
+/* static ground + faraway skyline */
+const gr=document.createElement("canvas");gr.width=W;gr.height=H;
+(function(){const c=gr.getContext("2d");
+ c.fillStyle="rgba(120,140,180,.45)";for(let x=0;x<W;x+=9){const h=8+(rnd()*18|0);c.fillRect(x,GY-h,8,h)}
+ c.fillStyle="#c9ced6";c.fillRect(0,GY,W,4);c.fillStyle="#aab0ba";c.fillRect(0,GY+3,W,1);
+ c.fillStyle="#4f5663";c.fillRect(0,GY+4,W,H-GY-4);
+ c.fillStyle="#f4e27a";for(let x=2;x<W;x+=14)c.fillRect(x,98,8,1);
+ c.fillStyle="#3d434e";c.fillRect(0,H-3,W,3)})();
+const clouds=[{x:20,y:12,w:22},{x:100,y:24,w:28},{x:150,y:8,w:18}];
+/* state */
+let st={done:0,p:0,speed:45,thr:.35};
+try{const s=JSON.parse(localStorage.getItem("htt-city"));if(s&&typeof s.done==="number")st=Object.assign(st,s)}catch(e){}
+$("thr").value=Math.round(st.thr*100);$("speed").value=st.speed;
+const sv=()=>{try{localStorage.setItem("htt-city",JSON.stringify(st))}catch(e){}};
+$("thr").oninput=e=>{st.thr=e.target.value/100;sv()};
+$("speed").onchange=e=>{st.speed=+e.target.value;sv()};
+$("reset").onclick=()=>{if(confirm("Reset the city and start a new one?")){st.done=0;st.p=0;streak=0;sv()}};
+/* audio */
+let ac,an,buf,stream,listening=false,demo=false,lvl=0,loudT=0,stopT=0,streak=0,calib=null,last=0,t=0,shown="",lastSave=0,fw=[],fwT=0;
+async function startMic(){
+ try{stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
+  ac=new(window.AudioContext||window.webkitAudioContext)();await ac.resume();
+  an=ac.createAnalyser();an.fftSize=1024;ac.createMediaStreamSource(stream).connect(an);buf=new Uint8Array(an.fftSize);
+  listening=true;$("start").textContent="Stop listening";$("calib").disabled=false;$("msg").textContent="";
+  try{navigator.wakeLock&&navigator.wakeLock.request("screen")}catch(e){}
+ }catch(e){$("msg").textContent="The microphone is blocked. Allow it in your browser's site settings, or use the test button to try it out."}}
+function stopMic(){listening=false;stream&&stream.getTracks().forEach(t=>t.stop());ac&&ac.close();$("start").textContent="Start listening";$("calib").disabled=true;lvl=0;streak=0}
+$("start").onclick=()=>listening?stopMic():startMic();
+$("calib").onclick=()=>{calib={sum:0,time:0};$("msg").textContent="Calibrating: keep the room quiet for 3 seconds."};
+const tb=$("test");tb.onpointerdown=()=>demo=true;["pointerup","pointerleave","pointercancel"].forEach(e=>tb.addEventListener(e,()=>demo=false));
+addEventListener("keydown",e=>{if(e.code==="Space"&&!["BUTTON","INPUT","SELECT"].includes(e.target.tagName)){e.preventDefault();demo=true}});
+addEventListener("keyup",e=>{if(e.code==="Space")demo=false});
+$("full").onclick=()=>document.fullscreenElement?document.exitFullscreen():$("stage").requestFullscreen&&$("stage").requestFullscreen();
+function readMic(){an.getByteTimeDomainData(buf);let s=0;for(const v of buf){const x=(v-128)/128;s+=x*x}return Math.min(1,Math.sqrt(s/buf.length)*5)}
+/* drawing */
+const hw=(i,x,y)=>((i*73856093^x*19349663^y*83492791)>>>0)%100/100;
+function bld(i,b,frac,P){const done=frac>=1,x0=b.x-(b.w>>1),bh=Math.round(frac*b.h),top=GY-b.h,nf=Math.max(0,(P-.45)/.55);
+ ctx.fillStyle=b.c[0];ctx.fillRect(x0,GY-bh,b.w,bh);ctx.fillStyle=b.c[1];ctx.fillRect(x0+b.w-2,GY-bh,2,bh);
+ for(let y=GY-6;y>=GY-bh+2;y-=4)for(let k=0;k<((b.w-4)/3|0);k++){const wx=x0+2+k*3;ctx.fillStyle=hw(i,wx,y)<nf*.8?"#ffd95a":"#3a5273";ctx.fillRect(wx,y,2,2)}
+ if(done){ctx.fillStyle="#e5e8ee";ctx.fillRect(x0,top,b.w,1);
+  if(b.h<=24){ctx.fillStyle="#8b3d2e";for(let r=0;r<4;r++)ctx.fillRect(x0-1+r,top-1-r,b.w+2-2*r,1)}
+  else if(b.h<=38){ctx.fillStyle="#8a6a4a";ctx.fillRect(b.x-2,top-4,5,3);ctx.fillRect(b.x-2,top-1,1,1);ctx.fillRect(b.x+2,top-1,1,1)}
+  else{ctx.fillStyle="#555";ctx.fillRect(b.x,top-8,1,8);if((t*2)%2<1){ctx.fillStyle="#ff3b3b";ctx.fillRect(b.x,top-9,1,1)}}
+ }else{ctx.fillStyle="#d79a2b";ctx.fillRect(x0-1,top,1,b.h);ctx.fillRect(x0+b.w,top,1,b.h);
+  for(let y=top;y<GY-bh;y+=6)ctx.fillRect(x0-1,y,b.w+2,1)}}
+function crane(b,active){const x0=b.x-(b.w>>1),right=x0+b.w+6<W-6,xm=right?x0+b.w+5:x0-6,d=right?-1:1,jy=GY-b.h-14;
+ ctx.fillStyle="#e0b020";ctx.fillRect(xm,jy,2,GY-jy);for(let y=jy+2;y<GY;y+=4){ctx.fillStyle="#a67f10";ctx.fillRect(xm,y,2,1)}
+ const j0=xm-d*6,j1=b.x;ctx.fillStyle="#e0b020";ctx.fillRect(Math.min(j0,j1),jy,Math.abs(j1-j0),2);
+ ctx.fillStyle="#777";ctx.fillRect(j0-(d<0?0:0),jy+2,4,3);ctx.fillRect(xm-1,jy-3,4,3);
+ ctx.fillStyle=active?((t*3)%2<1?"#4cff7a":"#1c7a38"):"#ff3b3b";ctx.fillRect(xm,jy-5,2,2);
+ const tx=Math.round(b.x+(active?Math.sin(t*.9)*3:0)*-d),sw=active?Math.round(Math.sin(t*2)*1.5):0,len=10+(active?Math.round(Math.sin(t*.6)*3):0);
+ ctx.fillStyle="#222";ctx.fillRect(tx,jy+2,1,len);ctx.fillStyle="#8a5a3a";ctx.fillRect(tx+sw-1,jy+2+len,4,3)}
+function workers(b,active){for(let i=0;i<3;i++){const x=Math.round(b.x-12+i*12+(active?Math.sin(t*2+i*2)*4:0)),y=GY+3-(active&&Math.sin(t*8+i)>.6?1:0);
+ ctx.fillStyle="#ffd23d";ctx.fillRect(x,y-6,3,1);ctx.fillStyle="#e8b9a0";ctx.fillRect(x,y-5,3,1);ctx.fillStyle="#2f6bd0";ctx.fillRect(x,y-4,3,3);ctx.fillStyle="#333";ctx.fillRect(x,y-1,1,1);ctx.fillRect(x+2,y-1,1,1)}}
+function stopSign(b){const x=b.x-(b.w>>1)-9;ctx.fillStyle="#666";ctx.fillRect(x+3,GY-5,1,5);ctx.fillStyle="#e22";ctx.fillRect(x,GY-12,7,7);ctx.fillRect(x+1,GY-13,5,9);ctx.fillStyle="#fff";ctx.fillRect(x+1,GY-9,5,1)}
+function boom(){const x=20+R()*152,y=14+R()*30,c=["#ff6b6b","#ffd93d","#6bcBff","#9dff6b","#ff9de6"][R()*5|0];for(let i=0;i<26;i++){const a=R()*6.28,s=14+R()*22;fw.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:1,c})}}
+function say(s,c){if(shown!==s){shown=s;$("status").textContent=s}$("fill").style.background=c}
+/* loop */
+function tick(now){const dt=Math.min(.05,(now-last)/1000||0);last=now;t+=dt;
+ const raw=demo?.85:(listening?readMic():0);
+ lvl+=(raw-lvl)*(1-Math.exp(-dt*(raw>lvl?12:2.5)));
+ if(calib){calib.sum+=lvl*dt;calib.time+=dt;if(calib.time>=3){st.thr=Math.max(.12,Math.min(.9,calib.sum/3+.2));$("thr").value=Math.round(st.thr*100);calib=null;sv();$("msg").textContent="Calibrated. Move the slider if you want to fine-tune it."}}
+ loudT=lvl>st.thr?loudT+dt:Math.max(0,loudT-dt*2);
+ if(loudT>.3)stopT=2;else stopT=Math.max(0,stopT-dt);
+ const halted=stopT>0,full=st.done>=N,active=listening&&!halted&&!full;
+ if(halted)streak=0;
+ if(active){streak+=dt;st.p+=dt/st.speed;if(st.p>=1){st.done++;st.p=0;sv()}}
+ if(now-lastSave>3000){lastSave=now;sv()}
+ const P=(st.done+st.p)/N;
+ for(let i=0;i<8;i++){ctx.fillStyle=mix(mix3(TOP,P),mix3(BOT,P),i/7);ctx.fillRect(0,i*11,W,11)}
+ const sx=Math.round(16+P*160),sy=Math.round(46-Math.sin(P*Math.PI)*28);ctx.fillStyle=mix("#fff3b0","#ffb36b",P*P);
+ for(let y=-6;y<=6;y++)for(let x=-6;x<=6;x++)if(x*x+y*y<=34)ctx.fillRect(sx+x,sy+y,1,1);
+ ctx.fillStyle="rgba(255,255,255,.9)";clouds.forEach(c=>{c.x+=dt*2;if(c.x>W+10)c.x=-c.w;const x=Math.round(c.x);ctx.fillRect(x,c.y+3,c.w,3);ctx.fillRect(x+4,c.y,c.w-10,3)});
+ ctx.drawImage(gr,0,0);
+ order.forEach((idx,k)=>{const b=B[idx];if(k<st.done)bld(idx,b,1,P);else if(k===st.done&&!full)bld(idx,b,Math.max(.02,st.p),P);else{ctx.fillStyle="#9aa0a8";ctx.fillRect(b.x-(b.w>>1),GY-1,b.w,1)}});
+ if(!full){const b=B[order[st.done]];crane(b,active);workers(b,active);if(halted)stopSign(b)}
+ else{fwT-=dt;if(fwT<=0){boom();fwT=.7+R()}}
+ fw=fw.filter(p=>p.l>0);fw.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=30*dt;p.l-=dt*.8;ctx.fillStyle=p.c;ctx.fillRect(Math.round(p.x),Math.round(p.y),1,1)});
+ $("fill").style.width=Math.round(lvl*100)+"%";$("mark").style.left="calc("+Math.round(st.thr*100)+"% - 2px)";
+ const m=Math.floor(streak/60),s=Math.floor(streak%60);
+ $("hud").textContent="City "+Math.round(P*100)+"%\nBuilt "+st.done+"/"+N+(listening?"\nCalm "+m+":"+String(s).padStart(2,"0"):"");
+ if(full)say("City complete! Great teamwork!","#ffc83d");
+ else if(halted)say("Too loud! Construction stopped.","#ff5a4a");
+ else if(!listening&&!demo)say("Press Start listening","#ffc83d");
+ else if(lvl>st.thr*.7)say("Getting loud... the crew is nervous.","#ff9a3d");
+ else say("Quiet! The crew is building.","#4cff7a");
+ requestAnimationFrame(tick)}
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>

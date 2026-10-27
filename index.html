@@ -1,440 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-CA">
 <head>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4665498551763567"
-     crossorigin="anonymous"></script>
-
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Handy Teacher Tools — Free Classroom Tools for Teachers</title>
-  <meta name="description" content="Free, instant-use classroom tools for teachers. No login, no data stored, no installs. Timers, pickers, polls, anchor charts, math tools, and more."/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:ital,wght@0,600;1,400&display=swap" rel="stylesheet"/>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-M5DCBRK7DE"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-M5DCBRK7DE');</script>
-  <style>
-    :root {
-      --apple:   #4caf50;
-      --apple-dk:#388e3c;
-      --chalk:   #f5f0e8;
-      --board:   #2d4a3e;
-      --gold:    #f9a825;
-      --gold-lt: #ffc107;
-      --ink:     #1a2e25;
-      --muted:   #6b7f76;
-      --card:    #ffffff;
-      --shadow:  0 4px 20px rgba(0,0,0,0.08);
-      --radius:  14px;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Nunito', sans-serif; background: var(--chalk); color: var(--ink); min-height: 100vh; }
-
-    /* ── HEADER ── */
-    header { background: var(--board); color: white; padding: 40px 24px 36px; text-align: center; position: relative; overflow: hidden; }
-    header::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.04) 39px, rgba(255,255,255,0.04) 40px); pointer-events: none; }
-    .header-inner { position: relative; z-index: 1; }
-    .site-badge { display: inline-flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 100px; padding: 6px 16px 6px 8px; margin-bottom: 20px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.85); }
-    .site-badge .dot { width: 8px; height: 8px; background: var(--apple); border-radius: 50%; box-shadow: 0 0 8px var(--apple); }
-    h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900; line-height: 1.1; margin-bottom: 12px; }
-    h1 span { color: var(--gold-lt); }
-    .tagline { font-size: clamp(1rem, 2.5vw, 1.15rem); color: rgba(255,255,255,0.72); max-width: 540px; margin: 0 auto 28px; font-family: 'Lora', serif; font-style: italic; }
-    .trust-pills { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-    .pill { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18); border-radius: 100px; padding: 6px 14px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.9); display: flex; align-items: center; gap: 6px; }
-
-    /* ── PRO TIP BANNER ── */
-    .pro-tip-banner {
-      background: linear-gradient(135deg, #1a3a2e 0%, #2d4a3e 100%);
-      border-bottom: 3px solid var(--gold);
-      padding: 18px 24px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    .pro-tip-banner .tip-icon { font-size: 1.6rem; flex-shrink: 0; }
-    .pro-tip-banner .tip-content { flex: 1; min-width: 200px; }
-    .pro-tip-banner .tip-label { font-size: 0.68rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); margin-bottom: 3px; }
-    .pro-tip-banner .tip-text { font-size: 0.95rem; font-weight: 700; color: rgba(255,255,255,0.92); line-height: 1.5; }
-    .pro-tip-banner .tip-text strong { color: var(--gold-lt); }
-    .offline-badge { background: var(--apple); color: white; border-radius: 100px; padding: 6px 16px; font-size: 0.8rem; font-weight: 900; white-space: nowrap; flex-shrink: 0; display: flex; align-items: center; gap: 6px; }
-
-    /* ── PAGE BODY ── */
-    .page-body { max-width: 1200px; margin: 0 auto; padding: 36px 20px 60px; display: grid; grid-template-columns: 1fr 240px; gap: 32px; align-items: start; }
-
-    /* ── SIDEBAR ── */
-    .sidebar { position: sticky; top: 20px; display: flex; flex-direction: column; gap: 16px; }
-    .sidebar-nav { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid #e5e0d8; overflow: hidden; }
-    .sidebar-nav-title { background: var(--board); color: white; padding: 12px 16px; font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
-    .sidebar-nav a { display: flex; align-items: center; gap: 8px; padding: 10px 16px; font-size: 0.82rem; font-weight: 800; color: var(--muted); text-decoration: none; border-bottom: 1px solid #f0ece4; transition: all 0.15s; }
-    .sidebar-nav a:last-child { border-bottom: none; }
-    .sidebar-nav a:hover { background: #f5f0e8; color: var(--board); }
-    .sidebar-nav a .cat-count { margin-left: auto; background: #f0ece4; border-radius: 100px; padding: 1px 8px; font-size: 0.7rem; font-weight: 900; color: var(--muted); }
-    .sidebar-stats { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid #e5e0d8; overflow: hidden; }
-    .sidebar-stats-title { background: var(--board); color: white; padding: 12px 16px; font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
-    .stat-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 16px; border-bottom: 1px solid #f0ece4; font-size: 0.82rem; }
-    .stat-row:last-child { border-bottom: none; }
-    .stat-label { font-weight: 700; color: var(--muted); }
-    .stat-val { font-weight: 900; color: var(--board); }
-
-    /* ── CATEGORY SECTIONS ── */
-    .cat-section { margin-bottom: 36px; }
-    .cat-heading { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-    .cat-heading h2 { font-size: 1.1rem; font-weight: 900; color: var(--board); white-space: nowrap; }
-    .cat-heading::after { content: ''; flex: 1; height: 2px; background: linear-gradient(to right, var(--board), transparent); border-radius: 2px; }
-    .cat-heading .cat-emoji { font-size: 1.2rem; }
-
-    /* ── TOOL CARDS ── */
-    .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
-    .tool-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 16px 16px; text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 8px; border: 2px solid transparent; transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; overflow: hidden; }
-    .tool-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.12); border-color: var(--apple); }
-    .tool-icon { font-size: 1.9rem; line-height: 1; }
-    .tool-name { font-size: 0.95rem; font-weight: 800; color: var(--ink); line-height: 1.2; }
-    .tool-desc { font-size: 0.78rem; color: var(--muted); font-weight: 600; line-height: 1.45; flex: 1; }
-    .tool-tag { display: inline-block; background: var(--chalk); border: 1px solid #ddd; border-radius: 100px; padding: 2px 9px; font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: auto; width: fit-content; transition: all 0.2s; }
-    .tool-card:hover .tool-tag { background: #e8f5e9; border-color: var(--apple); color: var(--apple-dk); }
-
-    /* colour accent strips */
-    .tool-card[data-color="green"]  { border-top: 4px solid #4caf50; }
-    .tool-card[data-color="blue"]   { border-top: 4px solid #2196f3; }
-    .tool-card[data-color="orange"] { border-top: 4px solid #ff9800; }
-    .tool-card[data-color="purple"] { border-top: 4px solid #9c27b0; }
-    .tool-card[data-color="teal"]   { border-top: 4px solid #009688; }
-    .tool-card[data-color="red"]    { border-top: 4px solid #f44336; }
-    .tool-card[data-color="amber"]  { border-top: 4px solid #ffc107; }
-    .tool-card[data-color="indigo"] { border-top: 4px solid #3f51b5; }
-    .tool-card[data-color="pink"]   { border-top: 4px solid #e91e63; }
-    .tool-card[data-color="cyan"]   { border-top: 4px solid #00bcd4; }
-    .tool-card[data-color="lime"]   { border-top: 4px solid #8bc34a; }
-    .tool-card[data-color="brown"]  { border-top: 4px solid #795548; }
-
-    /* ── FOOTER ── */
-    footer { background: var(--board); color: rgba(255,255,255,0.6); text-align: center; padding: 24px; font-size: 13px; font-weight: 600; }
-    footer a { color: rgba(255,255,255,0.8); text-decoration: none; margin: 0 6px; }
-    footer a:hover { color: var(--gold-lt); }
-    footer p + p { margin-top: 8px; }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 960px) { .page-body { grid-template-columns: 1fr; } .sidebar { position: static; flex-direction: row; flex-wrap: wrap; } .sidebar-nav, .sidebar-stats { flex: 1; min-width: 220px; } }
-    @media (max-width: 500px) { .tools-grid { grid-template-columns: 1fr 1fr; } }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Classroom Noise Monitors | Handy Teacher Tools</title>
+<meta name="description" content="Free pixel-art classroom noise monitors. Keep the forest animals calm or build a city with a quiet class.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#141a2a;--panel:#222b45;--line:#34406a;--go:#ffc83d;--leaf:#6fcf5a;--txt:#edf0fa}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font:1.1rem/1.6 "Atkinson Hyperlegible",Verdana,sans-serif}
+.wrap{max-width:60rem;margin:0 auto;padding:2rem 1rem 3rem}
+header{text-align:center;margin-bottom:2rem}
+h1{font:clamp(1rem,3.6vw,1.6rem)/1.5 "Press Start 2P","Courier New",monospace;margin:0 0 .8rem}
+header p{max-width:36rem;margin:0 auto;opacity:.9}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(18rem,1fr));gap:1.4rem}
+.card{background:var(--panel);border:3px solid var(--line);border-radius:.6rem;overflow:hidden;display:flex;flex-direction:column}
+.card canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges}
+.body{padding:1.1rem 1.2rem 1.3rem;display:flex;flex-direction:column;gap:.7rem;flex:1}
+.card h2{font:.85rem/1.5 "Press Start 2P","Courier New",monospace;margin:0}
+.card p{margin:0;flex:1}
+.open{align-self:flex-start;background:var(--go);color:#141a2a;font-weight:700;text-decoration:none;padding:.6rem 1.2rem;border-radius:.4rem;border:2px solid var(--go)}
+.open:hover{background:#ffd966}
+.open:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.how{margin-top:2.4rem;background:var(--panel);border-radius:.6rem;padding:1.2rem 1.4rem}
+.how h2{font:.85rem/1.5 "Press Start 2P","Courier New",monospace;margin:0 0 .6rem}
+.how ol{margin:0;padding-left:1.3rem}
+.how li{margin:.35rem 0}
+.priv{margin-top:1rem;font-size:.95rem;opacity:.85;text-align:center}
+</style>
 </head>
 <body>
-
-<!-- HEADER -->
-<header>
-  <div class="header-inner">
-    <div class="site-badge"><span class="dot"></span> handyteachertools.com</div>
-    <h1>Handy <span>Teacher</span> Tools</h1>
-    <p class="tagline">Free classroom tools, ready when you need them — no login, no fuss.</p>
-    <div class="trust-pills">
-      <span class="pill">✅ 100% Free</span>
-      <span class="pill">🔒 No Data Stored</span>
-      <span class="pill">⚡ Works Instantly</span>
-      <span class="pill">🖥️ Projector-Ready</span>
-      <span class="pill">📶 Works Offline</span>
-    </div>
+<div class="wrap">
+  <header>
+    <h1>Classroom Noise Monitors</h1>
+    <p>Pick a scene, press start, and let your class's volume decide what happens. Quiet keeps the magic going. Noise stops it.</p>
+  </header>
+  <div class="grid">
+    <article class="card">
+      <canvas id="t1" width="96" height="54" role="img" aria-label="Pixel forest with a rabbit and pine trees"></canvas>
+      <div class="body">
+        <h2>Quiet Forest</h2>
+        <p>Rabbits, deer, foxes and birds wander into the forest while the room is calm. When it gets loud, they all run away. Can your class keep them there?</p>
+        <a class="open" href="quiet-forest-sound-monitor.html">Open Quiet Forest</a>
+      </div>
+    </article>
+    <article class="card">
+      <canvas id="t2" width="96" height="54" role="img" aria-label="Pixel city skyline with a construction crane"></canvas>
+      <div class="body">
+        <h2>Quiet City Builder</h2>
+        <p>A crew builds a city one building at a time, but only during quiet time. Noise stops construction. The city is saved, so your class can finish it over several days.</p>
+        <a class="open" href="quiet-city-builder.html">Open Quiet City Builder</a>
+      </div>
+    </article>
   </div>
-</header>
-
-<!-- PRO TIP BANNER -->
-<div class="pro-tip-banner">
-  <span class="tip-icon">💡</span>
-  <div class="tip-content">
-    <div class="tip-label">Pro Tip</div>
-    <div class="tip-text">Open your tools in separate browser tabs before class starts. Once loaded, <strong>every tool works completely offline</strong> — no internet needed during your lesson. Perfect for schools with unreliable connections.</div>
-  </div>
-  <div class="offline-badge">📶 Works Offline</div>
-</div>
-
-<div class="page-body">
-
-  <!-- MAIN CONTENT -->
-  <main>
-
-    <!-- TIME MANAGEMENT -->
-    <div class="cat-section" id="cat-time">
-      <div class="cat-heading"><span class="cat-emoji">⏱</span><h2>Time Management</h2></div>
-      <div class="tools-grid">
-        <a href="02-classroom-timer.html" class="tool-card" data-color="blue">
-          <div class="tool-icon">⏱️</div>
-          <div class="tool-name">Classroom Timer</div>
-          <div class="tool-desc">Countdown and stopwatch with colour-coded urgency and audio alert.</div>
-          <span class="tool-tag">Timer</span>
-        </a>
-        <a href="12-lesson-timer-pro.html" class="tool-card" data-color="purple">
-          <div class="tool-icon">⏳</div>
-          <div class="tool-name">Lesson Timer Pro</div>
-          <div class="tool-desc">Plan your lesson in segments — auto-advances through each stage with sound.</div>
-          <span class="tool-tag">Timer</span>
-        </a>
-        <a href="16-countdown-to-bell.html" class="tool-card" data-color="teal">
-          <div class="tool-icon">🔔</div>
-          <div class="tool-name">Countdown to Bell</div>
-          <div class="tool-desc">Always-visible end-of-class countdown with urgency colours and a bell alert.</div>
-          <span class="tool-tag">Timer</span>
-        </a>
-        <a href="23-class-schedule.html" class="tool-card" data-color="indigo">
-          <div class="tool-icon">📅</div>
-          <div class="tool-name">Class Schedule Display</div>
-          <div class="tool-desc">Your full day on screen — live clock, current period highlighted, next period shown.</div>
-          <span class="tool-tag">Schedule</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- ENGAGEMENT -->
-    <div class="cat-section" id="cat-engagement">
-      <div class="cat-heading"><span class="cat-emoji">🎯</span><h2>Engagement</h2></div>
-      <div class="tools-grid">
-        <a href="01-random-student-picker.html" class="tool-card" data-color="green">
-          <div class="tool-icon">🎲</div>
-          <div class="tool-name">Random Student Picker</div>
-          <div class="tool-desc">Spin to pick a student fairly — tracks who's been called on.</div>
-          <span class="tool-tag">Picker</span>
-        </a>
-        <a href="06-quick-poll.html" class="tool-card" data-color="red">
-          <div class="tool-icon">📊</div>
-          <div class="tool-name">Quick Poll</div>
-          <div class="tool-desc">Live class vote with preset types and instant animated results.</div>
-          <span class="tool-tag">Poll</span>
-        </a>
-        <a href="13-scoreboard.html" class="tool-card" data-color="amber">
-          <div class="tool-icon">🏆</div>
-          <div class="tool-name">Scoreboard</div>
-          <div class="tool-desc">Sports-style live scoreboard for team competitions with confetti and sound.</div>
-          <span class="tool-tag">Game</span>
-        </a>
-        <a href="18-spinner.html" class="tool-card" data-color="purple">
-          <div class="tool-icon">🎡</div>
-          <div class="tool-name">Classroom Spinner</div>
-          <div class="tool-desc">Customisable spinning wheel for topics, activities, groups, or anything you need.</div>
-          <span class="tool-tag">Picker</span>
-        </a>
-        <a href="24-dice-roller.html" class="tool-card" data-color="indigo">
-          <div class="tool-icon">🎲</div>
-          <div class="tool-name">Dice Roller & Coin Flip</div>
-          <div class="tool-desc">Roll any dice (D4–D20) or flip a coin — with animation and running stats.</div>
-          <span class="tool-tag">Game</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- TEACHING -->
-    <div class="cat-section" id="cat-teaching">
-      <div class="cat-heading"><span class="cat-emoji">📖</span><h2>Teaching</h2></div>
-      <div class="tools-grid">
-        <a href="05-whiteboard.html" class="tool-card" data-color="teal">
-          <div class="tool-icon">✏️</div>
-          <div class="tool-name">Whiteboard</div>
-          <div class="tool-desc">Drawing canvas with pen, shapes, text, arrows and colour tools.</div>
-          <span class="tool-tag">Drawing</span>
-        </a>
-        <a href="09-word-cloud.html" class="tool-card" data-color="pink">
-          <div class="tool-icon">☁️</div>
-          <div class="tool-name">Word Cloud Generator</div>
-          <div class="tool-desc">Build a live word cloud from student responses — six colour themes.</div>
-          <span class="tool-tag">Visual</span>
-        </a>
-        <a href="15-flashcard-display.html" class="tool-card" data-color="blue">
-          <div class="tool-icon">🃏</div>
-          <div class="tool-name">Flashcard Display</div>
-          <div class="tool-desc">Math and language arts flashcard decks — flip, shuffle and auto-advance.</div>
-          <span class="tool-tag">Review</span>
-        </a>
-        <a href="19-word-wall.html" class="tool-card" data-color="pink">
-          <div class="tool-icon">📌</div>
-          <div class="tool-name">Word Wall</div>
-          <div class="tool-desc">Interactive vocabulary word wall — click any word to zoom it full screen.</div>
-          <span class="tool-tag">Vocabulary</span>
-        </a>
-        <a href="20-venn-diagram.html" class="tool-card" data-color="indigo">
-          <div class="tool-icon">⭕</div>
-          <div class="tool-name">Venn Diagram</div>
-          <div class="tool-desc">Interactive 2 or 3-circle Venn diagram — click any section to add items.</div>
-          <span class="tool-tag">Graphic Organiser</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- MATH -->
-    <div class="cat-section" id="cat-math">
-      <div class="cat-heading"><span class="cat-emoji">🔢</span><h2>Math</h2></div>
-      <div class="tools-grid">
-        <a href="21-cartesian-plane.html" class="tool-card" data-color="blue">
-          <div class="tool-icon">📐</div>
-          <div class="tool-name">Cartesian Plane</div>
-          <div class="tool-desc">Interactive coordinate grid — 1 or 4 quadrants, plot and label points.</div>
-          <span class="tool-tag">Graphing</span>
-        </a>
-        <a href="22-graph-maker.html" class="tool-card" data-color="cyan">
-          <div class="tool-icon">📊</div>
-          <div class="tool-name">Graph Maker</div>
-          <div class="tool-desc">Build bar, line and horizontal bar graphs — customise and save as PNG.</div>
-          <span class="tool-tag">Graphing</span>
-        </a>
-        <a href="25-math-symbols.html" class="tool-card" data-color="indigo">
-          <div class="tool-icon">∑</div>
-          <div class="tool-name">Math Symbols</div>
-          <div class="tool-desc">Every common math symbol — click to copy, search by name, build sequences.</div>
-          <span class="tool-tag">Reference</span>
-        </a>
-        <a href="26-anchor-charts-math.html" class="tool-card" data-color="blue">
-          <div class="tool-icon">📐</div>
-          <div class="tool-name">Math Anchor Charts</div>
-          <div class="tool-desc">10 ready-made math reference charts — order of operations, fractions, geometry, and more.</div>
-          <span class="tool-tag">Anchor Charts</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- LANGUAGE ARTS -->
-    <div class="cat-section" id="cat-language">
-      <div class="cat-heading"><span class="cat-emoji">📚</span><h2>Language Arts</h2></div>
-      <div class="tools-grid">
-        <a href="27-anchor-charts-language.html" class="tool-card" data-color="green">
-          <div class="tool-icon">📚</div>
-          <div class="tool-name">Language Anchor Charts</div>
-          <div class="tool-desc">10 ready-made language arts charts — parts of speech, figurative language, writing process, and more.</div>
-          <span class="tool-tag">Anchor Charts</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- ASSESSMENT -->
-    <div class="cat-section" id="cat-assessment">
-      <div class="cat-heading"><span class="cat-emoji">📋</span><h2>Assessment</h2></div>
-      <div class="tools-grid">
-        <a href="10-exit-ticket.html" class="tool-card" data-color="cyan">
-          <div class="tool-icon">🎟️</div>
-          <div class="tool-name">Exit Ticket Display</div>
-          <div class="tool-desc">24 reflection prompts with countdown timer and fullscreen mode.</div>
-          <span class="tool-tag">Assessment</span>
-        </a>
-        <a href="17-kwl-chart.html" class="tool-card" data-color="green">
-          <div class="tool-icon">📝</div>
-          <div class="tool-name">KWL Chart</div>
-          <div class="tool-desc">Know / Want to Know / Learned — build a live class chart and print it.</div>
-          <span class="tool-tag">Graphic Organiser</span>
-        </a>
-        <a href="11-report-card-generator.html" class="tool-card" data-color="teal">
-          <div class="tool-icon">📋</div>
-          <div class="tool-name">Report Card Builder</div>
-          <div class="tool-desc">Generate professional, personalised report card comments in seconds.</div>
-          <span class="tool-tag">Reporting</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- BEHAVIOUR & WELLBEING -->
-    <div class="cat-section" id="cat-behaviour">
-      <div class="cat-heading"><span class="cat-emoji">🌟</span><h2>Behaviour & Wellbeing</h2></div>
-      <div class="tools-grid">
-        <a href="03-noise-meter.html" class="tool-card" data-color="orange">
-          <div class="tool-icon">🔊</div>
-          <div class="tool-name">Noise Meter</div>
-          <div class="tool-desc">Live mic-based volume monitor — flashes when the class gets too loud.</div>
-          <span class="tool-tag">Behaviour</span>
-        </a>
-        <a href="07-reward-points.html" class="tool-card" data-color="amber">
-          <div class="tool-icon">⭐</div>
-          <div class="tool-name">Reward Points Tracker</div>
-          <div class="tool-desc">Track team or individual points with streaks, crowns and animations.</div>
-          <span class="tool-tag">Behaviour</span>
-        </a>
-        <a href="14-brain-break-picker.html" class="tool-card" data-color="red">
-          <div class="tool-icon">🧠</div>
-          <div class="tool-name">Brain Break Picker</div>
-          <div class="tool-desc">25 ready-to-use brain breaks with a built-in timer.</div>
-          <span class="tool-tag">Wellbeing</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- ORGANISATION -->
-    <div class="cat-section" id="cat-organisation">
-      <div class="cat-heading"><span class="cat-emoji">🗂</span><h2>Organisation</h2></div>
-      <div class="tools-grid">
-        <a href="04-group-maker.html" class="tool-card" data-color="purple">
-          <div class="tool-icon">👥</div>
-          <div class="tool-name">Group Maker</div>
-          <div class="tool-desc">Split your class into random groups instantly — print or copy results.</div>
-          <span class="tool-tag">Organisation</span>
-        </a>
-        <a href="08-seating-chart.html" class="tool-card" data-color="indigo">
-          <div class="tool-icon">🪑</div>
-          <div class="tool-name">Seating Chart Builder</div>
-          <div class="tool-desc">Drag-and-drop classroom layout with auto-fill and preset arrangements.</div>
-          <span class="tool-tag">Organisation</span>
-        </a>
-      </div>
-    </div>
-
-  </main>
-
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-
-    <div class="sidebar-nav">
-      <div class="sidebar-nav-title">Jump to Category</div>
-      <a href="#cat-time">⏱ Time Management <span class="cat-count">4</span></a>
-      <a href="#cat-engagement">🎯 Engagement <span class="cat-count">5</span></a>
-      <a href="#cat-teaching">📖 Teaching <span class="cat-count">5</span></a>
-      <a href="#cat-math">🔢 Math <span class="cat-count">4</span></a>
-      <a href="#cat-language">📚 Language Arts <span class="cat-count">1</span></a>
-      <a href="#cat-assessment">📋 Assessment <span class="cat-count">3</span></a>
-      <a href="#cat-behaviour">🌟 Behaviour &amp; Wellbeing <span class="cat-count">3</span></a>
-      <a href="#cat-organisation">🗂 Organisation <span class="cat-count">2</span></a>
-    </div>
-
-    <div class="sidebar-stats">
-      <div class="sidebar-stats-title">Site Info</div>
-      <div class="stat-row"><span class="stat-label">Total tools</span><span class="stat-val">27</span></div>
-      <div class="stat-row"><span class="stat-label">Cost to use</span><span class="stat-val">$0</span></div>
-      <div class="stat-row"><span class="stat-label">Login required</span><span class="stat-val">Never</span></div>
-      <div class="stat-row"><span class="stat-label">Data collected</span><span class="stat-val">None</span></div>
-      <div class="stat-row"><span class="stat-label">Works offline</span><span class="stat-val">✅ Yes</span></div>
-      <div class="stat-row"><span class="stat-label">Projector-ready</span><span class="stat-val">✅ All</span></div>
-    </div>
-
-  </aside>
-
-</div>
-
-<footer>
-  <p>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="privacy.html">Privacy Policy</a>
-    <a href="terms.html">Terms of Use</a>
-    <a href="cookies.html">Cookie Policy</a>
-  </p>
-  <p>© 2025 <a href="/">HandyTeacherTools.com</a> &nbsp;·&nbsp; Free for all teachers &nbsp;·&nbsp; No data collected</p>
-</footer>
-
-
-<!-- COOKIE CONSENT BANNER -->
-<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a2e25;color:#f0f0e8;padding:16px 24px;z-index:9999;font-family:'Nunito',sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,0.2);border-top:3px solid #4caf50;">
-  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
-    <div style="flex:1;min-width:240px">
-      <p style="font-size:0.88rem;font-weight:700;line-height:1.6;color:rgba(255,255,255,0.85)">
-        🍪 We use advertising cookies (via Google AdSense) to keep this site free for teachers.
-        Our tools themselves collect no data. See our
-        <a href="cookies.html" style="color:#ffc107;font-weight:800;text-decoration:none">Cookie Policy</a>
-        and
-        <a href="privacy.html" style="color:#ffc107;font-weight:800;text-decoration:none">Privacy Policy</a>.
-      </p>
-    </div>
-    <div style="display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap">
-      <button onclick="acceptCookies()" style="padding:10px 22px;background:#4caf50;color:white;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;cursor:pointer;">✅ Accept All</button>
-      <button onclick="declineCookies()" style="padding:10px 22px;background:transparent;color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.3);border-radius:8px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;cursor:pointer;">Decline</button>
-      <a href="cookies.html" style="padding:10px 16px;color:rgba(255,255,255,0.5);font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:700;text-decoration:none;display:flex;align-items:center;">More info</a>
-    </div>
-  </div>
+  <section class="how">
+    <h2>How to use</h2>
+    <ol>
+      <li>Open a monitor and press <b>Start listening</b>. Allow the microphone when your browser asks.</li>
+      <li>Click <b>Calibrate to quiet room</b> while the class is silent for 3 seconds.</li>
+      <li>Use <b>Fullscreen</b> to project it, and adjust the Sensitive/Tolerant slider to suit the activity.</li>
+    </ol>
+  </section>
+  <p class="priv">The microphone is only used to measure volume in your browser. Nothing is recorded or sent anywhere.</p>
 </div>
 <script>
-(function(){var c=localStorage.getItem('htt_cookie_consent');if(!c){document.getElementById('cookieBanner').style.display='block';}})();
-function acceptCookies(){localStorage.setItem('htt_cookie_consent','accepted');document.getElementById('cookieBanner').style.display='none';}
-function declineCookies(){localStorage.setItem('htt_cookie_consent','declined');document.getElementById('cookieBanner').style.display='none';}
+function px(id,fn){const c=document.getElementById(id).getContext("2d");fn(c)}
+function r(c,col,x,y,w,h){c.fillStyle=col;c.fillRect(x,y,w,h)}
+function pine(c,x,by,h,col){r(c,"#3b2a1d",x-1,by-3,2,3);c.fillStyle=col;for(let i=0;i<h;i++){const w=Math.round(2+i*.38)+(i%5>=3?2:0);c.fillRect(x-(w>>1),by-3-h+i,w,1)}}
+px("t1",c=>{
+ ["#6ec6f0","#85d0f3","#9bdaf6","#b3e3f8"].forEach((s,i)=>r(c,s,0,i*9,96,9));
+ r(c,"#fff6bd",76,6,6,6);
+ for(let x=0;x<96;x++){const h=Math.round(10+5*Math.sin(x*.07)+3*Math.sin(x*.19+1));r(c,"#5f9378",x,38-h,1,h)}
+ for(let x=3;x<96;x+=9)pine(c,x,40,12+(x%4)*2,"#2f6b4a");
+ r(c,"#5aa84a",0,38,96,16);r(c,"#4c9540",0,46,96,3);
+ pine(c,6,54,30,"#1f5a3a");pine(c,90,54,34,"#1f5a3a");
+ r(c,"#c9b8a2",40,42,8,4);r(c,"#c9b8a2",46,40,4,4);r(c,"#c9b8a2",47,37,1,3);r(c,"#c9b8a2",49,37,1,3);r(c,"#fff",39,43,2,2);
+ r(c,"#a8693a",60,44,10,5);r(c,"#7a4a26",61,49,1,4);r(c,"#7a4a26",68,49,1,4);r(c,"#a8693a",69,39,2,6);r(c,"#a8693a",70,38,4,4);r(c,"#f1e2c6",71,36,1,2);r(c,"#f1e2c6",73,36,1,2);
+});
+px("t2",c=>{
+ ["#6d8fd6","#7fa3e0","#a9c0ea","#f1c58f"].forEach((s,i)=>r(c,s,0,i*9,96,9));
+ r(c,"#ffe9a8",14,10,6,6);
+ const bs=[[8,14,"#9aa7b8"],[22,26,"#c97b63"],[36,38,"#7fa7c9"],[50,30,"#c2ac7e"],[62,20,"#9a9cc4"],[76,32,"#78ac96"]];
+ bs.forEach(([x,h,col],i)=>{r(c,col,x,40-h,11,h);r(c,"rgba(0,0,0,.18)",x+9,40-h,2,h);for(let y=40-h+3;y<37;y+=4)for(let k=0;k<3;k++)r(c,(x+y+k)%5<2?"#ffd95a":"#3a5273",x+2+k*3,y,2,2)});
+ r(c,"#c9ced6",0,40,96,3);r(c,"#4f5663",0,43,96,11);for(let x=2;x<96;x+=14)r(c,"#f4e27a",x,49,8,1);
+ r(c,"#e0b020",86,6,2,34);r(c,"#e0b020",70,6,18,2);r(c,"#777",86,8,4,3);r(c,"#ff3b3b",86,3,2,2);r(c,"#222",72,8,1,10);r(c,"#8a5a3a",71,18,4,3);
+});
 </script>
 </body>
 </html>

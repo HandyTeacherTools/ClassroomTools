@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quiet Forest Sound Monitor | Handy Teacher Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#10231a;--panel:#1b3a2a;--leaf:#6fcf5a;--sun:#f2c94c;--bad:#e8613c;--txt:#eaf6e4}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font:1.05rem/1.5 "Atkinson Hyperlegible",Verdana,sans-serif}
+.wrap{max-width:62rem;margin:0 auto;padding:1rem}
+h1{font:1rem/1.4 "Press Start 2P","Courier New",monospace;margin:.2rem 0 1rem}
+.stage{position:relative;border:4px solid var(--panel);border-radius:.4rem;overflow:hidden;background:#000}
+canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges}
+.stage:fullscreen{display:flex;align-items:center;border:0;border-radius:0}
+.stage:fullscreen canvas{max-height:100vh;margin:auto;width:auto;max-width:100%;aspect-ratio:16/9}
+.hud{position:absolute;left:2%;top:3%;font:clamp(.45rem,1.6vw,.8rem)/1.8 "Press Start 2P","Courier New",monospace;color:#fff;text-shadow:2px 2px 0 #0008}
+.bar{position:absolute;left:2%;right:2%;bottom:4%;height:clamp(10px,2.4vw,22px);background:#0007;border:3px solid #fff;border-radius:3px}
+.fill{height:100%;width:0;background:var(--leaf)}
+.mark{position:absolute;top:-6px;bottom:-6px;width:4px;background:#fff;box-shadow:0 0 0 1px #000}
+.status{position:absolute;left:2%;right:2%;bottom:calc(4% + clamp(18px,3.6vw,34px));font:clamp(.5rem,1.8vw,.9rem)/1.6 "Press Start 2P","Courier New",monospace;color:#fff;text-shadow:2px 2px 0 #000;text-align:center}
+.controls{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;margin:1rem 0}
+button{font:inherit;font-weight:700;padding:.6rem 1.1rem;border-radius:.4rem;border:2px solid var(--leaf);background:var(--panel);color:var(--txt);cursor:pointer}
+button.main{background:var(--leaf);color:#10231a}
+button:disabled{opacity:.5;cursor:default}
+button:focus-visible,input:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+label{display:flex;align-items:center;gap:.6rem;flex:1 1 18rem}
+input[type=range]{flex:1;accent-color:var(--leaf);min-width:8rem}
+.msg{min-height:1.5rem;color:var(--sun)}
+.small{font-size:.92rem;opacity:.85}
+details{background:var(--panel);border-radius:.4rem;padding:.6rem 1rem;margin-top:.8rem}
+summary{cursor:pointer;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Quiet Forest</h1>
+  <div class="stage" id="stage">
+    <canvas id="cv" width="192" height="108" aria-label="Pixel forest with animals that run away when the room is loud"></canvas>
+    <div class="hud" id="hud"></div>
+    <div class="status" id="status" aria-live="polite">Press Start listening</div>
+    <div class="bar"><div class="fill" id="fill"></div><div class="mark" id="mark"></div></div>
+  </div>
+  <div class="controls">
+    <button class="main" id="start">Start listening</button>
+    <button id="calib" disabled>Calibrate to quiet room</button>
+    <button id="test">Hold to test a loud noise</button>
+    <button id="full">Fullscreen</button>
+  </div>
+  <div class="controls">
+    <label>Sensitive <input type="range" id="thr" min="12" max="90" value="35" aria-label="How much noise scares the animals"> Tolerant</label>
+  </div>
+  <div class="msg" id="msg" role="status"></div>
+  <p class="small">The microphone is only used to measure how loud the room is. Nothing is recorded or sent anywhere.</p>
+  <details>
+    <summary>Classroom ideas</summary>
+    <ul class="small">
+      <li>Project it, then click <b>Calibrate to quiet room</b> while the class works silently for 3 seconds.</li>
+      <li>Set a goal: keep the deer in the forest for the whole work period.</li>
+      <li>Choose the sensitivity to suit the activity: partner talk needs a more tolerant setting than independent reading.</li>
+    </ul>
+  </details>
+</div>
+<script>
+const W=192,H=108,GY=70;
+const cv=document.getElementById("cv"),ctx=cv.getContext("2d");
+const $=id=>document.getElementById(id);
+let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
+const R=Math.random;
+/* ---------- static scenery ---------- */
+function mk(){const c=document.createElement("canvas");c.width=W;c.height=H;return c}
+function pine(c,x,by,h,col,trunk){c.fillStyle=trunk;c.fillRect(x-1,by-4,3,4);c.fillStyle=col;for(let i=0;i<h;i++){const w=Math.round(2+i*.38)+(i%6>=4?2:0);c.fillRect(x-(w>>1),by-4-h+i,w,1)}}
+const bg=mk(),fg=mk();
+(function(){const c=bg.getContext("2d");
+ ["#6ec6f0","#7fcff3","#92d7f5","#a7dff7","#bce6f9","#cfeefb"].forEach((s,i)=>{c.fillStyle=s;c.fillRect(0,i*12,W,12)});
+ c.fillStyle="#fff6bd";for(let y=-6;y<=6;y++)for(let x=-6;x<=6;x++)if(x*x+y*y<=34)c.fillRect(150+x,16+y,1,1);
+ for(let x=0;x<W;x++){let h=Math.round(18+9*Math.sin(x*.05)+5*Math.sin(x*.13+1));c.fillStyle="#86abc9";c.fillRect(x,GY-h,1,h);
+  h=Math.round(9+5*Math.sin(x*.07+2)+3*Math.sin(x*.19));c.fillStyle="#5f9378";c.fillRect(x,GY-h,1,h)}
+ for(let x=2;x<W;x+=7+(rnd()*5|0))pine(c,x,GY+3,14+(rnd()*8|0),"#2f6b4a","#3b2a1d");
+ c.fillStyle="#5aa84a";c.fillRect(0,GY,W,H-GY);
+ c.fillStyle="#4c9540";for(let y=GY+10;y<H;y+=11)c.fillRect(0,y,W,5);
+ for(let i=0;i<160;i++){c.fillStyle=rnd()<.5?"#74c262":"#3f8636";c.fillRect(rnd()*W|0,GY+2+(rnd()*(H-GY-2)|0),1,2)}
+ for(let i=0;i<22;i++){c.fillStyle=["#fff","#f6d55c","#f08ab0"][i%3];c.fillRect(rnd()*W|0,GY+6+(rnd()*(H-GY-8)|0),1,1)}
+ const f=fg.getContext("2d");
+ [[7,108,56],[22,108,46],[177,108,54],[187,108,60]].forEach(([x,y,h])=>pine(f,x,y,h,"#1f5a3a","#4a3524"));
+ f.fillStyle="#2c7a47";[[0,100],[34,104],[160,103],[190,99]].forEach(([x,y])=>f.fillRect(x-6,y,13,H-y));
+})();
+const clouds=[{x:20,y:14,w:22},{x:90,y:26,w:30},{x:140,y:8,w:18}];
+/* ---------- animals ---------- */
+const SP={
+rabbit:{w:12,h:8,sp:22,r:[[1,3,6,4,"#c9b8a2"],[6,2,4,4,"#c9b8a2"],[7,0,1,3,"#c9b8a2"],[9,0,1,3,"#c9b8a2"],[9,3,1,1,"#222"],[0,4,2,2,"#fff"],[2,7,2,1,"#8d7a66"],[6,7,2,1,"#8d7a66"]]},
+deer:{w:18,h:17,sp:14,r:[[3,6,10,5,"#a8693a"],[4,11,1,6,"#7a4a26"],[6,11,1,6,"#7a4a26"],[10,11,1,6,"#7a4a26"],[12,11,1,6,"#7a4a26"],[12,2,2,6,"#a8693a"],[13,1,4,4,"#a8693a"],[14,0,1,1,"#f1e2c6"],[16,0,1,1,"#f1e2c6"],[16,2,1,1,"#222"],[2,6,2,2,"#fff"],[6,8,5,1,"#d9a066"]]},
+fox:{w:17,h:10,sp:26,r:[[3,4,9,4,"#d9732a"],[11,2,4,4,"#d9732a"],[11,0,1,2,"#d9732a"],[14,0,1,2,"#d9732a"],[15,4,2,2,"#f3e2c8"],[14,3,1,1,"#222"],[4,8,1,2,"#4a2a14"],[10,8,1,2,"#4a2a14"],[0,3,4,3,"#d9732a"],[0,4,1,2,"#fff"],[6,6,5,2,"#f3e2c8"]]},
+bird:{w:10,h:7,sp:16,r:[[1,2,5,3,"#4a7fd0"],[5,1,3,3,"#4a7fd0"],[8,2,1,1,"#f2b01e"],[6,2,1,1,"#111"],[0,3,2,1,"#2d5aa0"],[3,5,1,2,"#f2b01e"],[2,2,3,1,"#2d5aa0",1]]}
+};
+const KINDS=["rabbit","deer","fox","bird","rabbit","bird"];
+let animals=[];
+function spawn(inside){const k=KINDS[R()*KINDS.length|0],s=SP[k];
+ const left=R()<.5,a={k,x:inside?30+R()*130:(left?-12:W+12),y:GY+8+R()*(H-GY-14),vx:0,vy:0,st:"walk",ph:R()*6,wait:0,tx:30+R()*130,dy:0};
+ a.vx=a.x<a.tx?1:-1;animals.push(a)}
+function scare(){animals.forEach(a=>{a.st="flee";const d=a.x<W/2?-1:1;a.vx=d*SP[a.k].sp*(3+R()*1.5);a.vy=a.k==="bird"?-(28+R()*22):0})}
+function upd(a,dt){const s=SP[a.k];a.ph+=dt*(a.st==="flee"?16:8);
+ if(a.st==="walk"){const d=a.tx-a.x;if(Math.abs(d)<1){a.st="idle";a.wait=1+R()*3;a.vx=Math.sign(a.vx)||1}else{a.vx=Math.sign(d)*s.sp;a.x+=a.vx*dt}}
+ else if(a.st==="idle"){a.wait-=dt;if(a.wait<=0){a.tx=Math.max(24,Math.min(W-24,a.x+(R()*80-40)));a.st="walk"}}
+ else{a.x+=a.vx*dt;a.y+=a.vy*dt}}
+function draw(a){const s=SP[a.k],mv=a.st!=="idle",bob=mv?Math.abs(Math.sin(a.ph))*(a.k==="rabbit"?3:a.k==="bird"?2:1):0;
+ const flap=a.k==="bird"&&a.st==="flee";
+ ctx.fillStyle="rgba(0,0,0,.18)";ctx.fillRect(Math.round(a.x)-(s.w>>1)+1,Math.round(a.y),s.w-2,1);
+ ctx.save();ctx.translate(Math.round(a.x),Math.round(a.y-bob-(flap?0:0)));ctx.scale(a.vx<0?-1:1,1);
+ for(const r of s.r){ctx.fillStyle=r[4];let y=r[1]-s.h;if(r[5]&&flap)y-=Math.floor(a.ph/1.5)%2?2:0;ctx.fillRect(r[0]-(s.w>>1),y,r[2],r[3])}
+ ctx.restore()}
+/* ---------- audio ---------- */
+let ac,an,buf,stream,listening=false,demo=false,lvl=0,raw=0,thr=.35,loudT=0,scareT=0,streak=0,calib=null,spawnT=1,last=0,t=0,shown="";
+try{const v=localStorage.getItem("htt-forest-thr");if(v){thr=+v;$("thr").value=Math.round(thr*100)}}catch(e){}
+$("thr").oninput=e=>{thr=e.target.value/100;try{localStorage.setItem("htt-forest-thr",thr)}catch(x){}};
+async function startMic(){
+ try{stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
+  ac=new(window.AudioContext||window.webkitAudioContext)();await ac.resume();
+  an=ac.createAnalyser();an.fftSize=1024;ac.createMediaStreamSource(stream).connect(an);buf=new Uint8Array(an.fftSize);
+  listening=true;$("start").textContent="Stop listening";$("calib").disabled=false;$("msg").textContent="";
+  try{navigator.wakeLock&&navigator.wakeLock.request("screen")}catch(e){}
+ }catch(e){$("msg").textContent="The microphone is blocked. Allow it in your browser's site settings, or use the test button to try it out."}}
+function stopMic(){listening=false;stream&&stream.getTracks().forEach(t=>t.stop());ac&&ac.close();$("start").textContent="Start listening";$("calib").disabled=true;lvl=0;streak=0}
+$("start").onclick=()=>listening?stopMic():startMic();
+$("calib").onclick=()=>{calib={sum:0,time:0};$("msg").textContent="Calibrating: keep the room quiet for 3 seconds."};
+const tb=$("test");tb.onpointerdown=()=>demo=true;["pointerup","pointerleave","pointercancel"].forEach(e=>tb.addEventListener(e,()=>demo=false));
+addEventListener("keydown",e=>{if(e.code==="Space"&&e.target.tagName!=="BUTTON"&&e.target.tagName!=="INPUT"){e.preventDefault();demo=true}});
+addEventListener("keyup",e=>{if(e.code==="Space")demo=false});
+$("full").onclick=()=>document.fullscreenElement?document.exitFullscreen():$("stage").requestFullscreen&&$("stage").requestFullscreen();
+function readMic(){an.getByteTimeDomainData(buf);let s=0;for(const v of buf){const x=(v-128)/128;s+=x*x}return Math.min(1,Math.sqrt(s/buf.length)*5)}
+/* ---------- loop ---------- */
+for(let i=0;i<4;i++)spawn(true);
+function say(s,c){if(shown!==s){shown=s;$("status").textContent=s}$("fill").style.background=c}
+function tick(now){const dt=Math.min(.05,(now-last)/1000||0);last=now;t+=dt;
+ raw=demo?.85:(listening?readMic():0);
+ lvl+=(raw-lvl)*(1-Math.exp(-dt*(raw>lvl?12:2.5)));
+ if(calib){calib.sum+=lvl*dt;calib.time+=dt;if(calib.time>=3){thr=Math.max(.12,Math.min(.9,calib.sum/3+.2));$("thr").value=Math.round(thr*100);calib=null;$("msg").textContent="Calibrated. Move the slider if you want to fine-tune it."}}
+ loudT=lvl>thr?loudT+dt:Math.max(0,loudT-dt*2);
+ if(loudT>.3){if(scareT<=0)scare();scareT=2.5;streak=0}else scareT=Math.max(0,scareT-dt);
+ if(listening&&scareT<=0)streak+=dt;
+ spawnT-=dt;if(spawnT<=0&&scareT<=0&&animals.length<6){spawn(false);spawnT=2+R()*3}
+ animals.forEach(a=>upd(a,dt));animals=animals.filter(a=>a.x>-24&&a.x<W+24&&a.y>-12);
+ ctx.drawImage(bg,0,0);
+ ctx.fillStyle="#fff";clouds.forEach(c=>{c.x+=dt*2;if(c.x>W+10)c.x=-c.w;const x=Math.round(c.x),y=c.y;ctx.fillRect(x,y+3,c.w,3);ctx.fillRect(x+4,y,c.w-10,3);ctx.fillRect(x+2,y+6,c.w-4,1)});
+ animals.slice().sort((a,b)=>a.y-b.y).forEach(draw);
+ ctx.drawImage(fg,0,0);
+ $("fill").style.width=Math.round(lvl*100)+"%";$("mark").style.left="calc("+Math.round(thr*100)+"% - 2px)";
+ const m=Math.floor(streak/60),s=Math.floor(streak%60);
+ $("hud").textContent="Animals "+animals.filter(a=>a.st!=="flee").length+(listening?"  Calm "+m+":"+String(s).padStart(2,"0"):"");
+ if(scareT>0)say("Too loud! The animals ran away.","#e8613c");
+ else if(!listening&&!demo)say("Press Start listening","#6fcf5a");
+ else if(lvl>thr*.7)say("Getting loud... the animals are listening.","#f2c94c");
+ else say("Nice and quiet. The animals feel safe.","#6fcf5a");
+ requestAnimationFrame(tick)}
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>
