@@ -1,93 +1,117 @@
 <!DOCTYPE html>
-<html lang="en-CA">
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Classroom Noise Monitors | Handy Teacher Tools</title>
-<meta name="description" content="Free pixel-art classroom noise monitors. Keep the forest animals calm or build a city with a quiet class.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Handy Teacher Tools: free classroom tools</title>
+<meta name="description" content="Free classroom tools for teachers: timers, noise meters, group makers, graphs, anchor charts and more.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#141a2a;--panel:#222b45;--line:#34406a;--go:#ffc83d;--leaf:#6fcf5a;--txt:#edf0fa}
+:root{--paper:#F6F9FC;--ink:#1B2A41;--muted:#4D5E78;--rule:#C9D8EA;--margin:#D64550;--hi:#FFE45C;--card:#FFFFFF;--focus:#1B5FD1}
+@media (prefers-color-scheme:dark){:root{--paper:#121C2B;--ink:#EAF1FB;--muted:#A9B8CE;--rule:#2A3B55;--margin:#FF7A84;--hi:#FFE45C;--card:#1A273A;--focus:#8DB8FF}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--txt);font:1.1rem/1.6 "Atkinson Hyperlegible",Verdana,sans-serif}
-.wrap{max-width:60rem;margin:0 auto;padding:2rem 1rem 3rem}
-header{text-align:center;margin-bottom:2rem}
-h1{font:clamp(1rem,3.6vw,1.6rem)/1.5 "Press Start 2P","Courier New",monospace;margin:0 0 .8rem}
-header p{max-width:36rem;margin:0 auto;opacity:.9}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(18rem,1fr));gap:1.4rem}
-.card{background:var(--panel);border:3px solid var(--line);border-radius:.6rem;overflow:hidden;display:flex;flex-direction:column}
-.card canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges}
-.body{padding:1.1rem 1.2rem 1.3rem;display:flex;flex-direction:column;gap:.7rem;flex:1}
-.card h2{font:.85rem/1.5 "Press Start 2P","Courier New",monospace;margin:0}
-.card p{margin:0;flex:1}
-.open{align-self:flex-start;background:var(--go);color:#141a2a;font-weight:700;text-decoration:none;padding:.6rem 1.2rem;border-radius:.4rem;border:2px solid var(--go)}
-.open:hover{background:#ffd966}
-.open:focus-visible{outline:3px solid #fff;outline-offset:2px}
-.how{margin-top:2.4rem;background:var(--panel);border-radius:.6rem;padding:1.2rem 1.4rem}
-.how h2{font:.85rem/1.5 "Press Start 2P","Courier New",monospace;margin:0 0 .6rem}
-.how ol{margin:0;padding-left:1.3rem}
-.how li{margin:.35rem 0}
-.priv{margin-top:1rem;font-size:.95rem;opacity:.85;text-align:center}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Atkinson Hyperlegible",system-ui,sans-serif;font-size:1.0625rem;line-height:1.55;
+ background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 31px,var(--rule) 31px,var(--rule) 32px)}
+.wrap{max-width:68rem;margin:0 auto;padding:0 1.25rem 0 clamp(2.75rem,8vw,5rem);position:relative;min-height:100vh}
+.wrap::before{content:"";position:absolute;left:clamp(1.5rem,5vw,3.25rem);top:0;bottom:0;width:2px;background:var(--margin);opacity:.7}
+header{padding:3.5rem 0 1.5rem}
+h1{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:800;font-size:clamp(2.5rem,7vw,4.5rem);line-height:1;margin:0 0 1rem;letter-spacing:-.02em}
+h1 mark{background:linear-gradient(transparent 55%,var(--hi) 55%);color:inherit;padding:0 .1em}
+.lede{max-width:34rem;margin:0 0 1.5rem;color:var(--muted);font-size:1.15rem}
+.search{display:block;max-width:26rem}
+.search span{display:block;font-weight:700;margin-bottom:.25rem}
+.search input{width:100%;padding:.7rem .9rem;font:inherit;color:var(--ink);background:var(--card);border:2px solid var(--ink);border-radius:6px}
+a:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.group{padding:1.75rem 0 .5rem}
+h2{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:700;font-size:1.6rem;margin:0;line-height:1.2}
+.blurb{margin:.15rem 0 1rem;color:var(--muted)}
+ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(15.5rem,1fr));gap:.9rem}
+li a{display:block;height:100%;padding:.85rem 1rem;background:var(--card);color:var(--ink);text-decoration:none;border:2px solid var(--ink);border-radius:4px 14px 4px 14px;transition:transform .12s,box-shadow .12s}
+li a:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--ink)}
+.name{display:block;font-weight:700}
+.desc{display:block;color:var(--muted);font-size:.95rem}
+.empty{display:none;margin:2rem 0;font-weight:700}
+footer{margin-top:3rem;padding:1.5rem 0 3rem;border-top:2px solid var(--ink)}
+footer nav{display:flex;flex-wrap:wrap;gap:.5rem 1.5rem}
+footer a{color:var(--ink);font-weight:700}
+@media (prefers-reduced-motion:reduce){li a{transition:none}html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <h1>Classroom Noise Monitors</h1>
-    <p>Pick a scene, press start, and let your class's volume decide what happens. Quiet keeps the magic going. Noise stops it.</p>
-  </header>
-  <div class="grid">
-    <article class="card">
-      <canvas id="t1" width="96" height="54" role="img" aria-label="Pixel forest with a rabbit and pine trees"></canvas>
-      <div class="body">
-        <h2>Quiet Forest</h2>
-        <p>Rabbits, deer, foxes and birds wander into the forest while the room is calm. When it gets loud, they all run away. Can your class keep them there?</p>
-        <a class="open" href="quiet-forest-sound-monitor.html">Open Quiet Forest</a>
-      </div>
-    </article>
-    <article class="card">
-      <canvas id="t2" width="96" height="54" role="img" aria-label="Pixel city skyline with a construction crane"></canvas>
-      <div class="body">
-        <h2>Quiet City Builder</h2>
-        <p>A crew builds a city one building at a time, but only during quiet time. Noise stops construction. The city is saved, so your class can finish it over several days.</p>
-        <a class="open" href="quiet-city-builder.html">Open Quiet City Builder</a>
-      </div>
-    </article>
-  </div>
-  <section class="how">
-    <h2>How to use</h2>
-    <ol>
-      <li>Open a monitor and press <b>Start listening</b>. Allow the microphone when your browser asks.</li>
-      <li>Click <b>Calibrate to quiet room</b> while the class is silent for 3 seconds.</li>
-      <li>Use <b>Fullscreen</b> to project it, and adjust the Sensitive/Tolerant slider to suit the activity.</li>
-    </ol>
-  </section>
-  <p class="priv">The microphone is only used to measure volume in your browser. Nothing is recorded or sent anywhere.</p>
+<header>
+<h1>Handy <mark>Teacher</mark> Tools</h1>
+<p class="lede">Free tools for your classroom. Open one on your board and use it right away. No sign-up needed.</p>
+<label class="search"><span>Find a tool</span><input id="q" type="search" placeholder="Try timer, graph or poll" autocomplete="off"></label>
+</header>
+<main id="tools">
+<section class="group"><h2>Run the room</h2><p class="blurb">Timers, pickers and schedules for the daily routine.</p><ul>
+<li><a href="02-classroom-timer.html"><span class="name">Classroom timer</span><span class="desc">Count down any activity.</span></a></li>
+<li><a href="12-lesson-timer-pro.html"><span class="name">Lesson timer pro</span><span class="desc">Time each part of a lesson.</span></a></li>
+<li><a href="16-countdown-to-bell.html"><span class="name">Countdown to bell</span><span class="desc">Show how long until the bell.</span></a></li>
+<li><a href="23-class-schedule.html"><span class="name">Class schedule</span><span class="desc">Display the day's plan.</span></a></li>
+<li><a href="01-random-student-picker.html"><span class="name">Random student picker</span><span class="desc">Pick a student fairly.</span></a></li>
+<li><a href="18-spinner.html"><span class="name">Spinner</span><span class="desc">Spin to choose.</span></a></li>
+<li><a href="04-group-maker.html"><span class="name">Group maker</span><span class="desc">Split the class into groups.</span></a></li>
+<li><a href="08-seating-chart.html"><span class="name">Seating chart</span><span class="desc">Arrange desks and names.</span></a></li>
+<li><a href="14-brain-break-picker.html"><span class="name">Brain break picker</span><span class="desc">Choose a quick break.</span></a></li>
+<li><a href="24-dice-roller.html"><span class="name">Dice roller</span><span class="desc">Roll one die or several.</span></a></li>
+</ul></section>
+<section class="group"><h2>Calm and behaviour</h2><p class="blurb">Keep the volume down and celebrate good choices.</p><ul>
+<li><a href="03-noise-meter.html"><span class="name">Noise meter</span><span class="desc">Show the class how loud it is.</span></a></li>
+<li><a href="quiet-city-builder.html"><span class="name">Quiet city builder</span><span class="desc">Build a city by staying quiet.</span></a></li>
+<li><a href="quiet-forest-sound-monitor.html"><span class="name">Quiet forest sound monitor</span><span class="desc">A forest that grows when the room is calm.</span></a></li>
+<li><a href="07-reward-points.html"><span class="name">Reward points</span><span class="desc">Track points for the class.</span></a></li>
+<li><a href="13-scoreboard.html"><span class="name">Scoreboard</span><span class="desc">Keep score for games and teams.</span></a></li>
+</ul></section>
+<section class="group"><h2>Check understanding</h2><p class="blurb">Gather what students know, before, during and after.</p><ul>
+<li><a href="06-quick-poll.html"><span class="name">Quick poll</span><span class="desc">Ask a question, see the results.</span></a></li>
+<li><a href="10-exit-ticket.html"><span class="name">Exit ticket</span><span class="desc">Collect a quick answer at the end.</span></a></li>
+<li><a href="17-kwl-chart.html"><span class="name">KWL chart</span><span class="desc">Know, want to know, learned.</span></a></li>
+<li><a href="09-word-cloud.html"><span class="name">Word cloud</span><span class="desc">Turn words into a cloud.</span></a></li>
+<li><a href="15-flashcard-display.html"><span class="name">Flashcard display</span><span class="desc">Show flashcards at full size.</span></a></li>
+<li><a href="11-report-card-generator.html"><span class="name">Report card generator</span><span class="desc">Draft report card comments.</span></a></li>
+</ul></section>
+<section class="group"><h2>Math</h2><p class="blurb">Graphs, shapes and symbols.</p><ul>
+<li><a href="21-cartesian-plane.html"><span class="name">Cartesian plane</span><span class="desc">Plot points on a grid.</span></a></li>
+<li><a href="22-graph-maker.html"><span class="name">Graph maker</span><span class="desc">Make a graph from your data.</span></a></li>
+<li><a href="geometry-tool.html"><span class="name">Geometry tool</span><span class="desc">Explore shapes and angles.</span></a></li>
+<li><a href="25-math-symbols.html"><span class="name">Math symbols</span><span class="desc">Copy symbols into your work.</span></a></li>
+<li><a href="26-anchor-charts-math.html"><span class="name">Math anchor charts</span><span class="desc">Reference charts for math.</span></a></li>
+</ul></section>
+<section class="group"><h2>Language and display</h2><p class="blurb">Words, charts and a place to write.</p><ul>
+<li><a href="19-word-wall.html"><span class="name">Word wall</span><span class="desc">Build a word wall.</span></a></li>
+<li><a href="27-anchor-charts-language.html"><span class="name">Language anchor charts</span><span class="desc">Reference charts for language.</span></a></li>
+<li><a href="20-venn-diagram.html"><span class="name">Venn diagram</span><span class="desc">Compare and contrast.</span></a></li>
+<li><a href="05-whiteboard.html"><span class="name">Whiteboard</span><span class="desc">Write and draw on screen.</span></a></li>
+</ul></section>
+<p class="empty" id="empty">No tools match that search. Try a shorter word.</p>
+</main>
+<footer>
+<nav aria-label="Site pages">
+<a href="about.html">About</a><a href="contact.html">Contact</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="cookies.html">Cookies</a>
+</nav>
+</footer>
 </div>
 <script>
-function px(id,fn){const c=document.getElementById(id).getContext("2d");fn(c)}
-function r(c,col,x,y,w,h){c.fillStyle=col;c.fillRect(x,y,w,h)}
-function pine(c,x,by,h,col){r(c,"#3b2a1d",x-1,by-3,2,3);c.fillStyle=col;for(let i=0;i<h;i++){const w=Math.round(2+i*.38)+(i%5>=3?2:0);c.fillRect(x-(w>>1),by-3-h+i,w,1)}}
-px("t1",c=>{
- ["#6ec6f0","#85d0f3","#9bdaf6","#b3e3f8"].forEach((s,i)=>r(c,s,0,i*9,96,9));
- r(c,"#fff6bd",76,6,6,6);
- for(let x=0;x<96;x++){const h=Math.round(10+5*Math.sin(x*.07)+3*Math.sin(x*.19+1));r(c,"#5f9378",x,38-h,1,h)}
- for(let x=3;x<96;x+=9)pine(c,x,40,12+(x%4)*2,"#2f6b4a");
- r(c,"#5aa84a",0,38,96,16);r(c,"#4c9540",0,46,96,3);
- pine(c,6,54,30,"#1f5a3a");pine(c,90,54,34,"#1f5a3a");
- r(c,"#c9b8a2",40,42,8,4);r(c,"#c9b8a2",46,40,4,4);r(c,"#c9b8a2",47,37,1,3);r(c,"#c9b8a2",49,37,1,3);r(c,"#fff",39,43,2,2);
- r(c,"#a8693a",60,44,10,5);r(c,"#7a4a26",61,49,1,4);r(c,"#7a4a26",68,49,1,4);r(c,"#a8693a",69,39,2,6);r(c,"#a8693a",70,38,4,4);r(c,"#f1e2c6",71,36,1,2);r(c,"#f1e2c6",73,36,1,2);
+(function(){
+var q=document.getElementById("q"),empty=document.getElementById("empty");
+q.addEventListener("input",function(){
+ var t=q.value.trim().toLowerCase(),any=false;
+ document.querySelectorAll(".group").forEach(function(g){
+  var shown=0;
+  g.querySelectorAll("li").forEach(function(li){
+   var ok=!t||li.textContent.toLowerCase().indexOf(t)>-1;
+   li.style.display=ok?"":"none"; if(ok)shown++;
+  });
+  g.style.display=shown?"":"none"; if(shown)any=true;
+ });
+ empty.style.display=any?"none":"block";
 });
-px("t2",c=>{
- ["#6d8fd6","#7fa3e0","#a9c0ea","#f1c58f"].forEach((s,i)=>r(c,s,0,i*9,96,9));
- r(c,"#ffe9a8",14,10,6,6);
- const bs=[[8,14,"#9aa7b8"],[22,26,"#c97b63"],[36,38,"#7fa7c9"],[50,30,"#c2ac7e"],[62,20,"#9a9cc4"],[76,32,"#78ac96"]];
- bs.forEach(([x,h,col],i)=>{r(c,col,x,40-h,11,h);r(c,"rgba(0,0,0,.18)",x+9,40-h,2,h);for(let y=40-h+3;y<37;y+=4)for(let k=0;k<3;k++)r(c,(x+y+k)%5<2?"#ffd95a":"#3a5273",x+2+k*3,y,2,2)});
- r(c,"#c9ced6",0,40,96,3);r(c,"#4f5663",0,43,96,11);for(let x=2;x<96;x+=14)r(c,"#f4e27a",x,49,8,1);
- r(c,"#e0b020",86,6,2,34);r(c,"#e0b020",70,6,18,2);r(c,"#777",86,8,4,3);r(c,"#ff3b3b",86,3,2,2);r(c,"#222",72,8,1,10);r(c,"#8a5a3a",71,18,4,3);
-});
+})();
 </script>
 </body>
 </html>
