@@ -1,8 +1,8 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Daily classroom head count tracker for the Ontario student attendance confirmation policy. Works offline; data stays in your browser."><meta name="theme-color" content="#0f5c63"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Head Count">
-<title>Daily Head Count Tracker</title>
+<meta name="description" content="Daily classroom head count tracker for the Ontario student attendance confirmation policy. Works offline; data stays in your browser."><meta name="robots" content="noindex, nofollow"><meta name="theme-color" content="#0f5c63"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Head Count">
+<title>Daily Head Count Tracker | Mascall Teaches</title>
 <style>
 :root{--bg:#f3f5f4;--card:#fff;--tx:#18222b;--mu:#566471;--bd:#cfd8d6;--ac:#0f5c63;--acx:#fff;--ok:#17703f;--okb:#dff3e7;--bad:#b3261e;--badb:#fde6e3;--na:#e9eceb;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -15,7 +15,7 @@ h1{font-size:1.25rem;margin:4px 0 10px}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:12px;margin-bottom:10px}
 .hdr{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 label{font-size:.8rem;color:var(--mu);display:block}
-input,textarea{width:100%;font:inherit;padding:9px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx)}
+input,textarea,select{width:100%;font:inherit;padding:9px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx)}
 button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:10px 12px;min-height:44px}
 button.p{background:var(--ac);color:var(--acx);border-color:var(--ac);font-weight:600}
 :focus-visible{outline:3px solid var(--ac);outline-offset:2px}
@@ -44,45 +44,55 @@ td.n{text-align:left;min-width:120px}
 <div><label for="room">Homeroom</label><input id="room"></div>
 <div><label for="grade">Grade / class</label><input id="grade"></div>
 <div><label for="enrol">Students on class list</label><input id="enrol" inputmode="numeric"></div></div></div>
-<div class="tabs noprint"><button id="tDay" class="on">Today</button><button id="tMon">November grid</button></div>
+<div class="card noprint"><label for="mon">Month</label><select id="mon"></select></div>
+<div class="tabs noprint"><button id="tDay" class="on">Today</button><button id="tMon">Month grid</button></div>
 <section id="day"></section>
 <section id="month" hidden><div class="ph" id="ph"></div><div class="card"><div class="wrap" id="grid"></div></div></section>
-<div class="foot noprint"><button id="pr" class="p">Print or save as PDF</button><button id="rs">Clear all data</button></div>
-<p class="noprint" style="color:var(--mu);font-size:.85rem">Counts and notes are saved only in this browser on this device. Use student names nowhere; record numbers only. Print at month end for your office.</p>
+<div class="foot noprint"><button id="pr" class="p">Print or save as PDF</button><button id="rs">Clear this month</button></div>
+<p class="noprint" style="color:var(--mu);font-size:.85rem">Counts and notes are saved only in this browser on this device. Use student names nowhere; record numbers only. Each month is saved separately. Print at month end for your office.</p>
 </main>
 <script>
-var KEY="hc-nov-2026",CP=[["arr","Arrival / Block 1"],["amr","AM recess return"],["amn","AM nutrition break return"],["b2","Block 2"],["pmr","PM recess return"],["pmn","PM nutrition break return"],["b3","Block 3"],["pe","Phys. Ed. / DPA"],["mu","Music / Planning"],["o1","Other (assembly, library, drill, rotary…)"],["o2","Other (assembly, library, drill, rotary…)"],["dis","End-of-day dismissal"]];
-var NS={20:"PA Day"},DAYS=[],S={room:"",grade:"",enrol:"",days:{},sel:2},view="day";
-for(var d=2;d<=30;d++){var w=new Date(2026,10,d).getDay();if(w>0&&w<6)DAYS.push(d)}
-try{var r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
-(function(){var t=new Date();if(t.getFullYear()==2026&&t.getMonth()==10&&DAYS.indexOf(t.getDate())>-1)S.sel=t.getDate()})();
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+var HK="hc-hdr",MN=["January","February","March","April","May","June","July","August","September","October","November","December"],WD=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+var CP=[["arr","Arrival / Block 1"],["amr","AM recess return"],["amn","AM nutrition break return"],["b2","Block 2"],["pmr","PM recess return"],["pmn","PM nutrition break return"],["b3","Block 3"],["pe","Phys. Ed. / DPA"],["mu","Music / Planning"],["o1","Other (assembly, library, drill, rotary…)"],["o2","Other (assembly, library, drill, rotary…)"],["dis","End-of-day dismissal"]];
+var H={room:"",grade:"",enrol:""},S={days:{},sel:null},Y=2026,M=10,DAYS=[],view="day";
+function get(k){try{var r=localStorage.getItem(k);return r?JSON.parse(r):null}catch(e){return null}}
+function mk(){return"hc-"+Y+"-"+(M+1)}
+function save(){try{localStorage.setItem(mk(),JSON.stringify(S));localStorage.setItem(HK,JSON.stringify(H))}catch(e){}}
 function $(i){return document.getElementById(i)}
 function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;")}
+function loadMonth(){
+var old=get("hc-nov-2026");S=get(mk());
+if(!S){S={days:{},sel:null};if(Y==2026&&M==10&&old&&old.days)S.days=old.days}
+DAYS=[];for(var d=1,n=new Date(Y,M+1,0).getDate();d<=n;d++){var w=new Date(Y,M,d).getDay();if(w>0&&w<6)DAYS.push(d)}
+var t=new Date();
+if(t.getFullYear()==Y&&t.getMonth()==M&&DAYS.indexOf(t.getDate())>-1)S.sel=t.getDate();
+else if(DAYS.indexOf(S.sel)<0)S.sel=DAYS[0]}
 function D(d){return S.days[d]||(S.days[d]={present:"",c:{},note:""})}
-function exp(d){var p=D(d).present;if(p!=="")return +p;return S.enrol!==""?+S.enrol:null}
+function NSL(d){var y=S.days[d];if(y&&"ns" in y)return y.ns;return(Y==2026&&M==10&&d==20)?"PA Day":""}
+function exp(d){var p=D(d).present;if(p!=="")return+p;return H.enrol!==""?+H.enrol:null}
 function st(d,id){var c=D(d).c[id],e=exp(d);if(!c)return"p";if(e==null)return"r";return c.n===e?"ok":"bad"}
 function now(){return new Date().toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})}
 function renderDay(){
-var d=S.sel,dy=D(d),e=exp(d),i=DAYS.indexOf(d),h="";
-h+='<div class="nav"><button id="pv" aria-label="Previous day"'+(i<1?" disabled":"")+'>‹</button><strong>Nov '+d+', 2026 '+["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date(2026,10,d).getDay()]+'</strong><button id="nx" aria-label="Next day"'+(i>=DAYS.length-1?" disabled":"")+'>›</button></div>';
-if(NS[d]){$("day").innerHTML=h+'<div class="card"><strong>'+NS[d]+'</strong> — no school for students. Nothing to record.</div>';nav();return}
+var d=S.sel,dy=D(d),e=exp(d),i=DAYS.indexOf(d),h="",lab=NSL(d);
+h+='<div class="nav"><button id="pv" aria-label="Previous day"'+(i<1?" disabled":"")+'>‹</button><strong>'+WD[new Date(Y,M,d).getDay()]+", "+MN[M]+" "+d+", "+Y+'</strong><button id="nx" aria-label="Next day"'+(i>=DAYS.length-1?" disabled":"")+'>›</button></div>';
+if(lab){$("day").innerHTML=h+'<div class="card"><strong>'+esc(lab)+'</strong> — no school for students. Nothing to record.<p><button id="ns">Mark as a school day</button></p></div>';nav();return}
 var bad=CP.filter(function(c){return st(d,c[0])=="bad"});
 var done=CP.filter(function(c){return dy.c[c[0]]}).length;
-h+='<div class="card"><label for="pres">Students present today (from attendance)</label><input id="pres" inputmode="numeric" value="'+esc(dy.present)+'" placeholder="'+(S.enrol!==""?S.enrol:"enter number")+'"><div class="prog" aria-hidden="true"><i style="width:'+Math.round(done/CP.length*100)+'%"></i></div><small style="color:var(--mu)">'+done+' of '+CP.length+' checkpoints recorded. Skip any that did not happen today.</small></div>';
+h+='<div class="card"><label for="pres">Students present today (from attendance)</label><input id="pres" inputmode="numeric" value="'+esc(dy.present)+'" placeholder="'+(H.enrol!==""?H.enrol:"enter number")+'"><div class="prog" aria-hidden="true"><i style="width:'+Math.round(done/CP.length*100)+'%"></i></div><small style="color:var(--mu)">'+done+' of '+CP.length+' checkpoints recorded. Skip any that did not happen today.</small></div>';
 if(bad.length)h+='<div class="alert" role="alert"><strong>Count does not match ('+bad.map(function(c){return c[1]}).join("; ")+')</strong><ol><li>Recount right away.</li><li>Check attendance and sign-in/sign-out.</li><li>Call the office if not resolved quickly.</li><li>Follow school safety procedures if a student’s whereabouts remain unknown.</li></ol></div>';
 h+='<div class="card">';
 CP.forEach(function(c){var s=st(d,c[0]),v=dy.c[c[0]];
-h+='<div class="row"><div><div class="nm">'+c[1]+'</div><small>'+(v?(v.t+(s=="ok"?"":"")):"Not yet recorded")+'</small> '+(s=="ok"?'<span class="tag ok">✓ Matches</span>':s=="bad"?'<span class="tag bad">⚠ Expected '+e+'</span>':"")+'</div><div class="ctl">'
+h+='<div class="row"><div><div class="nm">'+c[1]+'</div><small>'+(v?v.t:"Not yet recorded")+'</small> '+(s=="ok"?'<span class="tag ok">✓ Matches</span>':s=="bad"?'<span class="tag bad">⚠ Expected '+e+'</span>':"")+'</div><div class="ctl">'
 +'<input data-id="'+c[0]+'" inputmode="numeric" aria-label="'+c[1]+' count" class="'+(s=="ok"?"ok":s=="bad"?"bad":"")+'" value="'+(v?v.n:"")+'">'
 +'<button class="p" data-m="'+c[0]+'" title="Record count equal to students present"'+(e==null?" disabled":"")+'>All here</button>'
 +(v?'<button data-x="'+c[0]+'" aria-label="Clear">×</button>':"")+'</div></div>'});
-h+='</div><div class="card"><label for="note">Notes (late arrival, early pickup, etc.)</label><textarea id="note" rows="2">'+esc(dy.note)+'</textarea></div>';
+h+='</div><div class="card"><label for="note">Notes (late arrival, early pickup, etc.)</label><textarea id="note" rows="2">'+esc(dy.note)+'</textarea></div><button id="ns">Mark this day as no school (PA day, holiday)</button>';
 $("day").innerHTML=h;nav()}
 function nav(){
 var p=$("pv"),n=$("nx");
 if(p)p.onclick=function(){S.sel=DAYS[DAYS.indexOf(S.sel)-1];save();renderDay()};
 if(n)n.onclick=function(){S.sel=DAYS[DAYS.indexOf(S.sel)+1];save();renderDay()};
+var b=$("ns");if(b)b.onclick=function(){var y=D(S.sel);if(NSL(S.sel))y.ns="";else{var l=prompt("Label for this day (e.g. PA Day, Family Day)","PA Day");if(!l)return;y.ns=l}save();renderDay()};
 var pr=$("pres");if(pr)pr.onchange=function(){D(S.sel).present=this.value.replace(/\D/g,"");save();renderDay()};
 var nt=$("note");if(nt)nt.onchange=function(){D(S.sel).note=this.value;save()};
 document.querySelectorAll("[data-id]").forEach(function(el){el.onchange=function(){var v=this.value.replace(/\D/g,"");if(v==="")delete D(S.sel).c[this.dataset.id];else D(S.sel).c[this.dataset.id]={n:+v,t:now()};save();renderDay()}});
@@ -90,18 +100,26 @@ document.querySelectorAll("[data-m]").forEach(function(el){el.onclick=function()
 document.querySelectorAll("[data-x]").forEach(function(el){el.onclick=function(){delete D(S.sel).c[this.dataset.x];save();renderDay()}})}
 function renderGrid(){
 var h='<table><thead><tr><th>Day</th><th>Present</th>'+CP.map(function(c){return"<th>"+c[1].replace(/ \(.*/,"")+"</th>"}).join("")+'<th>Notes</th></tr></thead><tbody>';
-DAYS.forEach(function(d){var dy=D(d);
-if(NS[d]){h+='<tr><td class="d nsc">Nov '+d+'</td><td class="nsc" colspan="'+(CP.length+2)+'">'+NS[d]+' (no school for students)</td></tr>';return}
-h+='<tr><td class="d" data-g="'+d+'">Nov '+d+'</td><td>'+(exp(d)==null?"":exp(d))+'</td>';
+DAYS.forEach(function(d){var dy=D(d),l=NSL(d),dn=MN[M].slice(0,3)+" "+d;
+if(l){h+='<tr><td class="d nsc" data-g="'+d+'">'+dn+'</td><td class="nsc" colspan="'+(CP.length+2)+'">'+esc(l)+' (no school for students)</td></tr>';return}
+h+='<tr><td class="d" data-g="'+d+'">'+dn+'</td><td>'+(exp(d)==null?"":exp(d))+'</td>';
 CP.forEach(function(c){var s=st(d,c[0]),v=dy.c[c[0]];h+='<td class="'+(s=="ok"?"ok":s=="bad"?"bad":"")+'">'+(v?v.n:"")+'</td>'});
 h+='<td class="n">'+esc(dy.note)+'</td></tr>'});
 $("grid").innerHTML=h+'</tbody></table>';
-$("ph").innerHTML='<strong>Monthly Classroom Headcount Verification Tracker — November 2026</strong><br>Homeroom: '+esc(S.room)+' &nbsp; Grade/Class: '+esc(S.grade);
+$("ph").innerHTML='<strong>Monthly Classroom Headcount Verification Tracker — '+MN[M]+' '+Y+'</strong><br>Homeroom: '+esc(H.room)+' &nbsp; Grade/Class: '+esc(H.grade);
 document.querySelectorAll("[data-g]").forEach(function(el){el.onclick=function(){S.sel=+this.dataset.g;save();show("day")}})}
-function show(v){view=v;$("day").hidden=v!="day";$("month").hidden=v!="month";$("tDay").className=v=="day"?"on":"";$("tMon").className=v=="month"?"on":"";if(v=="day")renderDay();else renderGrid()}
-["room","grade","enrol"].forEach(function(k){var el=$(k);el.value=S[k];el.onchange=function(){S[k]=k=="enrol"?this.value.replace(/\D/g,""):this.value;save();show(view)}});
+function show(v){view=v;$("day").hidden=v!="day";$("month").hidden=v!="month";$("tDay").className=v=="day"?"on":"";$("tMon").className=v=="month"?"on":"";$("tMon").textContent=MN[M]+" grid";if(v=="day")renderDay();else renderGrid()}
+(function(){
+var h0=get(HK),old=get("hc-nov-2026");
+if(h0)H=h0;else if(old)H={room:old.room||"",grade:old.grade||"",enrol:old.enrol||""};
+var t=new Date(),ty=t.getFullYear(),tm=t.getMonth();
+if((ty==2026&&tm>=8)||(ty==2027&&tm<=5)){Y=ty;M=tm}
+var o="";for(var k=0;k<10;k++){var yy=k<4?2026:2027,mm=(8+k)%12;o+='<option value="'+yy+"-"+mm+'">'+MN[mm]+" "+yy+"</option>"}
+$("mon").innerHTML=o;$("mon").value=Y+"-"+M;
+$("mon").onchange=function(){save();var p=this.value.split("-");Y=+p[0];M=+p[1];loadMonth();show(view)};
+["room","grade","enrol"].forEach(function(k){var el=$(k);el.value=H[k];el.onchange=function(){H[k]=k=="enrol"?this.value.replace(/\D/g,""):this.value;save();show(view)}});
 $("tDay").onclick=function(){show("day")};$("tMon").onclick=function(){show("month")};
 $("pr").onclick=function(){show("month");window.print()};
-$("rs").onclick=function(){if(confirm("Clear every count and note for November? This cannot be undone.")){S.days={};save();show(view)}};
-show("day");
+$("rs").onclick=function(){if(confirm("Clear every count and note for "+MN[M]+" "+Y+"? This cannot be undone.")){S={days:{},sel:null};loadMonth();save();show(view)}};
+loadMonth();show("day")})();
 </script></body></html>
