@@ -5,112 +5,145 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Handy Teacher Tools: free classroom tools</title>
 <meta name="description" content="Free classroom tools for teachers: timers, noise meters, group makers, graphs, anchor charts and more.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&display=swap" rel="stylesheet">
 <style>
-:root{--paper:#F6F9FC;--ink:#1B2A41;--muted:#4D5E78;--rule:#C9D8EA;--margin:#D64550;--hi:#FFE45C;--card:#FFFFFF;--focus:#1B5FD1}
-@media (prefers-color-scheme:dark){:root{--paper:#121C2B;--ink:#EAF1FB;--muted:#A9B8CE;--rule:#2A3B55;--margin:#FF7A84;--hi:#FFE45C;--card:#1A273A;--focus:#8DB8FF}}
+:root{--bg:#F6F8FC;--card:#fff;--ink:#16213A;--muted:#5A6781;--line:#E1E7F0;--shadow:0 1px 2px rgba(22,33,58,.06),0 4px 14px rgba(22,33,58,.06);--h1:#1D4ED8;--h2:#0E9F8A}
+.g-run{--c:#2563EB;--t:#E3EDFF}
+.g-calm{--c:#0F9D78;--t:#DDF5EC}
+.g-check{--c:#D9480F;--t:#FFE9DD}
+.g-math{--c:#7C3AED;--t:#EEE5FF}
+.g-lang{--c:#C2255C;--t:#FFE3EC}
+
+@media (prefers-color-scheme:dark){:root{--bg:#0E1524;--card:#17213A;--ink:#EEF3FC;--muted:#A9B6CC;--line:#2A3957;--shadow:0 1px 2px rgba(0,0,0,.4);--h1:#1E3A8A;--h2:#0B6B63}
+.g-run{--c:#2563EB;--t:#1B2D52}
+.g-calm{--c:#0F9D78;--t:#173B33}
+.g-check{--c:#D9480F;--t:#4A2514}
+.g-math{--c:#7C3AED;--t:#32224F}
+.g-lang{--c:#C2255C;--t:#4A1A2D}
+}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:"Atkinson Hyperlegible",system-ui,sans-serif;font-size:1.0625rem;line-height:1.55;
- background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 31px,var(--rule) 31px,var(--rule) 32px)}
-.wrap{max-width:68rem;margin:0 auto;padding:0 1.25rem 0 clamp(2.75rem,8vw,5rem);position:relative;min-height:100vh}
-.wrap::before{content:"";position:absolute;left:clamp(1.5rem,5vw,3.25rem);top:0;bottom:0;width:2px;background:var(--margin);opacity:.7}
-header{padding:3.5rem 0 1.5rem}
-h1{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:800;font-size:clamp(2.5rem,7vw,4.5rem);line-height:1;margin:0 0 1rem;letter-spacing:-.02em}
-h1 mark{background:linear-gradient(transparent 55%,var(--hi) 55%);color:inherit;padding:0 .1em}
-.lede{max-width:34rem;margin:0 0 1.5rem;color:var(--muted);font-size:1.15rem}
-.search{display:block;max-width:26rem}
-.search span{display:block;font-weight:700;margin-bottom:.25rem}
-.search input{width:100%;padding:.7rem .9rem;font:inherit;color:var(--ink);background:var(--card);border:2px solid var(--ink);border-radius:6px}
-a:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
-.group{padding:1.75rem 0 .5rem}
-h2{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:700;font-size:1.6rem;margin:0;line-height:1.2}
-.blurb{margin:.15rem 0 1rem;color:var(--muted)}
-ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(15.5rem,1fr));gap:.9rem}
-li a{display:block;height:100%;padding:.85rem 1rem;background:var(--card);color:var(--ink);text-decoration:none;border:2px solid var(--ink);border-radius:4px 14px 4px 14px;transition:transform .12s,box-shadow .12s}
-li a:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--ink)}
-.name{display:block;font-weight:700}
-.desc{display:block;color:var(--muted);font-size:.95rem}
-.empty{display:none;margin:2rem 0;font-weight:700}
-footer{margin-top:3rem;padding:1.5rem 0 3rem;border-top:2px solid var(--ink)}
-footer nav{display:flex;flex-wrap:wrap;gap:.5rem 1.5rem}
-footer a{color:var(--ink);font-weight:700}
-@media (prefers-reduced-motion:reduce){li a{transition:none}html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:1.0625rem;line-height:1.5}
+a{color:inherit}
+:focus-visible{outline:3px solid #FFC83D;outline-offset:2px}
+.hero{background:linear-gradient(135deg,var(--h1),var(--h2));color:#fff;padding:0 0 3.25rem}
+.inner{max-width:72rem;margin:0 auto;padding:0 1.25rem}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 0;gap:1rem;flex-wrap:wrap}
+.brand{font-weight:800;font-size:1.2rem;text-decoration:none;display:flex;align-items:center;gap:.5rem}
+.brand b{display:grid;place-items:center;width:2.1rem;height:2.1rem;background:#FFC83D;color:#16213A;border-radius:10px;font-size:1.1rem}
+.nav nav{display:flex;gap:1.25rem}
+.nav nav a{text-decoration:none;font-weight:600;opacity:.9}
+.nav nav a:hover{opacity:1;text-decoration:underline}
+h1{font-size:clamp(2rem,5.5vw,3.4rem);line-height:1.08;margin:2rem 0 .6rem;max-width:40rem;letter-spacing:-.01em}
+.lede{margin:0 0 1.5rem;font-size:1.2rem;opacity:.92;max-width:34rem}
+.search{display:block;max-width:36rem}
+.search input{width:100%;padding:1.05rem 1.2rem;font:inherit;font-size:1.1rem;color:#16213A;background:#fff;border:0;border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.quick{margin-top:1.5rem;display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}
+.quick .lbl{font-weight:700;margin-right:.25rem}
+.q{display:inline-flex;align-items:center;gap:.4rem;padding:.5rem .9rem;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);border-radius:999px;color:#fff;text-decoration:none;font-weight:600}
+.q:hover{background:#fff;color:#16213A}
+.filters{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.pills{max-width:72rem;margin:0 auto;padding:.75rem 1.25rem;display:flex;gap:.5rem;overflow-x:auto}
+.pill{flex:none;display:inline-flex;align-items:center;gap:.5rem;font:inherit;font-weight:600;padding:.55rem 1rem;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:999px;cursor:pointer}
+.pill .dot{width:.65rem;height:.65rem;border-radius:50%;background:var(--c)}
+.pill:hover{border-color:var(--ink)}
+.pill[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+main{max-width:72rem;margin:0 auto;padding:.5rem 1.25rem 3rem}
+.group{padding-top:2.25rem}
+h2{display:flex;align-items:center;gap:.7rem;font-size:1.5rem;margin:0 0 1rem}
+h2 .bar{width:.45rem;height:1.7rem;background:var(--c);border-radius:4px}
+h2 .count{margin-left:.25rem;font-size:.9rem;font-weight:600;color:var(--muted)}
+ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(17rem,1fr));gap:1rem}
+.card{display:flex;align-items:center;gap:1rem;height:100%;min-height:5.5rem;padding:1rem 1.1rem;background:var(--card);border:1px solid var(--line);border-top:4px solid var(--c);border-radius:14px;box-shadow:var(--shadow);text-decoration:none;transition:transform .15s,box-shadow .15s}
+.card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(22,33,58,.16)}
+.icon{flex:none;display:grid;place-items:center;width:3.4rem;height:3.4rem;font-size:1.8rem;background:var(--t);border-radius:14px}
+.name{display:block;font-weight:700;font-size:1.08rem}
+.desc{display:block;color:var(--muted);font-size:.95rem;line-height:1.35}
+.empty{display:none;margin:2.5rem 0;font-size:1.1rem}
+footer{background:var(--card);border-top:1px solid var(--line)}
+footer div{max-width:72rem;margin:0 auto;padding:1.5rem 1.25rem;display:flex;flex-wrap:wrap;gap:.5rem 1.5rem}
+footer a{font-weight:600;color:var(--muted)}
+@media (min-width:48rem){.pills{flex-wrap:wrap;overflow:visible}}
+@media (max-width:30rem){.nav nav{gap:.9rem}.icon{width:3rem;height:3rem}}
+@media (prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}}
 </style>
 </head>
 <body>
-<div class="wrap">
-<header>
-<h1>Handy <mark>Teacher</mark> Tools</h1>
-<p class="lede">Free tools for your classroom. Open one on your board and use it right away. No sign-up needed.</p>
-<label class="search"><span>Find a tool</span><input id="q" type="search" placeholder="Try timer, graph or poll" autocomplete="off"></label>
-</header>
-<main id="tools">
-<section class="group"><h2>Run the room</h2><p class="blurb">Timers, pickers and schedules for the daily routine.</p><ul>
-<li><a href="02-classroom-timer.html"><span class="name">Classroom timer</span><span class="desc">Count down any activity.</span></a></li>
-<li><a href="12-lesson-timer-pro.html"><span class="name">Lesson timer pro</span><span class="desc">Time each part of a lesson.</span></a></li>
-<li><a href="16-countdown-to-bell.html"><span class="name">Countdown to bell</span><span class="desc">Show how long until the bell.</span></a></li>
-<li><a href="23-class-schedule.html"><span class="name">Class schedule</span><span class="desc">Display the day's plan.</span></a></li>
-<li><a href="01-random-student-picker.html"><span class="name">Random student picker</span><span class="desc">Pick a student fairly.</span></a></li>
-<li><a href="18-spinner.html"><span class="name">Spinner</span><span class="desc">Spin to choose.</span></a></li>
-<li><a href="04-group-maker.html"><span class="name">Group maker</span><span class="desc">Split the class into groups.</span></a></li>
-<li><a href="08-seating-chart.html"><span class="name">Seating chart</span><span class="desc">Arrange desks and names.</span></a></li>
-<li><a href="14-brain-break-picker.html"><span class="name">Brain break picker</span><span class="desc">Choose a quick break.</span></a></li>
-<li><a href="24-dice-roller.html"><span class="name">Dice roller</span><span class="desc">Roll one die or several.</span></a></li>
+<header class="hero"><div class="inner">
+<div class="nav"><a class="brand" href="index.html"><b aria-hidden="true">✓</b>Handy Teacher Tools</a>
+<nav aria-label="Main"><a href="about.html">About</a><a href="contact.html">Contact</a></nav></div>
+<h1>Free tools to run a calmer, smoother classroom</h1>
+<p class="lede">Open a tool on your board and use it right away. No sign-up needed.</p>
+<label class="search"><span style="position:absolute;left:-9999px">Search tools</span><input id="q" type="search" placeholder="Search tools, like timer, graph or poll" autocomplete="off"></label>
+<div class="quick"><span class="lbl">Quick start:</span><a class="q" href="02-classroom-timer.html"><span aria-hidden="true">⏱️</span>Timer</a><a class="q" href="03-noise-meter.html"><span aria-hidden="true">🔊</span>Noise meter</a><a class="q" href="01-random-student-picker.html"><span aria-hidden="true">🎯</span>Pick a student</a><a class="q" href="04-group-maker.html"><span aria-hidden="true">👥</span>Group maker</a><a class="q" href="18-spinner.html"><span aria-hidden="true">🎡</span>Spinner</a><a class="q" href="14-brain-break-picker.html"><span aria-hidden="true">🧘</span>Brain break</a></div>
+</div></header>
+<div class="filters"><div class="pills" role="group" aria-label="Filter by type"><button type="button" class="pill" data-cat="all" aria-pressed="true">All tools</button><button type="button" class="pill g-run" data-cat="run" aria-pressed="false"><span class="dot"></span>Run the room</button><button type="button" class="pill g-calm" data-cat="calm" aria-pressed="false"><span class="dot"></span>Calm and behaviour</button><button type="button" class="pill g-check" data-cat="check" aria-pressed="false"><span class="dot"></span>Check understanding</button><button type="button" class="pill g-math" data-cat="math" aria-pressed="false"><span class="dot"></span>Math</button><button type="button" class="pill g-lang" data-cat="lang" aria-pressed="false"><span class="dot"></span>Language and display</button></div></div>
+<main>
+<section class="group g-run" data-cat="run"><h2><span class="bar"></span>Run the room<span class="count">10 tools</span></h2><ul>
+<li><a class="card" href="02-classroom-timer.html"><span class="icon" aria-hidden="true">⏱️</span><span class="txt"><span class="name">Classroom timer</span><span class="desc">Count down any activity</span></span></a></li>
+<li><a class="card" href="12-lesson-timer-pro.html"><span class="icon" aria-hidden="true">⏳</span><span class="txt"><span class="name">Lesson timer pro</span><span class="desc">Time each part of a lesson</span></span></a></li>
+<li><a class="card" href="16-countdown-to-bell.html"><span class="icon" aria-hidden="true">🔔</span><span class="txt"><span class="name">Countdown to bell</span><span class="desc">See how long until the bell</span></span></a></li>
+<li><a class="card" href="23-class-schedule.html"><span class="icon" aria-hidden="true">📅</span><span class="txt"><span class="name">Class schedule</span><span class="desc">Display the day's plan</span></span></a></li>
+<li><a class="card" href="01-random-student-picker.html"><span class="icon" aria-hidden="true">🎯</span><span class="txt"><span class="name">Random student picker</span><span class="desc">Pick a student fairly</span></span></a></li>
+<li><a class="card" href="18-spinner.html"><span class="icon" aria-hidden="true">🎡</span><span class="txt"><span class="name">Spinner</span><span class="desc">Spin to choose</span></span></a></li>
+<li><a class="card" href="04-group-maker.html"><span class="icon" aria-hidden="true">👥</span><span class="txt"><span class="name">Group maker</span><span class="desc">Split the class into groups</span></span></a></li>
+<li><a class="card" href="08-seating-chart.html"><span class="icon" aria-hidden="true">🪑</span><span class="txt"><span class="name">Seating chart</span><span class="desc">Arrange desks and names</span></span></a></li>
+<li><a class="card" href="14-brain-break-picker.html"><span class="icon" aria-hidden="true">🧘</span><span class="txt"><span class="name">Brain break picker</span><span class="desc">Choose a quick break</span></span></a></li>
+<li><a class="card" href="24-dice-roller.html"><span class="icon" aria-hidden="true">🎲</span><span class="txt"><span class="name">Dice roller</span><span class="desc">Roll one die or several</span></span></a></li>
 </ul></section>
-<section class="group"><h2>Calm and behaviour</h2><p class="blurb">Keep the volume down and celebrate good choices.</p><ul>
-<li><a href="03-noise-meter.html"><span class="name">Noise meter</span><span class="desc">Show the class how loud it is.</span></a></li>
-<li><a href="quiet-city-builder.html"><span class="name">Quiet city builder</span><span class="desc">Build a city by staying quiet.</span></a></li>
-<li><a href="quiet-forest-sound-monitor.html"><span class="name">Quiet forest sound monitor</span><span class="desc">A forest that grows when the room is calm.</span></a></li>
-<li><a href="07-reward-points.html"><span class="name">Reward points</span><span class="desc">Track points for the class.</span></a></li>
-<li><a href="13-scoreboard.html"><span class="name">Scoreboard</span><span class="desc">Keep score for games and teams.</span></a></li>
+<section class="group g-calm" data-cat="calm"><h2><span class="bar"></span>Calm and behaviour<span class="count">5 tools</span></h2><ul>
+<li><a class="card" href="03-noise-meter.html"><span class="icon" aria-hidden="true">🔊</span><span class="txt"><span class="name">Noise meter</span><span class="desc">Show how loud the room is</span></span></a></li>
+<li><a class="card" href="quiet-city-builder.html"><span class="icon" aria-hidden="true">🏙️</span><span class="txt"><span class="name">Quiet city builder</span><span class="desc">Build a city by staying quiet</span></span></a></li>
+<li><a class="card" href="quiet-forest-sound-monitor.html"><span class="icon" aria-hidden="true">🌲</span><span class="txt"><span class="name">Quiet forest sound monitor</span><span class="desc">Grow a forest with a calm room</span></span></a></li>
+<li><a class="card" href="07-reward-points.html"><span class="icon" aria-hidden="true">⭐</span><span class="txt"><span class="name">Reward points</span><span class="desc">Track points for the class</span></span></a></li>
+<li><a class="card" href="13-scoreboard.html"><span class="icon" aria-hidden="true">🏆</span><span class="txt"><span class="name">Scoreboard</span><span class="desc">Keep score for teams and games</span></span></a></li>
 </ul></section>
-<section class="group"><h2>Check understanding</h2><p class="blurb">Gather what students know, before, during and after.</p><ul>
-<li><a href="06-quick-poll.html"><span class="name">Quick poll</span><span class="desc">Ask a question, see the results.</span></a></li>
-<li><a href="10-exit-ticket.html"><span class="name">Exit ticket</span><span class="desc">Collect a quick answer at the end.</span></a></li>
-<li><a href="17-kwl-chart.html"><span class="name">KWL chart</span><span class="desc">Know, want to know, learned.</span></a></li>
-<li><a href="09-word-cloud.html"><span class="name">Word cloud</span><span class="desc">Turn words into a cloud.</span></a></li>
-<li><a href="15-flashcard-display.html"><span class="name">Flashcard display</span><span class="desc">Show flashcards at full size.</span></a></li>
-<li><a href="11-report-card-generator.html"><span class="name">Report card generator</span><span class="desc">Draft report card comments.</span></a></li>
+<section class="group g-check" data-cat="check"><h2><span class="bar"></span>Check understanding<span class="count">6 tools</span></h2><ul>
+<li><a class="card" href="06-quick-poll.html"><span class="icon" aria-hidden="true">📊</span><span class="txt"><span class="name">Quick poll</span><span class="desc">Ask a question, see results</span></span></a></li>
+<li><a class="card" href="10-exit-ticket.html"><span class="icon" aria-hidden="true">🎟️</span><span class="txt"><span class="name">Exit ticket</span><span class="desc">Collect a quick answer at the end</span></span></a></li>
+<li><a class="card" href="17-kwl-chart.html"><span class="icon" aria-hidden="true">📝</span><span class="txt"><span class="name">KWL chart</span><span class="desc">Know, want to know, learned</span></span></a></li>
+<li><a class="card" href="09-word-cloud.html"><span class="icon" aria-hidden="true">☁️</span><span class="txt"><span class="name">Word cloud</span><span class="desc">Turn words into a cloud</span></span></a></li>
+<li><a class="card" href="15-flashcard-display.html"><span class="icon" aria-hidden="true">🗂️</span><span class="txt"><span class="name">Flashcard display</span><span class="desc">Show flashcards full size</span></span></a></li>
+<li><a class="card" href="11-report-card-generator.html"><span class="icon" aria-hidden="true">📄</span><span class="txt"><span class="name">Report card generator</span><span class="desc">Draft report card comments</span></span></a></li>
 </ul></section>
-<section class="group"><h2>Math</h2><p class="blurb">Graphs, shapes and symbols.</p><ul>
-<li><a href="21-cartesian-plane.html"><span class="name">Cartesian plane</span><span class="desc">Plot points on a grid.</span></a></li>
-<li><a href="22-graph-maker.html"><span class="name">Graph maker</span><span class="desc">Make a graph from your data.</span></a></li>
-<li><a href="geometry-tool.html"><span class="name">Geometry tool</span><span class="desc">Explore shapes and angles.</span></a></li>
-<li><a href="25-math-symbols.html"><span class="name">Math symbols</span><span class="desc">Copy symbols into your work.</span></a></li>
-<li><a href="26-anchor-charts-math.html"><span class="name">Math anchor charts</span><span class="desc">Reference charts for math.</span></a></li>
+<section class="group g-math" data-cat="math"><h2><span class="bar"></span>Math<span class="count">5 tools</span></h2><ul>
+<li><a class="card" href="21-cartesian-plane.html"><span class="icon" aria-hidden="true">📈</span><span class="txt"><span class="name">Cartesian plane</span><span class="desc">Plot points on a grid</span></span></a></li>
+<li><a class="card" href="22-graph-maker.html"><span class="icon" aria-hidden="true">📉</span><span class="txt"><span class="name">Graph maker</span><span class="desc">Make a graph from your data</span></span></a></li>
+<li><a class="card" href="geometry-tool.html"><span class="icon" aria-hidden="true">📐</span><span class="txt"><span class="name">Geometry tool</span><span class="desc">Explore shapes and angles</span></span></a></li>
+<li><a class="card" href="25-math-symbols.html"><span class="icon" aria-hidden="true">➗</span><span class="txt"><span class="name">Math symbols</span><span class="desc">Copy symbols into your work</span></span></a></li>
+<li><a class="card" href="26-anchor-charts-math.html"><span class="icon" aria-hidden="true">🧮</span><span class="txt"><span class="name">Math anchor charts</span><span class="desc">Reference charts for math</span></span></a></li>
 </ul></section>
-<section class="group"><h2>Language and display</h2><p class="blurb">Words, charts and a place to write.</p><ul>
-<li><a href="19-word-wall.html"><span class="name">Word wall</span><span class="desc">Build a word wall.</span></a></li>
-<li><a href="27-anchor-charts-language.html"><span class="name">Language anchor charts</span><span class="desc">Reference charts for language.</span></a></li>
-<li><a href="20-venn-diagram.html"><span class="name">Venn diagram</span><span class="desc">Compare and contrast.</span></a></li>
-<li><a href="05-whiteboard.html"><span class="name">Whiteboard</span><span class="desc">Write and draw on screen.</span></a></li>
+<section class="group g-lang" data-cat="lang"><h2><span class="bar"></span>Language and display<span class="count">4 tools</span></h2><ul>
+<li><a class="card" href="19-word-wall.html"><span class="icon" aria-hidden="true">🔤</span><span class="txt"><span class="name">Word wall</span><span class="desc">Build a word wall</span></span></a></li>
+<li><a class="card" href="27-anchor-charts-language.html"><span class="icon" aria-hidden="true">📖</span><span class="txt"><span class="name">Language anchor charts</span><span class="desc">Reference charts for language</span></span></a></li>
+<li><a class="card" href="20-venn-diagram.html"><span class="icon" aria-hidden="true">⭕</span><span class="txt"><span class="name">Venn diagram</span><span class="desc">Compare and contrast</span></span></a></li>
+<li><a class="card" href="05-whiteboard.html"><span class="icon" aria-hidden="true">✏️</span><span class="txt"><span class="name">Whiteboard</span><span class="desc">Write and draw on screen</span></span></a></li>
 </ul></section>
-<p class="empty" id="empty">No tools match that search. Try a shorter word.</p>
+<p class="empty" id="empty">No tools match that search. Try a shorter word, or choose All tools.</p>
 </main>
-<footer>
-<nav aria-label="Site pages">
+<footer><div>
 <a href="about.html">About</a><a href="contact.html">Contact</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="cookies.html">Cookies</a>
-</nav>
-</footer>
-</div>
+</div></footer>
 <script>
 (function(){
-var q=document.getElementById("q"),empty=document.getElementById("empty");
-q.addEventListener("input",function(){
+var q=document.getElementById("q"),empty=document.getElementById("empty"),cat="all";
+var pills=document.querySelectorAll(".pill"),groups=document.querySelectorAll(".group");
+function apply(){
  var t=q.value.trim().toLowerCase(),any=false;
- document.querySelectorAll(".group").forEach(function(g){
-  var shown=0;
+ groups.forEach(function(g){
+  var inCat=cat==="all"||g.dataset.cat===cat,shown=0;
   g.querySelectorAll("li").forEach(function(li){
-   var ok=!t||li.textContent.toLowerCase().indexOf(t)>-1;
+   var ok=inCat&&(!t||li.textContent.toLowerCase().indexOf(t)>-1);
    li.style.display=ok?"":"none"; if(ok)shown++;
   });
   g.style.display=shown?"":"none"; if(shown)any=true;
  });
  empty.style.display=any?"none":"block";
-});
+}
+pills.forEach(function(p){p.addEventListener("click",function(){
+ cat=p.dataset.cat;
+ pills.forEach(function(x){x.setAttribute("aria-pressed",x===p?"true":"false")});
+ apply();
+})});
+q.addEventListener("input",apply);
 })();
 </script>
 </body>
