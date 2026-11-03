@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quiet Space Base | Handy Teacher Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1022;--panel:#1c2142;--go:#6fd0ff;--txt:#e9edfb}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font:1.05rem/1.5 "Atkinson Hyperlegible",Verdana,sans-serif}
+.wrap{max-width:62rem;margin:0 auto;padding:1rem}
+h1{font:1rem/1.4 "Press Start 2P","Courier New",monospace;margin:.2rem 0 1rem}
+.stage{position:relative;border:4px solid var(--panel);border-radius:.4rem;overflow:hidden;background:#000}
+.view{position:relative}
+canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges}
+.exit{display:none;position:absolute;top:2%;right:2%;padding:.3rem .7rem;font-size:.9rem}
+.stage.fs .exit{display:block}
+.stage:fullscreen,.stage.pfs{display:flex;align-items:center;justify-content:center;border:0;border-radius:0;background:#000}
+.stage.pfs{position:fixed;inset:0;z-index:9999}
+.stage:fullscreen .view,.stage.pfs .view{width:min(100vw,calc(100vh*16/9))}
+.hud{position:absolute;left:2%;top:3%;font:clamp(.45rem,1.6vw,.8rem)/1.8 "Press Start 2P","Courier New",monospace;color:#fff;text-shadow:2px 2px 0 #000a;white-space:pre}
+.bar{position:absolute;left:2%;right:2%;bottom:3%;height:clamp(10px,2.4vw,22px);background:#0008;border:3px solid #fff;border-radius:3px}
+.fill{height:100%;width:0;background:var(--go)}
+.mark{position:absolute;top:-6px;bottom:-6px;width:4px;background:#fff;box-shadow:0 0 0 1px #000}
+.status{position:absolute;left:2%;right:2%;bottom:calc(3% + clamp(18px,3.6vw,34px));font:clamp(.5rem,1.8vw,.9rem)/1.6 "Press Start 2P","Courier New",monospace;color:#fff;text-shadow:2px 2px 0 #000;text-align:center}
+.controls{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;margin:1rem 0}
+button,select{font:inherit;font-weight:700;padding:.6rem 1.1rem;border-radius:.4rem;border:2px solid var(--go);background:var(--panel);color:var(--txt);cursor:pointer}
+button.main{background:var(--go);color:#0d1022}
+button:disabled{opacity:.5;cursor:default}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #fff;outline-offset:2px}
+label{display:flex;align-items:center;gap:.6rem;flex:1 1 16rem}
+input[type=range]{flex:1;accent-color:var(--go);min-width:8rem}
+.msg{min-height:1.5rem;color:var(--go)}
+.small{font-size:.92rem;opacity:.85}
+details{background:var(--panel);border-radius:.4rem;padding:.6rem 1rem;margin-top:.8rem}
+summary{cursor:pointer;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Quiet Space Base</h1>
+  <div class="stage" id="stage"><div class="view" id="view">
+    <canvas id="cv" width="192" height="108" aria-label="Pixel space base being built on Mars or the Moon while the room is quiet"></canvas>
+    <div class="hud" id="hud"></div>
+    <div class="status" id="status" aria-live="polite">Press Start listening</div>
+    <div class="bar"><div class="fill" id="fill"></div><div class="mark" id="mark"></div></div>
+    <button class="exit" id="exit">Exit fullscreen</button>
+  </div></div>
+  <div class="controls">
+    <button class="main" id="start">Start listening</button>
+    <button id="calib" disabled>Calibrate to quiet room</button>
+    <button id="test">Hold to test a loud noise</button>
+    <button id="full">Fullscreen</button>
+    <button id="reset">Reset base</button>
+  </div>
+  <div class="controls">
+    <label>Sensitive <input type="range" id="thr" min="12" max="90" value="35" aria-label="How much noise halts construction"> Tolerant</label>
+    <label>Planet
+      <select id="planet" aria-label="Planet"><option value="mars">Mars</option><option value="moon">The Moon</option></select>
+    </label>
+    <label>Build speed
+      <select id="speed" aria-label="Quiet time needed per module">
+        <option value="20">Fast: 20 s per module</option>
+        <option value="45" selected>Normal: 45 s per module</option>
+        <option value="90">Slow: 90 s per module</option>
+      </select>
+    </label>
+  </div>
+  <div class="msg" id="msg" role="status"></div>
+  <p class="small">The base only grows during quiet time, and it is saved in this browser so the class can keep building it across days. The microphone only measures volume. Nothing is recorded or sent anywhere.</p>
+  <details>
+    <summary>Classroom ideas</summary>
+    <ul class="small">
+      <li>Click <b>Calibrate to quiet room</b> while the class works silently for 3 seconds.</li>
+      <li>There are 10 modules to build: landing pad, solar array, habitat, greenhouse, comms tower, rover garage, lab, water tanks, radar dish and a big dome. When it is finished, a rocket brings the first crew.</li>
+      <li>On Mars, noise whips up a dust storm. On the Moon, it attracts meteors. You can switch planets at any time without losing progress.</li>
+    </ul>
+  </details>
+</div>
+<script>
+const W=192,H=108,GY=80,N=10,$=id=>document.getElementById(id),R=Math.random;
+const cv=$("cv"),ctx=cv.getContext("2d");
+const rc=(x,y,w,h,c)=>{ctx.fillStyle=c;ctx.fillRect(Math.round(x),Math.round(y),w,h)};
+let seed=5;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
+/* backgrounds */
+const bg=document.createElement("canvas");bg.width=W;bg.height=H;
+const DUST={mars:"#d99a6a",moon:"#b8bac2"};
+function paint(pl){const c=bg.getContext("2d"),r=(x,y,w,h,k)=>{c.fillStyle=k;c.fillRect(x,y,w,h)};seed=5;
+ if(pl==="moon"){["#04050d","#070a1a","#0a1030","#0e1740"].forEach((k,i)=>r(0,i*20,W,20,k));
+  for(let i=0;i<55;i++)r(rnd()*W|0,rnd()*70|0,1,1,rnd()<.2?"#9fb4ff":"#fff");
+  for(let y=-5;y<=5;y++)for(let x=-5;x<=5;x++)if(x*x+y*y<=26){r(155+x,22+y,1,1,x>2?"#27508f":((x*3+y*5)%7<2?"#4fa05a":"#3f7fd0"))}
+  for(let x=0;x<W;x++){const h=Math.round(10+6*Math.sin(x*.06)+3*Math.sin(x*.17));r(x,GY-h,1,h,"#5d5f68")}
+  r(0,GY,W,H-GY,"#9a9ca3");r(0,GY+12,W,6,"#8c8e96");r(0,GY+26,W,4,"#8c8e96")}
+ else{["#b9774f","#c98457","#d9946a","#e3a67c","#ebb68d","#f0c29b"].forEach((k,i)=>r(0,i*13,W,13,k));
+  for(let y=-3;y<=3;y++)for(let x=-3;x<=3;x++)if(x*x+y*y<=10)r(36+x,22+y,1,1,"#fff3d0");
+  for(let x=0;x<W;x++){const h=Math.round(9+5*Math.sin(x*.05+1)+3*Math.sin(x*.16));r(x,GY-h,1,h,"#8a3a22");}
+  r(0,GY,W,H-GY,"#a8482a");r(0,GY+12,W,6,"#96401f");r(0,GY+26,W,4,"#96401f");
+  for(let i=0;i<14;i++){const x=rnd()*W|0,y=GY+4+(rnd()*22|0);r(x,y,3,2,"#7a3219");r(x,y,2,1,"#c26a44")}}
+ for(let i=0;i<6;i++){const x=6+(rnd()*170|0),y=GY+6+(rnd()*20|0);r(x,y+1,11,2,pl==="moon"?"#7c7e86":"#8a3a22");r(x+1,y,9,1,pl==="moon"?"#b2b4bb":"#c26a44")}}
+/* structures: [w,h,draw(x)] */
+const S=[
+[16,3,x=>{rc(x-8,GY-2,16,2,"#4a4a52");rc(x-6,GY-3,12,1,"#6a6a74");rc(x-8,GY-3,1,1,"#ffd23d");rc(x+7,GY-3,1,1,"#ffd23d")}],
+[16,9,x=>{rc(x-8,GY-9,16,5,"#2b4a9a");for(let i=0;i<16;i+=4)rc(x-8+i,GY-9,1,5,"#5b7fd0");rc(x-8,GY-7,16,1,"#5b7fd0");rc(x-1,GY-4,2,4,"#888")}],
+[16,9,x=>dome(x,8,"#cfe4f2",1)],
+[16,8,x=>{dome(x,7,"#9fe0a8",0);rc(x-5,GY-4,2,3,"#3f9a4a");rc(x-1,GY-5,2,4,"#3f9a4a");rc(x+3,GY-4,2,3,"#3f9a4a")}],
+[8,33,x=>{rc(x,GY-30,2,30,"#aab");for(let y=GY-28;y<GY;y+=5)rc(x-1,y,4,1,"#889");rc(x-3,GY-33,8,2,"#e8eaf0");rc(x-1,GY-35,1,2,"#aab");if((t*2)%2<1)rc(x,GY-36,2,1,"#ff3b3b")}],
+[18,10,x=>{rc(x-8,GY-9,16,9,"#8b93a1");rc(x-4,GY-6,8,6,"#3a3f4a");rc(x-9,GY-10,18,1,"#aab");rc(x-6,GY-8,12,1,"#6e7684")}],
+[16,11,x=>{rc(x-8,GY-11,16,11,"#d8dde6");rc(x-8,GY-6,16,1,"#e0603a");rc(x-6,GY-9,3,3,"#7fd0ff");rc(x-1,GY-9,3,3,"#7fd0ff");rc(x+4,GY-9,3,3,"#7fd0ff");rc(x-1,GY-4,3,4,"#555")}],
+[14,12,x=>{rc(x-7,GY-12,6,12,"#c9ced6");rc(x+1,GY-12,6,12,"#c9ced6");rc(x-7,GY-8,6,1,"#889");rc(x+1,GY-8,6,1,"#889");rc(x-1,GY-4,2,2,"#555")}],
+[14,19,x=>{rc(x-1,GY-10,2,10,"#aab");rc(x-7,GY-14,14,2,"#e8eaf0");rc(x-6,GY-12,12,1,"#e8eaf0");rc(x-4,GY-11,8,1,"#cfd3dc");rc(x,GY-18,1,5,"#aab");rc(x-1,GY-19,3,1,"#f55")}],
+[18,10,x=>{dome(x,9,"#cfe4f2",1);rc(x-4,GY-7,8,3,"#7fd0ff")}]];
+function dome(x,r,col,win){for(let dy=0;dy<=r;dy++){const w=2*Math.round(Math.sqrt(r*r-dy*dy));rc(x-w/2,GY-dy-1,w,1,col)}rc(x-r-1,GY-2,2*r+2,2,"#8a8f9a");if(win){rc(x-2,GY-6,4,3,"#7fd0ff");rc(x-1,GY-4,2,2,"#555")}}
+const X=[...Array(N).keys()].map(i=>10+i*19),order=[...Array(N).keys()].sort((a,b)=>Math.abs(a-4.5)-Math.abs(b-4.5));
+function struct(k,frac){const [w,h,f]=S[k],x=X[order[k]];
+ if(frac>=1){f(x);return}
+ rc(x-w/2,GY-h,1,h,"#6fd0ff");rc(x+w/2-1,GY-h,1,h,"#6fd0ff");for(let i=0;i<w;i+=2)rc(x-w/2+i,GY-h,1,1,"#6fd0ff");
+ const bh=Math.ceil(frac*h);ctx.save();ctx.beginPath();ctx.rect(x-w/2-2,GY-bh,w+4,bh+4);ctx.clip();f(x);ctx.restore()}
+function astro(x,y,wave){rc(x-1,y-5,1,3,"#999");rc(x,y-6,3,4,"#f0f2f8");rc(x,y-6,3,2,"#e8f0ff");rc(x+1,y-5,2,1,"#e0a030");rc(x,y-2,1,2,"#bbb");rc(x+2,y-2,1,2,"#bbb");if(wave!==undefined)rc(x+3,y-7-wave,1,3,"#f0f2f8")}
+/* state */
+let st={done:0,p:0,speed:45,thr:.35,planet:"mars"};
+try{const s=JSON.parse(localStorage.getItem("htt-space"));if(s&&typeof s.done==="number")st=Object.assign(st,s)}catch(e){}
+$("thr").value=Math.round(st.thr*100);$("speed").value=st.speed;$("planet").value=st.planet;paint(st.planet);
+const sv=()=>{try{localStorage.setItem("htt-space",JSON.stringify(st))}catch(e){}};
+$("thr").oninput=e=>{st.thr=e.target.value/100;sv()};
+$("speed").onchange=e=>{st.speed=+e.target.value;sv()};
+$("planet").onchange=e=>{st.planet=e.target.value;paint(st.planet);ps=[];sv()};
+$("reset").onclick=()=>{if(confirm("Reset the base and start a new one?")){st.done=0;st.p=0;finT=0;landed=false;ps=[];streak=0;sv()}};
+/* audio */
+let ac,an,buf,stream,listening=false,demo=false,lvl=0,loudT=0,stopT=0,streak=0,calib=null,last=0,t=0,shown="",lastSave=0,ps=[],mt=[],mtT=0,storm=0,finT=0,landed=false;
+function burst(x,y,n,cols,sp,g,s){for(let i=0;i<n;i++){const a=R()*6.28,v=sp*(.3+R()*.7);ps.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-sp*.4,g,l:1,f:1.3,c:cols[R()*cols.length|0],s:s||1})}}
+async function startMic(){
+ try{stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
+  ac=new(window.AudioContext||window.webkitAudioContext)();await ac.resume();
+  an=ac.createAnalyser();an.fftSize=1024;ac.createMediaStreamSource(stream).connect(an);buf=new Uint8Array(an.fftSize);
+  listening=true;$("start").textContent="Stop listening";$("calib").disabled=false;$("msg").textContent="";
+  try{navigator.wakeLock&&navigator.wakeLock.request("screen")}catch(e){}
+ }catch(e){$("msg").textContent="The microphone is blocked. Allow it in your browser's site settings, or use the test button to try it out."}}
+function stopMic(){listening=false;stream&&stream.getTracks().forEach(t=>t.stop());ac&&ac.close();$("start").textContent="Start listening";$("calib").disabled=true;lvl=0;streak=0}
+$("start").onclick=()=>listening?stopMic():startMic();
+$("calib").onclick=()=>{calib={sum:0,time:0};$("msg").textContent="Calibrating: keep the room quiet for 3 seconds."};
+const tb=$("test");tb.onpointerdown=()=>demo=true;["pointerup","pointerleave","pointercancel"].forEach(e=>tb.addEventListener(e,()=>demo=false));
+addEventListener("keydown",e=>{if(e.code==="Space"&&!["BUTTON","INPUT","SELECT"].includes(e.target.tagName)){e.preventDefault();demo=true}});
+addEventListener("keyup",e=>{if(e.code==="Space")demo=false});
+(function(){const el=$("stage");
+const real=()=>document.fullscreenElement||document.webkitFullscreenElement;
+const on=()=>!!real()||el.classList.contains("pfs");
+const sync=()=>el.classList.toggle("fs",on());
+function exit(){if(real())(document.exitFullscreen||document.webkitExitFullscreen).call(document);el.classList.remove("pfs");sync()}
+function enter(){const f=el.requestFullscreen||el.webkitRequestFullscreen;
+ if(f){try{const p=f.call(el);if(p&&p.catch)p.catch(()=>{el.classList.add("pfs");sync()})}catch(e){el.classList.add("pfs")}}else el.classList.add("pfs");
+ sync()}
+$("full").onclick=()=>on()?exit():enter();$("exit").onclick=exit;
+["fullscreenchange","webkitfullscreenchange"].forEach(e=>document.addEventListener(e,sync));
+addEventListener("keydown",e=>{if(e.key==="Escape"&&el.classList.contains("pfs"))exit()});
+})();
+function readMic(){an.getByteTimeDomainData(buf);let s=0;for(const v of buf){const x=(v-128)/128;s+=x*x}return Math.min(1,Math.sqrt(s/buf.length)*5)}
+function say(s,c){if(shown!==s){shown=s;$("status").textContent=s}$("fill").style.background=c}
+/* loop */
+function tick(now){const dt=Math.min(.05,(now-last)/1000||0);last=now;t+=dt;
+ const raw=demo?.85:(listening?readMic():0);
+ lvl+=(raw-lvl)*(1-Math.exp(-dt*(raw>lvl?12:2.5)));
+ if(calib){calib.sum+=lvl*dt;calib.time+=dt;if(calib.time>=3){st.thr=Math.max(.12,Math.min(.9,calib.sum/3+.2));$("thr").value=Math.round(st.thr*100);calib=null;sv();$("msg").textContent="Calibrated. Move the slider if you want to fine-tune it."}}
+ loudT=lvl>st.thr?loudT+dt:Math.max(0,loudT-dt*2);
+ if(loudT>.3)stopT=2;else stopT=Math.max(0,stopT-dt);
+ const halted=stopT>0,full=st.done>=N,active=listening&&!halted&&!full,moon=st.planet==="moon";
+ if(halted)streak=0;
+ if(active){streak+=dt;st.p+=dt/st.speed;if(st.p>=1){st.done++;st.p=0;sv()}}
+ if(full)finT+=dt;
+ if(now-lastSave>3000){lastSave=now;sv()}
+ const P=(st.done+st.p)/N;
+ ctx.drawImage(bg,0,0);
+ for(let k=0;k<N;k++){if(k<st.done)struct(k,1);else if(k===st.done&&!full)struct(k,Math.max(.03,st.p))}
+ if(!full){const k=st.done,[w,h]=S[k],x=X[order[k]],bh=Math.ceil(Math.max(.03,st.p)*h),dx=Math.round(x+(active?Math.sin(t*1.2)*5:0)),dy=GY-h-9;
+  if(active){ctx.globalAlpha=.7;rc(dx,dy+3,1,Math.max(1,GY-bh-dy-3),"#6fd0ff");ctx.globalAlpha=1;if(R()<.5)burst(dx,GY-bh,1,["#fff","#6fd0ff"],14,40,1)}
+  rc(dx-4,dy,8,3,"#aab");rc(dx-4,dy-1,8,1,"#ccd");rc(dx-1,dy+3,2,1,"#555");
+  rc(dx+3,dy,1,1,active?((t*3)%2<1?"#4cff7a":"#1c7a38"):((t*4)%2<1?"#ff3b3b":"#7a1c1c"));
+  for(let i=0;i<2;i++)astro(Math.round(x+(i?1:-1)*(w/2+6)+(active?Math.sin(t*1.5+i*3)*3:0)),GY+6,undefined);
+  if(halted&&(t*4)%2<1){rc(x-1,GY-h-22,2,5,"#ff4a3a");rc(x-1,GY-h-16,2,2,"#ff4a3a")}}
+ else{const px=X[order[0]],u=Math.min(1,finT/4.5),ease=1-(1-u)*(1-u),ry=Math.round(-30+(GY-3+30)*ease);
+  rc(px-3,ry-18,6,16,"#e8eaf0");rc(px-2,ry-22,4,4,"#d9503a");rc(px-5,ry-6,2,6,"#d9503a");rc(px+3,ry-6,2,6,"#d9503a");rc(px-1,ry-14,2,2,"#6fd0ff");rc(px-4,ry-2,1,2,"#888");rc(px+3,ry-2,1,2,"#888");
+  if(u<1){rc(px-2,ry,4,4+(R()*4|0),"#ffb02e");rc(px-1,ry,2,3,"#fff");if(u>.6)burst(px,GY-2,2,[DUST[st.planet]],40,20,1)}
+  else{if(!landed){landed=true;burst(px,GY-2,30,[DUST[st.planet]],60,30,2)}
+   if(finT>5)for(let i=0;i<3;i++)astro(px+10+i*7,GY+6,Math.sin(t*6+i)>0?1:0)}}
+ /* noise effects */
+ if(halted){if(moon){mtT-=dt;if(mtT<=0){mt.push({x:20+R()*W,y:-4,vx:-30-R()*20,vy:70+R()*30,ly:GY+3+R()*22});mtT=.12+R()*.2}}
+  else if(R()<.8)ps.push({x:-4,y:R()*H,vx:120+R()*60,vy:(R()-.5)*8,g:0,l:1,f:.9,c:"#d8a070",s:2})}
+ mt.forEach(m=>{m.x+=m.vx*dt;m.y+=m.vy*dt;ps.push({x:m.x,y:m.y,vx:0,vy:0,g:0,l:.5,f:2.5,c:R()<.5?"#ffb02e":"#ff6a1f",s:1});rc(m.x,m.y,2,2,"#fff");if(m.y>=m.ly){burst(m.x,m.y,10,[DUST[st.planet]],45,60,1);m.dead=1}});
+ mt=mt.filter(m=>!m.dead&&m.x>-6);
+ storm+=((halted&&!moon?1:0)-storm)*dt*2;
+ if(storm>.02){ctx.fillStyle="rgba(190,100,50,"+(storm*.28)+")";ctx.fillRect(0,0,W,H)}
+ if(ps.length>600)ps.splice(0,ps.length-600);
+ ps.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=p.g*dt;p.l-=dt*p.f});ps=ps.filter(p=>p.l>0);
+ ps.forEach(p=>{ctx.globalAlpha=Math.min(1,p.l*1.5);rc(p.x,p.y,p.s,p.s,p.c)});ctx.globalAlpha=1;
+ $("fill").style.width=Math.round(lvl*100)+"%";$("mark").style.left="calc("+Math.round(st.thr*100)+"% - 2px)";
+ const m=Math.floor(streak/60),s=Math.floor(streak%60);
+ $("hud").textContent="Base "+Math.round(P*100)+"%\nModules "+st.done+"/"+N+(listening?"\nCalm "+m+":"+String(s).padStart(2,"0"):"");
+ if(full)say(finT<5?"Base complete! The first crew is landing...":"Base complete! Welcome to your new home!","#6fd0ff");
+ else if(halted)say(moon?"ALERT! Meteors! Construction halted.":"ALERT! Dust storm! Construction halted.","#ff5a4a");
+ else if(!listening&&!demo)say("Press Start listening","#6fd0ff");
+ else if(lvl>st.thr*.7)say("Getting loud... the crew is nervous.","#ff9a3d");
+ else say("Quiet! The crew is building the base.","#4cff7a");
+ requestAnimationFrame(tick)}
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>
